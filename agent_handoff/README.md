@@ -4,6 +4,8 @@
 
 `latest_state.json`由`github_sync/update_agent_handoff.py`生成，并在每次30分钟GitHub同步前刷新。它只保存轻量、可公开的恢复信息：当前阶段、五动作epoch/step、监督器状态、GPU摘要、关键本机路径、checkpoint SHA和恢复规则。
 
+训练和下游正式supervisor保持连续运行；独立只读训练健康汇总按用户要求每1小时采样一次，避免2–3天训练期间做无必要的密集检查。GitHub轻量状态同步仍为每30分钟一次。
+
 它不上传HMOG原始数据、正式results、NPZ/NPY、训练checkpoint、大型runtime cache、日志或凭据。以上本机产物仍由正式manifest、count/schema/identity审计和SHA约束；新Agent必须按缓存中的路径重新校验，不能只凭缓存声称阶段完成。
 
 恢复顺序：

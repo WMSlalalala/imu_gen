@@ -261,15 +261,15 @@ Pinch epoch31再次完整消费40,349个targets / 158 batches，valid feature co
 | 问题清单 | 所有 error/warning/监控误操作均有证据、影响和关闭标准 | 持续更新 |
 | 最终独立审计 | 从当前 bytes 重算 count/schema/SHA/身份/指标，不仅信任 sidecar 状态 | 待全部阶段完成 |
 
-## 10. 运行监督与 30 分钟检查约定
+## 10. 连续流水线与每小时训练检查约定
 
 文档编写不暂停、重启或修改已冻结的训练。当前同时保留三层监督：
 
 1. 主 trajectory supervisor 负责训练、100k 生成、25 detectors 和阶段门禁；
 2. total supervisor 不超前执行，当上游尚未完成时保持 `wait_trajectory`、`jobs={}` 且不占 GPU；
-3. 只读健康监控每 120 秒检查 supervisor stage/heartbeat、worker PID/step、epoch transaction、loss、AMP retry、GPU 利用率/显存/温度和 warning/error。
+3. 独立只读健康监控按用户要求每 1 小时检查 supervisor stage/heartbeat、worker PID/step、epoch transaction、loss、AMP retry、GPU 利用率/显存/温度和 warning/error。正式 supervisor 本身仍连续运行并执行 fail-closed 阶段门禁。
 
-在此基础上，每 30 分钟执行一次汇总审计，至少核对：
+在此基础上，每 1 小时执行一次训练汇总审计，至少核对：
 
 - 主/下游 supervisor 进程、stage、heartbeat 和返回状态；
 - 每个 active action 的 committed epoch、global step、examples、phase、最近成功心跳和 AMP retry；
@@ -278,7 +278,7 @@ Pinch epoch31再次完整消费40,349个targets / 158 batches，valid feature co
 - GPU 上是否只有预期 worker；若有外部任务，记录 PID、显存、温度、降频原因和进度影响，不擅自终止他任务；
 - 问题清单和本文的状态/时间是否同步。
 
-不等 30 分钟的立即处理条件包括：任一 error、worker/supervisor 退出、600 秒无有效进度、单 batch AMP retry 超上限、NaN/Inf、hash/身份不一致、GPU hardware thermal slowdown、超过 max operating temperature、下游超前运行或任一 fail-closed 门失败。
+任一 error、worker/supervisor 退出、单 batch AMP retry 超上限、NaN/Inf、hash/身份不一致、下游超前运行或任一 fail-closed 门失败仍由正式 supervisor 连续检测并阻止阶段推进；人工健康摘要不需要按分钟重复读取。GitHub源码与Agent轻量交接缓存仍每30分钟同步一次，但它不触发训练级深审计。
 
 ### 10.1 已完成的 30 分钟汇总快照（2026-07-22 18:50 EDT）
 
@@ -295,7 +295,7 @@ Pinch epoch31再次完整消费40,349个targets / 158 batches，valid feature co
 | errors | 0 |
 | 已记录异常 | GPU1 外部 workflow 连续切换训练/导出阶段，分别保存为 P-TRJ-152/155/157/159/160；keystroke GPU0 两次瞬时0%保存为 P-TRJ-154/156 |
 
-该表是18:50的历史快照，不代替持续的120秒健康检查；其后进展以第6节和唯一状态问题清单为准。
+该表是18:50且当时采用120秒健康检查时的历史快照；19:55以后独立健康汇总改为每1小时，后续进展以第6节和唯一状态问题清单为准。
 
 ## 11. 从原始 HMOG 到最终检测结果：逐步实施记录
 

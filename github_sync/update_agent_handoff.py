@@ -136,6 +136,11 @@ def main() -> int:
             "Do not mark the overall task complete until every formal artifact and audit passes.",
             "Record every detected or unresolved problem in the authoritative issue document.",
         ],
+        "monitoring_policy": {
+            "training_health_interval_seconds": 3600,
+            "github_handoff_sync_interval_seconds": 1800,
+            "note": "Formal supervisors remain continuous; the separate read-only health summary is sampled hourly.",
+        },
         "publication_policy": {
             "tracked": "Source, tests, Chinese documents, protocols, and this lightweight handoff cache.",
             "local_only": "HMOG data, results, NPZ/NPY, runtime caches, checkpoints, logs, and secrets.",

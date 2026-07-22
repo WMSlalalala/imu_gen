@@ -4,10 +4,10 @@
     "trajectory_estimator_pack_20260721/docs/IMU与轨迹交付状态及问题清单.md",
     "trajectory_estimator_pack_20260721/docs/轨迹生成方法与HMOG标准数据集测试说明.md"
   ],
-  "generated_local_time": "2026-07-22T19:54:32-04:00",
-  "generated_unix_time": 1784764472.7052183,
+  "generated_local_time": "2026-07-22T19:56:32-04:00",
+  "generated_unix_time": 1784764592.4708364,
   "health": {
-    "checked_unix_time": 1784764373.9958057,
+    "checked_unix_time": 1784764516.8681903,
     "error_count": 0,
     "gpus": [
       {
@@ -16,7 +16,7 @@
         "memory_total_mib": 49140.0,
         "memory_used_mib": 10063.0,
         "name": "NVIDIA RTX A6000",
-        "temperature_c": 86.0,
+        "temperature_c": 87.0,
         "utilization_percent": 100.0
       },
       {
@@ -25,7 +25,7 @@
         "memory_total_mib": 49140.0,
         "memory_used_mib": 12369.0,
         "name": "NVIDIA RTX A6000",
-        "temperature_c": 78.0,
+        "temperature_c": 82.0,
         "utilization_percent": 76.0
       }
     ],
@@ -38,6 +38,11 @@
     "total_detector_run": "/mnt/share/mwang49/real-human/imu_gen/final/trajectory_estimator_pack_20260721/results/formal_paired_total_eventplan_v16_20260722",
     "trajectory_run": "/mnt/share/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260722_v16_numeric_recovery/results/formal_eventplan_v16_numeric_recovery_100epoch_100k_20260722"
   },
+  "monitoring_policy": {
+    "github_handoff_sync_interval_seconds": 1800,
+    "note": "Formal supervisors remain continuous; the separate read-only health summary is sampled hourly.",
+    "training_health_interval_seconds": 3600
+  },
   "publication_policy": {
     "local_only": "HMOG data, results, NPZ/NPY, runtime caches, checkpoints, logs, and secrets.",
     "local_only_recovery": "Use paths plus formal count/schema/identity/SHA manifests; never infer completion from this cache alone.",
@@ -46,7 +51,7 @@
   "purpose": "Lightweight recovery state; not a substitute for formal manifests or audits.",
   "repository": {
     "branch": "main",
-    "local_head_before_this_sync": "8f3746414773831f774faea286bce92802e86e31",
+    "local_head_before_this_sync": "cd2fcf30df241b97aec5cdf257459518b05b856e",
     "origin": "git@github.com:WMSlalalala/imu_gen.git",
     "web_url": "https://github.com/WMSlalalala/imu_gen"
   },
@@ -63,7 +68,7 @@
     "jobs": {},
     "pid": 2049946,
     "status": "running",
-    "updated_unix_time": 1784764452.0083182
+    "updated_unix_time": 1784764572.1365175
   },
   "training": {
     "keystroke": {
@@ -79,9 +84,9 @@
       "total_epochs": 100,
       "warning_count": 0,
       "worker_epoch_index": 4,
-      "worker_global_step": 2143,
-      "worker_heartbeat_age_seconds": 24.153111457824707,
-      "worker_next_batch": 59,
+      "worker_global_step": 2157,
+      "worker_heartbeat_age_seconds": 12.424086809158325,
+      "worker_next_batch": 73,
       "worker_phase": "train",
       "worker_pid": 2195033
     },
@@ -98,9 +103,9 @@
       "total_epochs": 100,
       "warning_count": 1,
       "worker_epoch_index": 33,
-      "worker_global_step": 5283,
-      "worker_heartbeat_age_seconds": 13.461995601654053,
-      "worker_next_batch": 69,
+      "worker_global_step": 5299,
+      "worker_heartbeat_age_seconds": 13.085661888122559,
+      "worker_next_batch": 85,
       "worker_phase": "train",
       "worker_pid": 2159255
     },
@@ -118,7 +123,7 @@
       "warning_count": 1,
       "worker_epoch_index": 100,
       "worker_global_step": 15200,
-      "worker_heartbeat_age_seconds": 21698.259727716446,
+      "worker_heartbeat_age_seconds": 21841.132112264633,
       "worker_next_batch": 0,
       "worker_phase": "complete",
       "worker_pid": 2063649
@@ -137,7 +142,7 @@
       "warning_count": 1,
       "worker_epoch_index": 100,
       "worker_global_step": 18600,
-      "worker_heartbeat_age_seconds": 6211.319149494171,
+      "worker_heartbeat_age_seconds": 6354.191534042358,
       "worker_next_batch": 0,
       "worker_phase": "complete",
       "worker_pid": 2071163
@@ -156,7 +161,7 @@
       "warning_count": 1,
       "worker_epoch_index": 100,
       "worker_global_step": 11400,
-      "worker_heartbeat_age_seconds": 50345.565596818924,
+      "worker_heartbeat_age_seconds": 50488.43798136711,
       "worker_next_batch": 0,
       "worker_phase": "complete",
       "worker_pid": 2063585
@@ -166,6 +171,6 @@
     "current_stage": "training",
     "pid": 2047761,
     "status": "running",
-    "updated_unix_time": 1784764458.7435675
+    "updated_unix_time": 1784764579.1391525
   }
 }
