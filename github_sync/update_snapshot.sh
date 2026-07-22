@@ -9,8 +9,12 @@ if [[ ! -d .git ]]; then
   exit 2
 fi
 
+# Keep a small, public-safe recovery snapshot so a later agent can locate and
+# validate the local formal artifacts without publishing datasets/checkpoints.
+python3 github_sync/update_agent_handoff.py
+
 git add --all -- \
-  .gitignore README.md github_sync \
+  .gitignore README.md github_sync agent_handoff \
   trajectory_humanization_full_20260722_v16_numeric_recovery \
   trajectory_estimator_pack_20260721 \
   trajectory_pad_supplement_20260722 \

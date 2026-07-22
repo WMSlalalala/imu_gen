@@ -7,6 +7,9 @@
 !/github_sync/
 !/github_sync/**
 
+!/agent_handoff/
+!/agent_handoff/**
+
 !/trajectory_humanization_full_20260722_v16_numeric_recovery/
 !/trajectory_humanization_full_20260722_v16_numeric_recovery/**
 
