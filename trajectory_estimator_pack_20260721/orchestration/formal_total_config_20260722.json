@@ -1,0 +1,21 @@
+{
+  "schema_version": "formal_paired_total_config_v1",
+  "python": "/home/mwang49/miniconda3/envs/hml/bin/python",
+  "pack_root": "/home/mwang49/real-human/imu_gen/final/trajectory_estimator_pack_20260721",
+  "trajectory_run_root": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260713/results/formal_eventplan_v15_100epoch_100k_20260721",
+  "split_json": "/home/mwang49/real-human/imu_gen/final/data/splits/users_seed42.json",
+  "pad_detectors_root": "/home/mwang49/real-human/imu_gen/final/pad_detectors",
+  "real_pair_root": "/home/mwang49/real-human/imu_gen/final/trajectory_estimator_pack_20260721/results/formal_real_pair_indices_20260721",
+  "real_consistency_root": "/home/mwang49/real-human/imu_gen/final/trajectory_estimator_pack_20260721/results/formal_real_consistency_components_20260721",
+  "real_imu_root": "/home/mwang49/real-human/imu_gen/final/data/processed_xy4_20260702",
+  "output_root": "/home/mwang49/real-human/imu_gen/final/trajectory_estimator_pack_20260721/results/formal_paired_total_eventplan_v15_20260722",
+  "devices": ["cuda:0", "cuda:1"],
+  "paired_imu_shards": 2,
+  "feature_batch_size": 512,
+  "bootstrap_replicates": 500,
+  "duration_bins": 4,
+  "trajectory_detector_base_seed": 20260713,
+  "trajectory_latency_iterations_per_action": 25,
+  "total_latency_iterations": 1000,
+  "seed": 42
+}

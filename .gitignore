@@ -1,0 +1,48 @@
+# Default deny: this parent directory contains many historical runs and data.
+/*
+
+# Curated repository files.
+!/.gitignore
+!/README.md
+!/github_sync/
+!/github_sync/**
+
+!/trajectory_humanization_full_20260722_v16_numeric_recovery/
+!/trajectory_humanization_full_20260722_v16_numeric_recovery/**
+
+!/trajectory_estimator_pack_20260721/
+!/trajectory_estimator_pack_20260721/**
+
+!/trajectory_pad_supplement_20260722/
+!/trajectory_pad_supplement_20260722/**
+
+# Include only the curated IMU release inside its much larger experiment tree.
+!/android_duration_time_fixed_20260720/
+/android_duration_time_fixed_20260720/*
+!/android_duration_time_fixed_20260720/imu_release_20260721/
+!/android_duration_time_fixed_20260720/imu_release_20260721/**
+
+# Never publish datasets, results, caches, checkpoints or transient files.
+**/results/
+**/results/**
+**/.pytest_cache/
+**/.pytest_cache/**
+**/__pycache__/
+**/__pycache__/**
+**/*.py[cod]
+**/*.pt
+**/*.pth
+**/*.ckpt
+**/*.npz
+**/*.npy
+**/*.zip
+**/*.tar
+**/*.tar.gz
+**/*.log
+**/*.tmp
+**/*.pending
+**/.env
+**/.env.*
+**/*token*
+**/*credential*
+**/*secret*

@@ -1,0 +1,125 @@
+{
+  "schema_version": "trajectory_formal_supervisor_config_v1",
+  "formal_config_path": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260722_v16_numeric_recovery/orchestration/formal_pipeline_config_eventplan_v16_numeric_recovery_20260722.json",
+  "project_root": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260722_v16_numeric_recovery",
+  "python": "/home/mwang49/miniconda3/envs/hml/bin/python",
+  "corpus_dir": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260713/results/trajectories_full_v2",
+  "split_json": "/home/mwang49/real-human/imu_gen/final/data/splits/users_seed42.json",
+  "split_sha256": "82f2277374be47d5ec9dada2f7e60d0d5afd7ba79ac8a08b67e1607294ff530b",
+  "run_root": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260722_v16_numeric_recovery/results/formal_eventplan_v16_numeric_recovery_100epoch_100k_20260722",
+  "gate_root": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260722_v16_numeric_recovery/results/formal_eventplan_v16_numeric_recovery_launch_gates_20260722",
+  "formal_launch_authorized": true,
+  "actions": [
+    "tap",
+    "scroll",
+    "swipe",
+    "pinch",
+    "keystroke"
+  ],
+  "devices": [
+    "cuda:0",
+    "cuda:1"
+  ],
+  "action_device": {
+    "tap": "cuda:0",
+    "scroll": "cuda:1",
+    "swipe": "cuda:0",
+    "pinch": "cuda:1",
+    "keystroke": "cuda:0"
+  },
+  "training": {
+    "amp_overflow_max_retries": 4,
+    "epochs": 100,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0001,
+    "grad_clip_norm": 1.0,
+    "ema_decay": 0.999,
+    "diffusion_steps": 1000,
+    "base_channels": 96,
+    "cond_dim": 192,
+    "time_dim": 96,
+    "n_blocks": 8,
+    "dropout": 0.05,
+    "keycode_vocab": 16384,
+    "seed": 42,
+    "num_workers": 0,
+    "checkpoint_every_steps": 500,
+    "reference_cache_size": 2048
+  },
+  "training_bootstrap": {
+    "schema_version": "trajectory_v15_to_v16_training_bootstrap_config_v1",
+    "source_run_root": "/home/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260713/results/formal_eventplan_v15_100epoch_100k_20260721",
+    "source_tree_sha256": "4f8f2c4576b9ab726e13a29ea4664c9dc17024b2a63b74ce76c5acee2cd0c655",
+    "actions": {
+      "tap": {
+        "last_checkpoint_sha256": "32eccc2741a932e5951e18801692a5f0caf41699a1c8836f2622690254720181"
+      },
+      "scroll": {
+        "last_checkpoint_sha256": "475f363272d02253602e0a5171a991bc7a1ecc7d17ab2e5d166b690a2da62b2b"
+      }
+    }
+  },
+  "throughput_probe": {
+    "device": "cuda:0",
+    "candidate_batch_sizes": [
+      32,
+      64,
+      128,
+      256
+    ],
+    "candidate_measured_steps": 8,
+    "candidate_warmup_steps": 2,
+    "selected_measured_steps": 100,
+    "selected_warmup_steps": 5,
+    "gpu_safety_margin_gib": 6,
+    "selection_metric": "projected_full_epoch_examples_per_second",
+    "candidate_wall_time_limit_seconds": 120,
+    "clean_gpu_max_utilization_percent": 10,
+    "clean_gpu_max_temperature_c": 70,
+    "clean_gpu_max_memory_used_mib": 1024
+  },
+  "generation": {
+    "num_shards": 2,
+    "samples_per_user_action": 200,
+    "total_fake": 100000,
+    "batch_size": 32,
+    "seed": 20260713,
+    "ddim_steps": 50
+  },
+  "launch_gates": {
+    "reference_seed": 42,
+    "generation_seed": 20260713,
+    "samples_per_user_action": 200,
+    "condition_workers": 8,
+    "e2e_device": "cuda:0",
+    "e2e_users_per_pool": 1,
+    "e2e_samples_per_user": 1,
+    "e2e_optimizer_steps": 20
+  },
+  "detector": {
+    "epochs": 40,
+    "batch_size": 64,
+    "requested_deep_batch_size": 64,
+    "bootstrap_replicates": 500,
+    "seed": 20260713,
+    "patience": 0,
+    "feature_cpu_concurrency": 2,
+    "deep_gpu_concurrency_per_device": 1,
+    "real_hash_seed": 20260713,
+    "feature_detectors": [
+      "linear_svm",
+      "rbf_svm",
+      "xgboost"
+    ],
+    "deep_detectors": [
+      "tcn",
+      "transformer"
+    ]
+  },
+  "supervision": {
+    "poll_seconds": 30,
+    "training_progress_stale_seconds": 600,
+    "minimum_free_disk_gib": 40,
+    "archive_precheckpoint_training_attempts": true
+  }
+}
