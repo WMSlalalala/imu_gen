@@ -1,6 +1,6 @@
 # 轨迹生成方法与 HMOG 标准数据集测试说明
 
-版本：2026-07-22 19:45 EDT（正式实验进行中、逐步审计版）
+版本：2026-07-22 19:47 EDT（正式实验进行中、逐步审计版）
 
 ## 1. 文档目的与结论边界
 
@@ -425,7 +425,7 @@ Pinch epoch31再次完整消费40,349个targets / 158 batches，valid feature co
 
 在第2项未完成前，只能写“HMOG固定协议PAD结果”，不能写“完全用户独立检测性能”。这是当前开放方法学问题，不因25个主协议detector跑完而自动关闭。
 
-补充实现已经独立落在`trajectory_pad_supplement_20260722`：它不修改冻结主协议，先从正式primary bundle重建real/fake双侧统一70/10/20用户owner，再构建排除全部500 refs/action的第二变体，并分别运行25个检测器。实现层synthetic unittest 3/3、编译和CLI入口已通过；正式bundle与指标仍必须等待100k和primary detector bundle，不能把代码通过写成补充实验完成。
+补充实现已经独立落在`trajectory_pad_supplement_20260722`：它不修改冻结主协议，先从正式primary bundle重建real/fake双侧统一70/10/20用户owner，再构建排除全部500 refs/action的第二变体，并分别运行25个检测器。Registry通过主协议canonical loader从内容重算hash并绑定split SHA，不能靠修改JSON中的自报字段绕过。实现层synthetic unittest 4/4、编译和CLI入口已通过；正式bundle与指标仍必须等待100k和primary detector bundle，不能把代码通过写成补充实验完成。
 
 ### 13.3 五类检测器每一步
 

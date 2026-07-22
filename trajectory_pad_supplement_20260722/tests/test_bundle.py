@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import sys
+import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -10,8 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from supplement.bundle import reassign_user_disjoint
+from supplement.bundle import _owner_map, load_reference_ids, reassign_user_disjoint
 from detectors.deep_pad import make_record
+from generation.protocol import ReferenceRegistry
 
 
 def _record(user_id: int, label: int, suffix: int):
@@ -98,6 +101,40 @@ class SupplementBundleTests(unittest.TestCase):
                 exclude_references=True,
                 require_formal_fake_counts=False,
             )
+
+    def test_registry_hash_is_recomputed_not_trusted(self):
+        split_hash = "a" * 64
+        owner = _owner_map(self.split)
+        entries = {
+            ("tap", user_id, owner[user_id]): tuple(
+                user_id * 10 + offset for offset in range(5)
+            )
+            for user_id in range(100)
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "reference_registry.json"
+            registry = ReferenceRegistry.build(entries, split_hash)
+            registry.write(str(path))
+            ids, counts, observed_hash = load_reference_ids(
+                path,
+                action="tap",
+                owner=owner,
+                expected_split_sha256=split_hash,
+            )
+            self.assertEqual(len(ids), 500)
+            self.assertEqual(counts, {"train": 350, "val": 50, "test": 100})
+            self.assertEqual(observed_hash, registry.registry_sha256)
+
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            payload["entries"][0]["reference_event_ids"][0] += 1_000_000
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "content hash mismatch"):
+                load_reference_ids(
+                    path,
+                    action="tap",
+                    owner=owner,
+                    expected_split_sha256=split_hash,
+                )
 
 
 if __name__ == "__main__":

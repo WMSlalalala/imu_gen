@@ -12,7 +12,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import shutil
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -36,6 +35,7 @@ from detectors.deep_pad import (  # noqa: E402
     load_raw_sequence_bundle,
     save_raw_sequence_bundle,
 )
+from generation.protocol import FixedUserSplit, ReferenceRegistry  # noqa: E402
 
 
 POOLS = ("train", "val", "test")
@@ -82,27 +82,29 @@ def load_reference_ids(
     *,
     action: str,
     owner: Mapping[int, str],
+    expected_split_sha256: str,
 ) -> Tuple[Set[str], Dict[str, int], str]:
-    """Load exactly five unique reference events for each of 100 users."""
+    """Canonically reload exactly five unique refs for each of 100 users."""
 
     path = Path(registry_path)
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("action") != action:
+    if payload.get("action") not in (None, action):
         raise ValueError("reference registry action mismatch for %s" % action)
-    entries = payload.get("entries")
-    if not isinstance(entries, list) or len(entries) != 100:
+    canonical = ReferenceRegistry.load(str(path), expected_split_sha256)
+    if len(canonical.entries) != 100 or {
+        key[0] for key in canonical.entries
+    } != {action}:
         raise ValueError("%s registry must contain exactly 100 user entries" % action)
     seen_users: Set[int] = set()
     reference_ids: Set[str] = set()
     counts = {pool: 0 for pool in POOLS}
-    for entry in entries:
-        user_id = int(entry["user_id"])
+    for (entry_action, user_id, split), raw_ids in canonical.entries.items():
         if user_id in seen_users or user_id not in owner:
             raise ValueError("invalid/duplicate registry user for %s" % action)
         seen_users.add(user_id)
-        if entry.get("action") != action or entry.get("split") != owner[user_id]:
+        if entry_action != action or split != owner[user_id]:
             raise ValueError("registry user/action/split mismatch for %s" % action)
-        ids = tuple(str(int(value)) for value in entry["reference_event_ids"])
+        ids = tuple(str(int(value)) for value in raw_ids)
         if len(ids) != 5 or len(set(ids)) != 5:
             raise ValueError("registry entry is not exactly five unique references")
         if reference_ids.intersection(ids):
@@ -113,10 +115,7 @@ def load_reference_ids(
         raise ValueError("%s registry does not cover 100 users / 500 refs" % action)
     if counts != {"train": 350, "val": 50, "test": 100}:
         raise ValueError("reference pool counts do not follow fixed 70/10/20 users")
-    declared_hash = str(payload.get("registry_sha256", ""))
-    if not declared_hash:
-        raise ValueError("registry does not declare registry_sha256")
-    return reference_ids, counts, declared_hash
+    return reference_ids, counts, canonical.registry_sha256
 
 
 def reassign_user_disjoint(
@@ -259,6 +258,7 @@ def build_supplement_bundle(
 
     split_path = Path(split_json).resolve()
     split = load_fake_user_split(split_path)
+    canonical_split = FixedUserSplit.load(str(split_path), require_formal=True)
     owner = _owner_map(split)
     registry_map_file = Path(registry_map_path).resolve()
     registry_map = json.loads(registry_map_file.read_text(encoding="utf-8"))
@@ -276,7 +276,10 @@ def build_supplement_bundle(
             if any(row.action != action for row in records):
                 raise ValueError("primary bundle action mismatch for %s" % action)
             references, expected_reference_pools, registry_hash = load_reference_ids(
-                Path(registry_map[action]), action=action, owner=owner
+                Path(registry_map[action]),
+                action=action,
+                owner=owner,
+                expected_split_sha256=canonical_split.source_sha256,
             )
             assigned, assigned_features, audit = reassign_user_disjoint(
                 records,
@@ -359,6 +362,7 @@ def audit_supplement_bundle(
         if observed != manifest.get(key):
             raise ValueError("supplement source binding changed: %s" % key)
     split = load_fake_user_split(split_path)
+    canonical_split = FixedUserSplit.load(str(split_path), require_formal=True)
     owner = _owner_map(split)
     registry_map = json.loads(registry_map_path.read_text(encoding="utf-8"))
     exclude = bool(manifest["exclude_references"])
@@ -371,7 +375,10 @@ def audit_supplement_bundle(
             raise ValueError("supplement output hash changed for %s" % action)
         records, features = load_raw_sequence_bundle(path)
         references, _, registry_hash = load_reference_ids(
-            Path(registry_map[action]), action=action, owner=owner
+            Path(registry_map[action]),
+            action=action,
+            owner=owner,
+            expected_split_sha256=canonical_split.source_sha256,
         )
         if registry_hash != manifest["reference_registry_sha256_by_action"][action]:
             raise ValueError("registry identity changed for %s" % action)
@@ -433,4 +440,3 @@ def audit_supplement_bundle(
     }
     _atomic_json(root / "bundle_audit.json", receipt)
     return receipt
-
