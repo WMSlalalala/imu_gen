@@ -280,6 +280,8 @@ Pinch epoch31再次完整消费40,349个targets / 158 batches，valid feature co
 
 任一 error、worker/supervisor 退出、单 batch AMP retry 超上限、NaN/Inf、hash/身份不一致、下游超前运行或任一 fail-closed 门失败仍由正式 supervisor 连续检测并阻止阶段推进；人工健康摘要不需要按分钟重复读取。GitHub源码与Agent轻量交接缓存仍每30分钟同步一次，但它不触发训练级深审计。
 
+2026-07-22 19:57复查时清理了一个旧v15只读健康摘要残留进程；它不是当前v16流水线的一部分。当前训练健康摘要的唯一实时口径是v16 run目录下的每小时`training_health.json`/`training_health.txt`，历史v15报告只能作为失败run归档证据，不能用于判断当前v16训练进度。
+
 ### 10.1 已完成的 30 分钟汇总快照（2026-07-22 18:50 EDT）
 
 | 检查项 | 结果 |
