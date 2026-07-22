@@ -1,6 +1,6 @@
 # 轨迹生成方法与 HMOG 标准数据集测试说明
 
-版本：2026-07-22 19:41 EDT（正式实验进行中、逐步审计版）
+版本：2026-07-22 19:45 EDT（正式实验进行中、逐步审计版）
 
 ## 1. 文档目的与结论边界
 
@@ -235,6 +235,7 @@ Pinch epoch31再次完整消费40,349个targets / 158 batches，valid feature co
 - HMOG 完整语料审计：`trajectory_humanization_full_20260713/results/trajectories_full_v2/formal_audit/formal_data_audit.md`
 - 正式 run：`results/formal_eventplan_v16_numeric_recovery_100epoch_100k_20260722`
 - 训练后阶段就绪性复核：`results/formal_eventplan_v16_numeric_recovery_100epoch_100k_20260722/audits/post_training_readiness_review_20260722.md`
+- GitHub源码镜像：`https://github.com/WMSlalalala/sensor_worldmodel`（不包含数据、results、cache或checkpoint）
 
 本文在后续每个正式阶段完成时更新，最终版将补入 25+5 个检测器的全局指标、4 个时长分层、bootstrap 95% CI、runtime 与所有未关闭问题。
 
