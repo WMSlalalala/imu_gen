@@ -4,8 +4,8 @@
     "trajectory_estimator_pack_20260721/docs/IMU与轨迹交付状态及问题清单.md",
     "trajectory_estimator_pack_20260721/docs/轨迹生成方法与HMOG标准数据集测试说明.md"
   ],
-  "generated_local_time": "2026-07-22T19:59:32-04:00",
-  "generated_unix_time": 1784764772.49227,
+  "generated_local_time": "2026-07-22T20:10:09-04:00",
+  "generated_unix_time": 1784765409.5885708,
   "health": {
     "checked_unix_time": 1784764516.8681903,
     "error_count": 0,
@@ -51,7 +51,7 @@
   "purpose": "Lightweight recovery state; not a substitute for formal manifests or audits.",
   "repository": {
     "branch": "main",
-    "local_head_before_this_sync": "a17e9fcdeb24c37d519bad01cfe0c6f068f63266",
+    "local_head_before_this_sync": "9adc597ff0cd0745a240e2696f30d495eb110bc6",
     "origin": "git@github.com:WMSlalalala/imu_gen.git",
     "web_url": "https://github.com/WMSlalalala/imu_gen"
   },
@@ -68,7 +68,7 @@
     "jobs": {},
     "pid": 2049946,
     "status": "running",
-    "updated_unix_time": 1784764752.3160315
+    "updated_unix_time": 1784765382.9444737
   },
   "training": {
     "keystroke": {
@@ -171,6 +171,6 @@
     "current_stage": "training",
     "pid": 2047761,
     "status": "running",
-    "updated_unix_time": 1784764759.6140282
+    "updated_unix_time": 1784765391.2914155
   }
 }
