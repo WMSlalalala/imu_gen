@@ -40,9 +40,25 @@
 | [`comparison/`](comparison/README.md) | 八个第三方基线加一条真人对照，在同一实验台上各能到多少 | `comparison/code/`（30 个文件：29 个脚本 + 1 份数据文件 `released_generators.json`）、[`comparison/scores/comparison_cells.csv`](comparison/scores/comparison_cells.csv)（258 行）、`comparison/notes/`（9 份逐方法说明） |
 | [`ablation/`](ablation/README.md) | 发布版的哪个部件在起作用 | `ablation/code/`（12 个脚本）、[`ablation/scores/ablation_cells.csv`](ablation/scores/ablation_cells.csv)（180 行）、`ablation/notes/`（10 份，覆盖 A2–A11） |
 
-## 为什么是 FRR=5% 上的 FAR，不是 EER
+## 两个判据：FRR=5% 上的 FAR（主）与 test 上的 EER（对照）
 
-部署时厂商先规定用户能忍受的误拒比例，再看这个前提下漏进来多少假货。在这 90 格上逐格重算，EER 阈值平均要拒掉 33.6% 的真人事件，没有产品会这样发货；FRR=5% 阈值上实测拒真率均值 5.2%。两个判据在本项目上给出方向相反的结论：同一批 90 格，按 EER 读是均值 0.386、0 格过 0.60，按 FRR=5% 读是均值 0.775、77 格过 0.60。格子产物默认写出的 `far` 字段正是 EER 阈值上的值，直接汇总会系统性低估攻击面。细节见 [EXPERIMENTS_CN.md](EXPERIMENTS_CN.md) §1.4。
+**主判据是 FRR=5% 上的 FAR。** 部署时厂商先规定用户能忍受的误拒比例，再看这个前提下漏进来多少假货。这条阈值在**开发集**上选定、冻结，之后才碰评测集（每格 `summary.json` 里的 `test_threshold_selection_calls: 0` 就是这条纪律的记录）。90 格实测拒真率均值 5.2%、最高 9.6%，命中 5% 目标。
+
+**同时提供 EER，因为文献里多数是这么报的**，而且多数是**在 test 上**定位那个等错误点。结果在 [RESULTS_EER.md](RESULTS_EER.md)，由 `comparison/code/eer_tables.py` 生成，两份分数 CSV 里 `eer_test` 与 `far_at_frr5` 是并列的两列，一行一格。
+
+这是**较弱的协议**——等错误点是看着评测集的分数挪出来的。发布版自己的产物把同一个量记作 `primary_metrics.descriptive_test_eer`，`descriptive`（描述性）这个词就是在标注这一点。`eer_tables.py --check` 会把 438 格的重算值与各格自记的该字段逐一比对（当前 0 处不一致）。
+
+**两个判据该怎么一起读。** 方法之间的**排序完全一致**：两张表里都是 发布版 > ImagenTime > Diffusion-TS 轨迹臂 > … > TTS-GAN，消融臂也都是 A8 > A10 > A9 ≈ A11。变的是**尺度和绝对水平**：
+
+| | FAR @ FRR=5% | test EER |
+|---|---|---|
+| 发布版（IMU，30 格） | 0.835 | 0.397 |
+| ImagenTime（IMU，30 格） | 0.683 | 0.301 |
+| 真人对照（IMU，30 格） | 0.773 | 0.447 |
+
+EER 的理论上限是 0.5（完全分不开），所以 0.397 不是「只有四成」——**真人对照的 0.447 才是这条流水线上可达的天花板，发布版到了它的 89%，ImagenTime 到 67%**。反过来，按 0.60 这条工程线去数格子，两个判据会给出相反的印象：FRR=5% 口径下 77/90 格过线，EER 口径下 0 格过线。**所以「≥0.60 的格子数」这一列只对主判据有意义，不要拿到 EER 表上用。**
+
+一个容易踩的坑：格子产物默认写出的 `far` 字段取在**开发集选定的 EER 阈值**上（90 格均值 0.386），既不是主判据的 0.775，也不是 test EER 的 0.397——三者是三个不同的操作点。直接汇总 `far` 字段会系统性低估攻击面。取数一律走 `summarise_final.collect(method, metric)`，`metric` 只有 `far5` 与 `test_eer` 两个合法值。细节见 [EXPERIMENTS_CN.md](EXPERIMENTS_CN.md) §1.4。
 
 ## 环境
 
@@ -64,7 +80,7 @@
 
 ## 仓库里有什么、没有什么
 
-有：全部评测与基线构建代码、逐格分数 CSV（列为 `action` / `modality` / `detector` / `far_at_frr5`，对比与消融两张表另有 `method` 列）、19 份由构建产物自动生成的逐方法可复现说明（因此不会与实际跑的东西漂移；**一处已知例外**——`comparison/notes/csdi_unconditional.md` 里关于五-shot 臂的那一句是脚本硬编码、不是从产物读出来的，文字本身已按日志证据改正并重新生成，但它仍靠人工维护，见 [comparison/README.md](comparison/README.md) §7 与 §9）。分数可自行核对，例如复算发布版总成绩：
+有：全部评测与基线构建代码、逐格分数 CSV（列为 `action` / `modality` / `detector` / `far_at_frr5` / `eer_test`，对比与消融两张表另有 `method` 列——两个判据并列，一行一格）、19 份由构建产物自动生成的逐方法可复现说明（因此不会与实际跑的东西漂移；**一处已知例外**——`comparison/notes/csdi_unconditional.md` 里关于五-shot 臂的那一句是脚本硬编码、不是从产物读出来的，文字本身已按日志证据改正并重新生成，但它仍靠人工维护，见 [comparison/README.md](comparison/README.md) §7 与 §9）。分数可自行核对，例如复算发布版总成绩：
 
 ```bash
 cd evaluation

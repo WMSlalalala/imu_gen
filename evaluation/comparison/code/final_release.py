@@ -97,6 +97,32 @@ def cell_sources() -> dict:
     return resolved
 
 
+def reference_scores_eer() -> dict:
+    """The release's own equal-error rate, located on the test split.
+
+    Same cells `provenance.json` points at as `reference_scores`, scored at the
+    other operating point.  See `summarise_final.read_cell` for why this one is
+    the weaker protocol: the cut is chosen knowing the test scores, which is why
+    the release's own artefacts label the same quantity "descriptive".
+
+    Returns {(action, modality, detector) -> {"eer":, "cut":, "far":, "frr":}}.
+    """
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from summarise_final import read_cell
+
+    scores = {}
+    for key, directory in sorted(cell_sources().items()):
+        action, modality, detector = key
+        cell = WORKING_RESULTS / directory / "cells" / f"{action}__{modality}__{detector}"
+        result = read_cell(cell, "test_eer")
+        if result is None:
+            continue
+        eer, cut, far, frr = result
+        scores[key] = {"eer": eer, "cut": cut, "far": far, "frr": frr}
+    return scores
+
+
 def reference_scores() -> dict:
     """The release's own FAR at the development-selected FRR=5% threshold.
 

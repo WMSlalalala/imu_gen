@@ -14,6 +14,7 @@ comparison cannot drift from the numbers the paper reports.
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import statistics
 import sys
@@ -34,35 +35,75 @@ from final_release import (  # noqa: E402
 ROOT = Path("/mnt/share/mwang49/data7/results/direct100k/baselines/final")
 
 
-def read_cell(cell: Path) -> tuple | None:
-    """FAR and FRR at the development-selected FRR=5% threshold."""
-
+def _load_scores(cell: Path):
+    """The cell's test scores, split by label. None if the cell is incomplete."""
     thresholds_path = cell / "thresholds.json"
     scores_path = cell / "test_scores.jsonl"
+    if not scores_path.is_file():
+        scores_path = cell / "test_scores.jsonl.gz"
     if not thresholds_path.is_file() or not scores_path.is_file():
         return None
     thresholds = json.loads(thresholds_path.read_text())
     if thresholds["score_direction"] != "larger_is_more_fake":
         raise SystemExit(f"unexpected score direction in {cell}")
-    cut = float(thresholds["frr5"])
-    fake = accepted = genuine = rejected = 0
-    with scores_path.open() as handle:
+    opener = gzip.open if scores_path.suffix == ".gz" else open
+    fake, genuine = [], []
+    with opener(scores_path, "rt") as handle:
         for line in handle:
             row = json.loads(line)
-            score = float(row["fake_high_score"])
-            if int(row["label"]) == 1:
-                fake += 1
-                accepted += score < cut
-            else:
-                genuine += 1
-                rejected += score >= cut
+            (fake if int(row["label"]) == 1 else genuine).append(float(row["fake_high_score"]))
     if not fake or not genuine:
         return None
-    return accepted / fake, rejected / genuine
+    return thresholds, fake, genuine
 
 
-def collect(method: str) -> tuple:
-    """{(action, modality, detector) -> far} plus the cells that are missing."""
+def read_cell(cell: Path, metric: str = "far5") -> tuple | None:
+    """One cell's number, at one of two operating points.
+
+    `far5` -- FAR and FRR at the FRR=5% threshold that was selected on the
+    development split.  This is the paper's primary criterion: the threshold is
+    fixed before the test set is touched, which is what a deployed detector does.
+
+    `test_eer` -- the equal-error rate located on the test set itself, plus the
+    threshold that achieves it.  Many papers report EER this way, so it is here
+    for comparability, but it is a weaker protocol: the operating point is chosen
+    with knowledge of the test scores.  The release's own artefacts record the
+    same quantity under `primary_metrics.descriptive_test_eer`, and name it
+    "descriptive" for exactly that reason.
+    """
+    loaded = _load_scores(cell)
+    if loaded is None:
+        return None
+    thresholds, fake, genuine = loaded
+
+    if metric == "far5":
+        cut = float(thresholds["frr5"])
+        accepted = sum(1 for s in fake if s < cut)
+        rejected = sum(1 for s in genuine if s >= cut)
+        return accepted / len(fake), rejected / len(genuine)
+
+    if metric == "test_eer":
+        import numpy as _np
+        f = _np.asarray(fake); g = _np.asarray(genuine)
+        # Sweep every distinct score as a candidate cut and keep the one where
+        # the two error rates come closest; EER is their average there.
+        best = None
+        for cut in _np.unique(_np.concatenate([f, g])):
+            far = float((f < cut).mean())
+            frr = float((g >= cut).mean())
+            gap = abs(far - frr)
+            if best is None or gap < best[0]:
+                best = (gap, float(cut), far, frr)
+        _gap, cut, far, frr = best
+        return (far + frr) / 2.0, cut, far, frr
+
+    raise SystemExit(f"unknown metric {metric!r}")
+
+
+def collect(method: str, metric: str = "far5") -> tuple:
+    """{(action, modality, detector) -> number} plus the cells that are missing.
+
+    `metric` picks the operating point -- see read_cell."""
 
     root = ROOT / method
     manifest_path = root / "bundle_manifest.json"
@@ -97,7 +138,7 @@ def collect(method: str) -> tuple:
             cells_dir = root / f"cells_{bundle}_{modality}" / "cells"
             for detector in DETECTORS:
                 cell = cells_dir / f"{action}__{modality}__{detector}"
-                result = read_cell(cell)
+                result = read_cell(cell, metric)
                 if result is None:
                     missing.append(f"{action}__{modality}__{detector}")
                 else:
