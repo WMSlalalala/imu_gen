@@ -1,0 +1,40 @@
+# evaluation/ 的运行环境，钉死到作者机器上实测的版本。
+# 两档路径，见 README.md「环境」一节：
+#
+#   (A) 只复算 CSV（本目录所有均值 / 中位 / >=0.60 计数）
+#       ——不需要本文件。Python 3 标准库的 csv + statistics 就够；
+#         main/README.md 里的示例片段另需 pandas。
+#
+#   (B) 重跑第三方基线、重建数据集或重训检测器
+#       ——需要下列全部。Python 3.10.20（作者机器 conda env `cuhkx`）；
+#         CUDA 12.1 运行时、cuDNN 9.1.0、NVIDIA 驱动 610.43.02、
+#         2 x RTX A6000（各 49,140 MiB）；从零复现整条链约需 150 GB 磁盘。
+#
+# 注意：evaluation/*/code/ 下的脚本把解释器绝对路径
+# /home/mwang49/miniconda3/envs/cuhkx/bin/python 写死了，换机器须先改。
+
+# --- 只复算 CSV 时唯一可能用到的第三方包（可选） ---
+pandas==2.3.3
+
+# --- 归档代码（evaluation/*/code/）与冻结发布版检测器代码实际 import 的包 ---
+numpy==2.2.6
+scikit-learn==1.7.2
+xgboost==3.2.0
+joblib==1.5.3
+PyYAML==6.0.3
+
+# --- 深度检测器与生成器 ---
+# CUDA 轮子来自 https://download.pytorch.org/whl/cu121 与 .../cu124，
+# 安装时按该索引取，否则会装到 CPU 版。
+torch==2.5.1+cu121
+torchvision==0.20.1+cu124
+
+# --- 四个上游生成模型仓库（Diffusion-TS / CSDI / ImagenTime / TTS-GAN）---
+# 它们各自带 requirements，按其说明安装即可；下面是同一 env 里实测共存、
+# 能跑通 comparison/code/run_*.py 的版本，仅作参考基线。
+einops==0.8.2
+ema-pytorch==0.7.9
+tqdm==4.68.1
+matplotlib==3.10.9
+accelerate==1.13.0
+transformers==4.53.3

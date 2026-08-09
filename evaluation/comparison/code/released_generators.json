@@ -1,0 +1,105 @@
+{
+  "note": "The generator run behind each released checkpoint, pinned by name. Selecting by mtime instead would let any later training run -- including the A7 ablation, which must train under fewshot_adv -- silently replace the release.",
+  "runs": {
+    "keystroke": {
+      "fewshot_adv": {
+        "checkpoint": "best_post_adv_epoch0032_step22464_metric0.320932_20260629_225517.pt",
+        "run": "keystroke_diffusion_fewshot_adv_v21",
+        "source": "release cache metadata_json"
+      },
+      "noshot_adv": {
+        "checkpoint": "best_post_adv_epoch0064_step44928_metric0.307100_20260629_231209.pt",
+        "run": "keystroke_diffusion_noshot_adv_v21",
+        "source": "newest run (never entered the release)"
+      }
+    },
+    "pinch": {
+      "fewshot": {
+        "checkpoint": "best_epoch0064_step18112_metric0.099884_20260630_121602.pt",
+        "run": "pinch_diffusion_fewshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "fewshot_adv": {
+        "checkpoint": "last.pt",
+        "run": "pinch_diffusion_fewshot_adv_featmatch_20260630_0750",
+        "source": "release cache metadata_json"
+      },
+      "noshot": {
+        "checkpoint": "best_epoch0048_step13584_metric0.103493_20260630_115355.pt",
+        "run": "pinch_diffusion_noshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "noshot_adv": {
+        "checkpoint": "best_epoch0048_step13584_metric0.099054_20260629_220044.pt",
+        "run": "pinch_diffusion_noshot_adv_v21",
+        "source": "newest run (never entered the release)"
+      }
+    },
+    "scroll": {
+      "fewshot": {
+        "checkpoint": "best_epoch0032_step13632_metric0.125613_20260630_111102.pt",
+        "run": "scroll_diffusion_fewshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "fewshot_adv": {
+        "checkpoint": "last.pt",
+        "run": "scroll_diffusion_fewshot_adv_featdist_20260630_0825",
+        "source": "release cache metadata_json"
+      },
+      "noshot": {
+        "checkpoint": "best_epoch0032_step13632_metric0.118092_20260630_110841.pt",
+        "run": "scroll_diffusion_noshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "noshot_adv": {
+        "checkpoint": "best_post_adv_epoch0048_step20448_metric0.313296_20260629_210715.pt",
+        "run": "scroll_diffusion_noshot_adv_v21",
+        "source": "newest run (never entered the release)"
+      }
+    },
+    "swipe": {
+      "fewshot": {
+        "checkpoint": "best_epoch0032_step11008_metric0.113319_20260630_115632.pt",
+        "run": "swipe_diffusion_fewshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "fewshot_adv": {
+        "checkpoint": "best_post_adv_epoch0125_step43000_metric0.371361_20260630_070731.pt",
+        "run": "swipe_diffusion_fewshot_adv_featmatch_20260630_0703",
+        "source": "release cache metadata_json"
+      },
+      "noshot": {
+        "checkpoint": "best_epoch0032_step11008_metric0.113183_20260630_115229.pt",
+        "run": "swipe_diffusion_noshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "noshot_adv": {
+        "checkpoint": "best_post_adv_epoch0032_step11008_metric0.316679_20260629_213014.pt",
+        "run": "swipe_diffusion_noshot_adv_v21",
+        "source": "newest run (never entered the release)"
+      }
+    },
+    "tap": {
+      "fewshot": {
+        "checkpoint": "best_epoch0064_step6592_metric0.122146_20260630_105927.pt",
+        "run": "tap_diffusion_fewshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "fewshot_adv": {
+        "checkpoint": "best_post_adv_epoch0120_step12360_metric0.314798_20260630_022125.pt",
+        "run": "tap_diffusion_fewshot_adv_padpush2_20260630_021833",
+        "source": "release cache metadata_json"
+      },
+      "noshot": {
+        "checkpoint": "best_epoch0080_step8240_metric0.125725_20260630_105952.pt",
+        "run": "tap_diffusion_noshot_nonadv_v21_20260630_1055",
+        "source": "newest run (never entered the release)"
+      },
+      "noshot_adv": {
+        "checkpoint": "best_post_adv_epoch0080_step8240_metric0.294835_20260629_204532.pt",
+        "run": "tap_diffusion_noshot_adv_v21",
+        "source": "newest run (never entered the release)"
+      }
+    }
+  }
+}
