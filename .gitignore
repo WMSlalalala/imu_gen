@@ -25,6 +25,17 @@
 !/android_duration_time_fixed_20260720/imu_release_20260721/
 !/android_duration_time_fixed_20260720/imu_release_20260721/**
 
+# The method tree: the pipeline index and data map, pointing at the curated
+# root dirs that implement each stage. Text only -- see method/DATA.md.
+!/method/
+!/method/**
+
+# The evaluation tree: code, per-cell score tables and the write-ups.
+# Deliberately no datasets -- see evaluation/DATA.md for where the 118 GB of
+# generated events and the 6.5 GB frozen release live and why they stay out.
+!/evaluation/
+!/evaluation/**
+
 # Never publish datasets, results, caches, checkpoints or transient files.
 **/results/
 **/results/**
