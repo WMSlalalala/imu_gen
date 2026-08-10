@@ -1,0 +1,2055 @@
+{
+ "meta": {
+  "task": "reconciliation of two independent session-aggregation measurements",
+  "primary_release": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells (repo-published; event FAR@frr5 = 0.7746)",
+  "secondary_release": "/mnt/share/mwang49/data7/results/direct100k/detectors_90cell/cells (r1 pre-fix baseline; event FAR@frr5 = 0.4447) -- READ ONLY",
+  "n_sessions": 474,
+  "n_users": 20,
+  "referee_script": "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/sessagg/C/referee.py",
+  "referee_outputs": [
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/sessagg/C/referee_repo.json",
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/sessagg/C/referee_mnt.json"
+  ],
+  "referee_design": "third independent implementation; third seed scheme (900001+7r, R=20); both user splits plus 200 random balanced 10/10 splits; both price conventions; brute-force validation of the session cut rule",
+  "tolerance": 0.005
+ },
+ "verdict": "The two implementations agree. Every mechanical choice that could have differed -- threshold field, accept rule, tie handling at the session cut, within-session sampling, count-rule off-by-one -- is identical, and the referee confirms both. All residual disagreements trace to three REPORTING choices, not to measurement error: (1) which fixed user split is called primary, (2) A reporting bootstrap means in the breakout rows where B reports point estimates, (3) A pricing detection off the macro-averaged curve where B averages per-cell prices. The scientific conclusion is identical in both and survives reconciliation.",
+ "comparison_table": [
+  {
+   "quantity": "event FAR@frr5 mean over 90 cells",
+   "A": 0.7745750000000001,
+   "B": 0.774575,
+   "absdiff": 1.1102230246251565e-16,
+   "reconciled": 0.7745749999999999,
+   "note": ""
+  },
+  {
+   "quantity": "event FRR@frr5 mean over 90 cells",
+   "A": 0.052332450069657546,
+   "B": 0.052332,
+   "absdiff": 4.5006965754962325e-07,
+   "reconciled": 0.052332450069657546,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR5, macro18, S1_COUNT",
+   "A": 0.36587552742616036,
+   "B": 0.3681,
+   "absdiff": 0.00222447257383962,
+   "reconciled": 0.36506472691045466,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR5, macro18, S2_MEAN",
+   "A": 0.4890646976090014,
+   "B": 0.4889,
+   "absdiff": 0.0001646976090013963,
+   "reconciled": 0.4880945557899672,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR5, macro18, S3_MAX",
+   "A": 0.39970698546647915,
+   "B": 0.4105,
+   "absdiff": 0.010793014533520828,
+   "reconciled": 0.40409367674636665,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR5, macro18, S4_TRIMMED",
+   "A": 0.48960970464135023,
+   "B": 0.4947,
+   "absdiff": 0.0050902953586497435,
+   "reconciled": 0.49476292194092825,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR5, macro18, S5_LOGODDS",
+   "A": 0.40212728551336147,
+   "B": 0.3977,
+   "absdiff": 0.0044272855133614675,
+   "reconciled": 0.4005410806375996,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S1_COUNT",
+   "A": 0.2324660103141116,
+   "B": 0.2383,
+   "absdiff": 0.005833989685888413,
+   "reconciled": 0.23453029770276604,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S2_MEAN",
+   "A": 0.2505332864510079,
+   "B": 0.2561,
+   "absdiff": 0.005566713548992075,
+   "reconciled": 0.25618260665729015,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S3_MAX",
+   "A": 0.2584505391467417,
+   "B": 0.2511,
+   "absdiff": 0.007350539146741719,
+   "reconciled": 0.2532605778246601,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S4_TRIMMED",
+   "A": 0.24267463666197842,
+   "B": 0.2518,
+   "absdiff": 0.009125363338021608,
+   "reconciled": 0.25333295241443976,
+   "note": ""
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S5_LOGODDS",
+   "A": 0.2646976090014065,
+   "B": 0.2739,
+   "absdiff": 0.00920239099859349,
+   "reconciled": 0.27032759024847625,
+   "note": ""
+  },
+  {
+   "quantity": "realised held-out session FA @q=0.05, S1_COUNT",
+   "A": 0.039967182372245655,
+   "B": 0.0407,
+   "absdiff": 0.0007328176277543452,
+   "reconciled": 0.03982184716361933,
+   "note": ""
+  },
+  {
+   "quantity": "realised held-out session FA @q=0.05, S2_MEAN",
+   "A": 0.051336146272855133,
+   "B": 0.0532,
+   "absdiff": 0.0018638537271448638,
+   "reconciled": 0.05208802156586968,
+   "note": ""
+  },
+  {
+   "quantity": "realised held-out session FA @q=0.05, S3_MAX",
+   "A": 0.05121894045944679,
+   "B": 0.0554,
+   "absdiff": 0.004181059540553207,
+   "reconciled": 0.051251758087201144,
+   "note": ""
+  },
+  {
+   "quantity": "realised held-out session FA @q=0.05, S4_TRIMMED",
+   "A": 0.05168776371308016,
+   "B": 0.0519,
+   "absdiff": 0.00021223628691983965,
+   "reconciled": 0.051728199718706055,
+   "note": ""
+  },
+  {
+   "quantity": "realised held-out session FA @q=0.05, S5_LOGODDS",
+   "A": 0.05215658696671355,
+   "B": 0.051,
+   "absdiff": 0.0011565869667135506,
+   "reconciled": 0.05180672761368966,
+   "note": ""
+  },
+  {
+   "quantity": "session AUC, macro18, S1_COUNT",
+   "A": 0.7711426491184343,
+   "B": 0.7714,
+   "absdiff": 0.00025735088156564334,
+   "reconciled": 0.7709287176002579,
+   "note": ""
+  },
+  {
+   "quantity": "session AUC, macro18, S2_MEAN",
+   "A": 0.8493183146694202,
+   "B": 0.8497,
+   "absdiff": 0.00038168533057980625,
+   "reconciled": 0.8493927799240784,
+   "note": ""
+  },
+  {
+   "quantity": "session AUC, macro18, S3_MAX",
+   "A": 0.7626485039691724,
+   "B": 0.7633,
+   "absdiff": 0.0006514960308275919,
+   "reconciled": 0.762855116305752,
+   "note": ""
+  },
+  {
+   "quantity": "session AUC, macro18, S4_TRIMMED",
+   "A": 0.8110055949703375,
+   "B": 0.8118,
+   "absdiff": 0.0007944050296624372,
+   "reconciled": 0.8105754508714772,
+   "note": ""
+  },
+  {
+   "quantity": "session AUC, macro18, S5_LOGODDS",
+   "A": 0.783746199465502,
+   "B": 0.7834,
+   "absdiff": 0.0003461994655019618,
+   "reconciled": 0.7836133167563761,
+   "note": ""
+  },
+  {
+   "quantity": "oracle caught@sessionFRR5, macro18, S1_COUNT",
+   "A": 0.36244725738396627,
+   "B": 0.3611,
+   "absdiff": 0.0013472573839662938,
+   "reconciled": 0.36251172058134085,
+   "note": ""
+  },
+  {
+   "quantity": "oracle caught@sessionFRR5, macro18, S2_MEAN",
+   "A": 0.48658579465541485,
+   "B": 0.4854,
+   "absdiff": 0.0011857946554148513,
+   "reconciled": 0.4863748241912799,
+   "note": ""
+  },
+  {
+   "quantity": "oracle caught@sessionFRR5, macro18, S3_MAX",
+   "A": 0.4035923581809657,
+   "B": 0.4027,
+   "absdiff": 0.0008923581809657244,
+   "reconciled": 0.40349859353023904,
+   "note": ""
+  },
+  {
+   "quantity": "oracle caught@sessionFRR5, macro18, S4_TRIMMED",
+   "A": 0.49832395686826064,
+   "B": 0.4966,
+   "absdiff": 0.0017239568682606565,
+   "reconciled": 0.49840600093764653,
+   "note": ""
+  },
+  {
+   "quantity": "oracle caught@sessionFRR5, macro18, S5_LOGODDS",
+   "A": 0.40063877168307555,
+   "B": 0.4005,
+   "absdiff": 0.00013877168307552257,
+   "reconciled": 0.40173464603844355,
+   "note": ""
+  },
+  {
+   "quantity": "price of detection @caught0.5, S1_COUNT (aggregate)",
+   "A": 0.10478199718706048,
+   "B": 0.1409,
+   "absdiff": 0.03611800281293952,
+   "reconciled": 0.14064697609001406,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.1001)"
+  },
+  {
+   "quantity": "price of detection @caught0.8, S1_COUNT (aggregate)",
+   "A": 0.44397562119081113,
+   "B": 0.6545,
+   "absdiff": 0.21052437880918884,
+   "reconciled": 0.6746366619784342,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.4440)"
+  },
+  {
+   "quantity": "price of detection @caught0.95, S1_COUNT (aggregate)",
+   "A": 1.0,
+   "B": 0.9703,
+   "absdiff": 0.02969999999999995,
+   "reconciled": 0.9687060478199719,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 1.0000)"
+  },
+  {
+   "quantity": "price of detection @caught0.5, S2_MEAN (aggregate)",
+   "A": 0.05872011251758088,
+   "B": 0.0739,
+   "absdiff": 0.015179887482419115,
+   "reconciled": 0.0723159868729489,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.0556)"
+  },
+  {
+   "quantity": "price of detection @caught0.8, S2_MEAN (aggregate)",
+   "A": 0.26933895921237694,
+   "B": 0.2757,
+   "absdiff": 0.006361040787623062,
+   "reconciled": 0.27226910454758557,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.2693)"
+  },
+  {
+   "quantity": "price of detection @caught0.95, S2_MEAN (aggregate)",
+   "A": 0.696671354899203,
+   "B": 0.586,
+   "absdiff": 0.11067135489920299,
+   "reconciled": 0.5917721518987342,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.6954)"
+  },
+  {
+   "quantity": "price of detection @caught0.5, S3_MAX (aggregate)",
+   "A": 0.10232067510548525,
+   "B": 0.1078,
+   "absdiff": 0.005479324894514762,
+   "reconciled": 0.11005625879043601,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.1008)"
+  },
+  {
+   "quantity": "price of detection @caught0.8, S3_MAX (aggregate)",
+   "A": 0.5225035161744023,
+   "B": 0.4921,
+   "absdiff": 0.03040351617440229,
+   "reconciled": 0.49203000468823255,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.5246)"
+  },
+  {
+   "quantity": "price of detection @caught0.95, S3_MAX (aggregate)",
+   "A": 0.8479840600093763,
+   "B": 0.7891,
+   "absdiff": 0.05888406000937629,
+   "reconciled": 0.7900843881856541,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.8438)"
+  },
+  {
+   "quantity": "price of detection @caught0.5, S4_TRIMMED (aggregate)",
+   "A": 0.056024378809188945,
+   "B": 0.0718,
+   "absdiff": 0.015775621190811058,
+   "reconciled": 0.07044069385841538,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.0545)"
+  },
+  {
+   "quantity": "price of detection @caught0.8, S4_TRIMMED (aggregate)",
+   "A": 0.4050632911392406,
+   "B": 0.3807,
+   "absdiff": 0.024363291139240628,
+   "reconciled": 0.38103609939052974,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.4051)"
+  },
+  {
+   "quantity": "price of detection @caught0.95, S4_TRIMMED (aggregate)",
+   "A": 0.797937177684013,
+   "B": 0.7082,
+   "absdiff": 0.0897371776840129,
+   "reconciled": 0.7139006094702297,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.7949)"
+  },
+  {
+   "quantity": "price of detection @caught0.5, S5_LOGODDS (aggregate)",
+   "A": 0.11333802156586967,
+   "B": 0.164,
+   "absdiff": 0.05066197843413034,
+   "reconciled": 0.16373652133145805,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.1079)"
+  },
+  {
+   "quantity": "price of detection @caught0.8, S5_LOGODDS (aggregate)",
+   "A": 0.4467885607126114,
+   "B": 0.4006,
+   "absdiff": 0.046188560712611404,
+   "reconciled": 0.39791373652133144,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.4453)"
+  },
+  {
+   "quantity": "price of detection @caught0.95, S5_LOGODDS (aggregate)",
+   "A": 0.7408579465541492,
+   "B": 0.5966,
+   "absdiff": 0.14425794655414914,
+   "reconciled": 0.5965775902484762,
+   "note": "A used macro-curve convention, B used mean-of-per-cell; reconciled = mean-of-per-cell (A's macro-curve value = 0.7365)"
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S1_COUNT",
+   "A": 0.3928204027332691,
+   "B": 0.3973,
+   "absdiff": 0.0044795972667308614,
+   "reconciled": 0.38987675808720096,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_only, S1_COUNT",
+   "A": 0.25997170387713026,
+   "B": 0.256,
+   "absdiff": 0.00397170387713025,
+   "reconciled": 0.25621255274261595,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S1_COUNT",
+   "A": 0.45345587871281773,
+   "B": 0.4511,
+   "absdiff": 0.002355878712817727,
+   "reconciled": 0.44910486990154713,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S1_COUNT",
+   "A": 0.2946027359802606,
+   "B": 0.2836,
+   "absdiff": 0.01100273598026058,
+   "reconciled": 0.2898862517580872,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_rf, S1_COUNT",
+   "A": 0.38589811030524024,
+   "B": 0.3861,
+   "absdiff": 0.00020188969475976037,
+   "reconciled": 0.37829324894514754,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S1_COUNT",
+   "A": 0.2646536158674421,
+   "B": 0.2636,
+   "absdiff": 0.0010536158674421259,
+   "reconciled": 0.2628496835443039,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S1_COUNT",
+   "A": 0.4704596933355161,
+   "B": 0.4652,
+   "absdiff": 0.005259693335516125,
+   "reconciled": 0.4658693741209565,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S1_COUNT",
+   "A": 0.30179698567924607,
+   "B": 0.3138,
+   "absdiff": 0.012003014320753957,
+   "reconciled": 0.30447345288326283,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S1_COUNT",
+   "A": 0.49508482947872917,
+   "B": 0.4965,
+   "absdiff": 0.0014151705212708254,
+   "reconciled": 0.4890163502109701,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S2_MEAN",
+   "A": 0.49279953269372784,
+   "B": 0.4806,
+   "absdiff": 0.01219953269372781,
+   "reconciled": 0.48407392756680734,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_only, S2_MEAN",
+   "A": 0.34060609088935223,
+   "B": 0.34,
+   "absdiff": 0.0006060908893522066,
+   "reconciled": 0.3382616912798875,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S2_MEAN",
+   "A": 0.6432459637880761,
+   "B": 0.6459,
+   "absdiff": 0.002654036211923949,
+   "reconciled": 0.6419480485232069,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S2_MEAN",
+   "A": 0.3813118271641803,
+   "B": 0.3964,
+   "absdiff": 0.015088172835819702,
+   "reconciled": 0.3784632559774967,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_rf, S2_MEAN",
+   "A": 0.5276698529456926,
+   "B": 0.5312,
+   "absdiff": 0.003530147054307431,
+   "reconciled": 0.5302417369901549,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S2_MEAN",
+   "A": 0.333059839312049,
+   "B": 0.3177,
+   "absdiff": 0.01535983931204904,
+   "reconciled": 0.3241694796061884,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S2_MEAN",
+   "A": 0.706553616544067,
+   "B": 0.7013,
+   "absdiff": 0.005253616544066975,
+   "reconciled": 0.7006044303797466,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S2_MEAN",
+   "A": 0.4077396838629835,
+   "B": 0.4074,
+   "absdiff": 0.0003396838629834975,
+   "reconciled": 0.4006506680731364,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S2_MEAN",
+   "A": 0.5969683549133399,
+   "B": 0.5791,
+   "absdiff": 0.017868354913339934,
+   "reconciled": 0.5944377637130803,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S3_MAX",
+   "A": 0.42350986508975325,
+   "B": 0.4271,
+   "absdiff": 0.003590134910246734,
+   "reconciled": 0.4201501406469761,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_only, S3_MAX",
+   "A": 0.34350948459363506,
+   "B": 0.348,
+   "absdiff": 0.004490515406364914,
+   "reconciled": 0.34127593178621657,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S3_MAX",
+   "A": 0.45133159639291937,
+   "B": 0.4564,
+   "absdiff": 0.005068403607080607,
+   "reconciled": 0.4508549578059073,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S3_MAX",
+   "A": 0.2583991254895501,
+   "B": 0.2745,
+   "absdiff": 0.016100874510449947,
+   "reconciled": 0.260804676511955,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_rf, S3_MAX",
+   "A": 0.4557233101012524,
+   "B": 0.4567,
+   "absdiff": 0.000976689898747607,
+   "reconciled": 0.45606627988748244,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S3_MAX",
+   "A": 0.23673303612351157,
+   "B": 0.2547,
+   "absdiff": 0.017966963876488412,
+   "reconciled": 0.2370130098452883,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S3_MAX",
+   "A": 0.6237477892031366,
+   "B": 0.6169,
+   "absdiff": 0.006847789203136556,
+   "reconciled": 0.61923417721519,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S3_MAX",
+   "A": 0.38252675963230165,
+   "B": 0.376,
+   "absdiff": 0.006526759632301649,
+   "reconciled": 0.3729513009845289,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S3_MAX",
+   "A": 0.47957187160286313,
+   "B": 0.4841,
+   "absdiff": 0.0045281283971368436,
+   "reconciled": 0.4784926160337552,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S4_TRIMMED",
+   "A": 0.5129711259964191,
+   "B": 0.5096,
+   "absdiff": 0.0033711259964190887,
+   "reconciled": 0.5141011779184245,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_only, S4_TRIMMED",
+   "A": 0.36313087885745526,
+   "B": 0.361,
+   "absdiff": 0.002130878857455276,
+   "reconciled": 0.36971220112517583,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S4_TRIMMED",
+   "A": 0.6021403128127074,
+   "B": 0.6134,
+   "absdiff": 0.011259687187292533,
+   "reconciled": 0.6004753867791842,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S4_TRIMMED",
+   "A": 0.3800589477047192,
+   "B": 0.3943,
+   "absdiff": 0.014241052295280776,
+   "reconciled": 0.38245622362869197,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_rf, S4_TRIMMED",
+   "A": 0.5576275111169213,
+   "B": 0.5618,
+   "absdiff": 0.00417248888307864,
+   "reconciled": 0.5630005274261604,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S4_TRIMMED",
+   "A": 0.33112399951055294,
+   "B": 0.3278,
+   "absdiff": 0.003323999510552955,
+   "reconciled": 0.3228753516174403,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S4_TRIMMED",
+   "A": 0.6975267760390746,
+   "B": 0.7104,
+   "absdiff": 0.012873223960925384,
+   "reconciled": 0.710464310829817,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S4_TRIMMED",
+   "A": 0.4096748315028818,
+   "B": 0.3981,
+   "absdiff": 0.0115748315028818,
+   "reconciled": 0.4103827355836849,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S4_TRIMMED",
+   "A": 0.5804725694590136,
+   "B": 0.5755,
+   "absdiff": 0.004972569459013587,
+   "reconciled": 0.5793983825597747,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S5_LOGODDS",
+   "A": 0.43030763435717273,
+   "B": 0.4217,
+   "absdiff": 0.008607634357172711,
+   "reconciled": 0.4303950421940928,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_only, S5_LOGODDS",
+   "A": 0.2860156983877995,
+   "B": 0.2837,
+   "absdiff": 0.002315698387799492,
+   "reconciled": 0.27975017580872,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S5_LOGODDS",
+   "A": 0.4927357697893291,
+   "B": 0.4877,
+   "absdiff": 0.00503576978932907,
+   "reconciled": 0.491478023909986,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S5_LOGODDS",
+   "A": 0.1763012832181549,
+   "B": 0.1704,
+   "absdiff": 0.00590128321815489,
+   "reconciled": 0.1755838607594937,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_rf, S5_LOGODDS",
+   "A": 0.3926177508992784,
+   "B": 0.3838,
+   "absdiff": 0.008817750899278443,
+   "reconciled": 0.3916424050632912,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S5_LOGODDS",
+   "A": 0.16228868954095133,
+   "B": 0.1665,
+   "absdiff": 0.004211310459048684,
+   "reconciled": 0.1608964486638537,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S5_LOGODDS",
+   "A": 0.537718125277619,
+   "B": 0.529,
+   "absdiff": 0.008718125277618949,
+   "reconciled": 0.534120428973277,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S5_LOGODDS",
+   "A": 0.4902410700441712,
+   "B": 0.4856,
+   "absdiff": 0.004641070044171247,
+   "reconciled": 0.48924701125175796,
+   "note": ""
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S5_LOGODDS",
+   "A": 0.6589512860884279,
+   "B": 0.6509,
+   "absdiff": 0.008051286088427867,
+   "reconciled": 0.651756329113924,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=1, macro session FA",
+   "A": 0.4660103141115799,
+   "B": 0.466,
+   "absdiff": 1.0314111579867724e-05,
+   "reconciled": 0.4660103141115799,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=1, macro caught",
+   "A": 0.8166373652133146,
+   "B": 0.8185,
+   "absdiff": 0.0018626347866853576,
+   "reconciled": 0.8165318799812471,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=2, macro session FA",
+   "A": 0.23312236286919832,
+   "B": 0.2331,
+   "absdiff": 2.236286919832242e-05,
+   "reconciled": 0.23312236286919832,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=2, macro caught",
+   "A": 0.6580168776371307,
+   "B": 0.6571,
+   "absdiff": 0.0009168776371306642,
+   "reconciled": 0.6571905766526018,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=3, macro session FA",
+   "A": 0.11954992967651197,
+   "B": 0.1195,
+   "absdiff": 4.992967651197555e-05,
+   "reconciled": 0.11954992967651197,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=3, macro caught",
+   "A": 0.5358649789029537,
+   "B": 0.534,
+   "absdiff": 0.0018649789029536734,
+   "reconciled": 0.5359411626816689,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=4, macro session FA",
+   "A": 0.06645569620253164,
+   "B": 0.0665,
+   "absdiff": 4.430379746836466e-05,
+   "reconciled": 0.06645569620253164,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=4, macro caught",
+   "A": 0.44189521800281295,
+   "B": 0.4407,
+   "absdiff": 0.00119521800281297,
+   "reconciled": 0.44189521800281295,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=5, macro session FA",
+   "A": 0.03844350679793717,
+   "B": 0.0384,
+   "absdiff": 4.350679793717338e-05,
+   "reconciled": 0.03844350679793717,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=5, macro caught",
+   "A": 0.3661451007969996,
+   "B": 0.3665,
+   "absdiff": 0.0003548992030004139,
+   "reconciled": 0.36611579934364746,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=6, macro session FA",
+   "A": 0.02437880918893577,
+   "B": 0.0244,
+   "absdiff": 2.1190811064230458e-05,
+   "reconciled": 0.02437880918893577,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=6, macro caught",
+   "A": 0.3050925925925926,
+   "B": 0.3036,
+   "absdiff": 0.001492592592592601,
+   "reconciled": 0.3042018284106891,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=7, macro session FA",
+   "A": 0.012423816221284576,
+   "B": 0.0124,
+   "absdiff": 2.381622128457689e-05,
+   "reconciled": 0.012423816221284576,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=7, macro caught",
+   "A": 0.2528598218471636,
+   "B": 0.2519,
+   "absdiff": 0.0009598218471635889,
+   "reconciled": 0.2519280356305672,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=8, macro session FA",
+   "A": 0.006915142991092358,
+   "B": 0.0069,
+   "absdiff": 1.5142991092358463e-05,
+   "reconciled": 0.006915142991092358,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=8, macro caught",
+   "A": 0.20955813408345053,
+   "B": 0.209,
+   "absdiff": 0.0005581340834505399,
+   "reconciled": 0.20792311298640412,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=9, macro session FA",
+   "A": 0.0038677918424753865,
+   "B": 0.0039,
+   "absdiff": 3.2208157524613295e-05,
+   "reconciled": 0.0038677918424753865,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=9, macro caught",
+   "A": 0.17292545710267226,
+   "B": 0.1719,
+   "absdiff": 0.001025457102672267,
+   "reconciled": 0.1712025316455696,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=10, macro session FA",
+   "A": 0.002695733708391936,
+   "B": 0.0027,
+   "absdiff": 4.26629160806425e-06,
+   "reconciled": 0.002695733708391936,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=10, macro caught",
+   "A": 0.14183075480543833,
+   "B": 0.1408,
+   "absdiff": 0.001030754805438322,
+   "reconciled": 0.1401781528363807,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=11, macro session FA",
+   "A": 0.0016408813877168305,
+   "B": 0.0016,
+   "absdiff": 4.088138771683042e-05,
+   "reconciled": 0.0016408813877168305,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=11, macro caught",
+   "A": 0.11626230661040789,
+   "B": 0.1148,
+   "absdiff": 0.0014623066104078875,
+   "reconciled": 0.11446905766526018,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=12, macro session FA",
+   "A": 0.0009376465072667604,
+   "B": 0.0009,
+   "absdiff": 3.76465072667604e-05,
+   "reconciled": 0.0009376465072667604,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=12, macro caught",
+   "A": 0.09423347398030942,
+   "B": 0.0935,
+   "absdiff": 0.0007334739803094154,
+   "reconciled": 0.09310243788091889,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=13, macro session FA",
+   "A": 0.0004688232536333802,
+   "B": 0.0005,
+   "absdiff": 3.117674636661982e-05,
+   "reconciled": 0.0004688232536333802,
+   "note": ""
+  },
+  {
+   "quantity": "S1 count rule k=13, macro caught",
+   "A": 0.07615447726207221,
+   "B": 0.0753,
+   "absdiff": 0.0008544772620722035,
+   "reconciled": 0.0747304266291608,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S1_COUNT",
+   "A": -0.0034282700421940926,
+   "B": -0.007,
+   "absdiff": 0.0035717299578059076,
+   "reconciled": -0.002553006329113816,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S2_MEAN",
+   "A": -0.002478902953586548,
+   "B": -0.0035,
+   "absdiff": 0.001021097046413452,
+   "reconciled": -0.0017197315986872685,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S3_MAX",
+   "A": 0.003885372714486579,
+   "B": -0.0078,
+   "absdiff": 0.011685372714486579,
+   "reconciled": -0.0005950832161276121,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S4_TRIMMED",
+   "A": 0.008714252226910413,
+   "B": 0.0019,
+   "absdiff": 0.006814252226910413,
+   "reconciled": 0.0036430789967182853,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S5_LOGODDS",
+   "A": -0.0014885138302859202,
+   "B": 0.0028,
+   "absdiff": 0.004288513830285921,
+   "reconciled": 0.0011935654008439767,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S1_COUNT",
+   "A": -0.006153305203938114,
+   "B": -0.0126,
+   "absdiff": 0.006446694796061886,
+   "reconciled": -0.009524437412095632,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S2_MEAN",
+   "A": -0.006616268166900974,
+   "B": -0.0131,
+   "absdiff": 0.006483731833099027,
+   "reconciled": -0.011562353492733185,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S3_MAX",
+   "A": -0.014480778246601045,
+   "B": -0.0063,
+   "absdiff": 0.008180778246601045,
+   "reconciled": -0.008980221518987364,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S4_TRIMMED",
+   "A": -0.014662447257383943,
+   "B": -0.0253,
+   "absdiff": 0.010637552742616057,
+   "reconciled": -0.02412526371308016,
+   "note": ""
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S5_LOGODDS",
+   "A": -0.0018108298171589654,
+   "B": -0.0115,
+   "absdiff": 0.009689170182841034,
+   "reconciled": -0.007194678856071224,
+   "note": ""
+  },
+  {
+   "quantity": "MNT secondary: caught@FRR5 S1_COUNT",
+   "A": 0.6015119549929676,
+   "B": 0.6031,
+   "absdiff": 0.001588045007032357,
+   "reconciled": 0.6062591127519921,
+   "note": ""
+  },
+  {
+   "quantity": "MNT secondary: caught@FRR5 S2_MEAN",
+   "A": 0.7653949835911862,
+   "B": 0.7655,
+   "absdiff": 0.00010501640881377394,
+   "reconciled": 0.7678266233005153,
+   "note": ""
+  },
+  {
+   "quantity": "MNT secondary: caught@FRR5 S3_MAX",
+   "A": 0.7065693858415377,
+   "B": 0.7053,
+   "absdiff": 0.0012693858415376846,
+   "reconciled": 0.707720434833568,
+   "note": ""
+  },
+  {
+   "quantity": "MNT secondary: caught@FRR5 S4_TRIMMED",
+   "A": 0.7493788091889358,
+   "B": 0.7457,
+   "absdiff": 0.0036788091889358165,
+   "reconciled": 0.7507266467416787,
+   "note": ""
+  },
+  {
+   "quantity": "MNT secondary: caught@FRR5 S5_LOGODDS",
+   "A": 0.6975738396624471,
+   "B": 0.6928,
+   "absdiff": 0.004773839662447155,
+   "reconciled": 0.6938534048288799,
+   "note": ""
+  }
+ ],
+ "disagreements": [
+  {
+   "quantity": "caught@sessionFRR5, macro18, S3_MAX",
+   "a_value": 0.3997,
+   "b_value": 0.4105,
+   "abs_diff": 0.0108,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.40409367674636665
+  },
+  {
+   "quantity": "caught@sessionFRR5, macro18, S4_TRIMMED",
+   "a_value": 0.4896,
+   "b_value": 0.4947,
+   "abs_diff": 0.0051,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.49476292194092825
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S1_COUNT",
+   "a_value": 0.2325,
+   "b_value": 0.2383,
+   "abs_diff": 0.0058,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.23453029770276604
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S2_MEAN",
+   "a_value": 0.2505,
+   "b_value": 0.2561,
+   "abs_diff": 0.0056,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.25618260665729015
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S3_MAX",
+   "a_value": 0.2585,
+   "b_value": 0.2511,
+   "abs_diff": 0.0074,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.2532605778246601
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S4_TRIMMED",
+   "a_value": 0.2427,
+   "b_value": 0.2518,
+   "abs_diff": 0.0091,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.25333295241443976
+  },
+  {
+   "quantity": "caught@sessionFRR1, macro18, S5_LOGODDS",
+   "a_value": 0.2647,
+   "b_value": 0.2739,
+   "abs_diff": 0.0092,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.27032759024847625
+  },
+  {
+   "quantity": "price of detection @caught0.5, S1_COUNT (aggregate)",
+   "a_value": 0.1048,
+   "b_value": 0.1409,
+   "abs_diff": 0.0361,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.14064697609001406
+  },
+  {
+   "quantity": "price of detection @caught0.8, S1_COUNT (aggregate)",
+   "a_value": 0.444,
+   "b_value": 0.6545,
+   "abs_diff": 0.2105,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.6746366619784342
+  },
+  {
+   "quantity": "price of detection @caught0.95, S1_COUNT (aggregate)",
+   "a_value": 1.0,
+   "b_value": 0.9703,
+   "abs_diff": 0.0297,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.9687060478199719
+  },
+  {
+   "quantity": "price of detection @caught0.5, S2_MEAN (aggregate)",
+   "a_value": 0.0587,
+   "b_value": 0.0739,
+   "abs_diff": 0.0152,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.0723159868729489
+  },
+  {
+   "quantity": "price of detection @caught0.8, S2_MEAN (aggregate)",
+   "a_value": 0.2693,
+   "b_value": 0.2757,
+   "abs_diff": 0.0064,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.27226910454758557
+  },
+  {
+   "quantity": "price of detection @caught0.95, S2_MEAN (aggregate)",
+   "a_value": 0.6967,
+   "b_value": 0.586,
+   "abs_diff": 0.1107,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.5917721518987342
+  },
+  {
+   "quantity": "price of detection @caught0.5, S3_MAX (aggregate)",
+   "a_value": 0.1023,
+   "b_value": 0.1078,
+   "abs_diff": 0.0055,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.11005625879043601
+  },
+  {
+   "quantity": "price of detection @caught0.8, S3_MAX (aggregate)",
+   "a_value": 0.5225,
+   "b_value": 0.4921,
+   "abs_diff": 0.0304,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.49203000468823255
+  },
+  {
+   "quantity": "price of detection @caught0.95, S3_MAX (aggregate)",
+   "a_value": 0.848,
+   "b_value": 0.7891,
+   "abs_diff": 0.0589,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.7900843881856541
+  },
+  {
+   "quantity": "price of detection @caught0.5, S4_TRIMMED (aggregate)",
+   "a_value": 0.056,
+   "b_value": 0.0718,
+   "abs_diff": 0.0158,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.07044069385841538
+  },
+  {
+   "quantity": "price of detection @caught0.8, S4_TRIMMED (aggregate)",
+   "a_value": 0.4051,
+   "b_value": 0.3807,
+   "abs_diff": 0.0244,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.38103609939052974
+  },
+  {
+   "quantity": "price of detection @caught0.95, S4_TRIMMED (aggregate)",
+   "a_value": 0.7979,
+   "b_value": 0.7082,
+   "abs_diff": 0.0897,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.7139006094702297
+  },
+  {
+   "quantity": "price of detection @caught0.5, S5_LOGODDS (aggregate)",
+   "a_value": 0.1133,
+   "b_value": 0.164,
+   "abs_diff": 0.0507,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.16373652133145805
+  },
+  {
+   "quantity": "price of detection @caught0.8, S5_LOGODDS (aggregate)",
+   "a_value": 0.4468,
+   "b_value": 0.4006,
+   "abs_diff": 0.0462,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.39791373652133144
+  },
+  {
+   "quantity": "price of detection @caught0.95, S5_LOGODDS (aggregate)",
+   "a_value": 0.7409,
+   "b_value": 0.5966,
+   "abs_diff": 0.1443,
+   "cause": "Different aggregation of the price across the 18 cells. A reports the FA at which the MACRO-AVERAGED (FA, caught) curve crosses the target; B reports the MEAN OVER CELLS of each cell's own price. Verified: A's per-cell prices, averaged, reproduce B's aggregate (S2@80%: A mean-per-cell 0.2756 vs B 0.2757). The two are different quantities, not an error in either sweep.",
+   "correct": 0.5965775902484762
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S1_COUNT",
+   "a_value": 0.2946,
+   "b_value": 0.2836,
+   "abs_diff": 0.011,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.2898862517580872
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S1_COUNT",
+   "a_value": 0.4705,
+   "b_value": 0.4652,
+   "abs_diff": 0.0053,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.4658693741209565
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S1_COUNT",
+   "a_value": 0.3018,
+   "b_value": 0.3138,
+   "abs_diff": 0.012,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.30447345288326283
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S2_MEAN",
+   "a_value": 0.4928,
+   "b_value": 0.4806,
+   "abs_diff": 0.0122,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.48407392756680734
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S2_MEAN",
+   "a_value": 0.3813,
+   "b_value": 0.3964,
+   "abs_diff": 0.0151,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.3784632559774967
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S2_MEAN",
+   "a_value": 0.3331,
+   "b_value": 0.3177,
+   "abs_diff": 0.0154,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.3241694796061884
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S2_MEAN",
+   "a_value": 0.7066,
+   "b_value": 0.7013,
+   "abs_diff": 0.0053,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.7006044303797466
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S2_MEAN",
+   "a_value": 0.597,
+   "b_value": 0.5791,
+   "abs_diff": 0.0179,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.5944377637130803
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S3_MAX",
+   "a_value": 0.4513,
+   "b_value": 0.4564,
+   "abs_diff": 0.0051,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.4508549578059073
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S3_MAX",
+   "a_value": 0.2584,
+   "b_value": 0.2745,
+   "abs_diff": 0.0161,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.260804676511955
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_svm, S3_MAX",
+   "a_value": 0.2367,
+   "b_value": 0.2547,
+   "abs_diff": 0.018,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.2370130098452883
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S3_MAX",
+   "a_value": 0.6237,
+   "b_value": 0.6169,
+   "abs_diff": 0.0068,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.61923417721519
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S3_MAX",
+   "a_value": 0.3825,
+   "b_value": 0.376,
+   "abs_diff": 0.0065,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.3729513009845289
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S4_TRIMMED",
+   "a_value": 0.6021,
+   "b_value": 0.6134,
+   "abs_diff": 0.0113,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.6004753867791842
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S4_TRIMMED",
+   "a_value": 0.3801,
+   "b_value": 0.3943,
+   "abs_diff": 0.0142,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.38245622362869197
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S4_TRIMMED",
+   "a_value": 0.6975,
+   "b_value": 0.7104,
+   "abs_diff": 0.0129,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.710464310829817
+  },
+  {
+   "quantity": "caught@FRR5 detector behaveformer_stdat, S4_TRIMMED",
+   "a_value": 0.4097,
+   "b_value": 0.3981,
+   "abs_diff": 0.0116,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.4103827355836849
+  },
+  {
+   "quantity": "caught@FRR5 modality trajectory_xytime, S5_LOGODDS",
+   "a_value": 0.4303,
+   "b_value": 0.4217,
+   "abs_diff": 0.0086,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.4303950421940928
+  },
+  {
+   "quantity": "caught@FRR5 modality imu_trajectory_xytime, S5_LOGODDS",
+   "a_value": 0.4927,
+   "b_value": 0.4877,
+   "abs_diff": 0.005,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.491478023909986
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_svm, S5_LOGODDS",
+   "a_value": 0.1763,
+   "b_value": 0.1704,
+   "abs_diff": 0.0059,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.1755838607594937
+  },
+  {
+   "quantity": "caught@FRR5 detector hmog_style_rf, S5_LOGODDS",
+   "a_value": 0.3926,
+   "b_value": 0.3838,
+   "abs_diff": 0.0088,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.3916424050632912
+  },
+  {
+   "quantity": "caught@FRR5 detector paper_xgboost, S5_LOGODDS",
+   "a_value": 0.5377,
+   "b_value": 0.529,
+   "abs_diff": 0.0087,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.534120428973277
+  },
+  {
+   "quantity": "caught@FRR5 detector authconformer, S5_LOGODDS",
+   "a_value": 0.659,
+   "b_value": 0.6509,
+   "abs_diff": 0.0081,
+   "cause": "A's breakout rows report the BOOTSTRAP MEAN of the caught rate, B's report the POINT ESTIMATE. A's own point estimates differ from A's reported bootstrap means by up to 0.028 (paper_svm S4: point 0.3034 vs reported 0.3311), and A's breakout rows are therefore not consistent with A's own ALL row (point 0.3659 vs bootstrap mean 0.3687 for S1). Stacked on top of the split difference. Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.651756329113924
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S3_MAX",
+   "a_value": 0.0039,
+   "b_value": -0.0078,
+   "abs_diff": 0.0117,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": -0.0005950832161276121
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.05, S4_TRIMMED",
+   "a_value": 0.0087,
+   "b_value": 0.0019,
+   "abs_diff": 0.0068,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": 0.0036430789967182853
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S1_COUNT",
+   "a_value": -0.0062,
+   "b_value": -0.0126,
+   "abs_diff": 0.0064,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": -0.009524437412095632
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S2_MEAN",
+   "a_value": -0.0066,
+   "b_value": -0.0131,
+   "abs_diff": 0.0065,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": -0.011562353492733185
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S3_MAX",
+   "a_value": -0.0145,
+   "b_value": -0.0063,
+   "abs_diff": 0.0082,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": -0.008980221518987364
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S4_TRIMMED",
+   "a_value": -0.0147,
+   "b_value": -0.0253,
+   "abs_diff": 0.0106,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": -0.02412526371308016
+  },
+  {
+   "quantity": "calibration gap (oracle - user-disjoint) @q=0.01, S5_LOGODDS",
+   "a_value": -0.0018,
+   "b_value": -0.0115,
+   "abs_diff": 0.0097,
+   "cause": "Different PRIMARY user-disjoint split. A = 20 sorted user ids, alternating parity (fold0 = u006,u011,u013,u019,u035,u041,u049,u064,u066,u085). B = first 10 vs last 10 sorted ids. Nothing else differs: the referee reproduces A's number under A's split and B's number under B's split to <=0.0015. Across 200 random balanced 10/10 splits the macro caught-rate has SD ~0.004, so both values are inside the split-to-split noise band.",
+   "correct": -0.007194678856071224
+  }
+ ],
+ "final_numbers": {
+  "at_frr5": {
+   "S1_COUNT": {
+    "caught": 0.3651,
+    "caught_A_split": 0.366,
+    "caught_B_split": 0.3695,
+    "split_sd": 0.0042,
+    "ci95_userbootstrap": [
+     0.3278,
+     0.4184
+    ],
+    "realised_session_fa": 0.0398,
+    "oracle_caught": 0.3625,
+    "auc": 0.7709
+   },
+   "S2_MEAN": {
+    "caught": 0.4881,
+    "caught_A_split": 0.4889,
+    "caught_B_split": 0.4888,
+    "split_sd": 0.0043,
+    "ci95_userbootstrap": [
+     0.4274,
+     0.5627
+    ],
+    "realised_session_fa": 0.0521,
+    "oracle_caught": 0.4864,
+    "auc": 0.8494
+   },
+   "S3_MAX": {
+    "caught": 0.4041,
+    "caught_A_split": 0.4003,
+    "caught_B_split": 0.4108,
+    "split_sd": 0.0034,
+    "ci95_userbootstrap": [
+     0.3727,
+     0.4594
+    ],
+    "realised_session_fa": 0.0513,
+    "oracle_caught": 0.4035,
+    "auc": 0.7629
+   },
+   "S4_TRIMMED": {
+    "caught": 0.4948,
+    "caught_A_split": 0.4897,
+    "caught_B_split": 0.4946,
+    "split_sd": 0.0041,
+    "ci95_userbootstrap": [
+     0.4287,
+     0.5613
+    ],
+    "realised_session_fa": 0.0517,
+    "oracle_caught": 0.4984,
+    "auc": 0.8106
+   },
+   "S5_LOGODDS": {
+    "caught": 0.4005,
+    "caught_A_split": 0.4034,
+    "caught_B_split": 0.3991,
+    "split_sd": 0.0029,
+    "ci95_userbootstrap": [
+     0.3683,
+     0.4424
+    ],
+    "realised_session_fa": 0.0518,
+    "oracle_caught": 0.4017,
+    "auc": 0.7836
+   }
+  },
+  "at_frr1": {
+   "S1_COUNT": {
+    "caught": 0.2345,
+    "caught_A_split": 0.231,
+    "caught_B_split": 0.2375,
+    "split_sd": 0.004,
+    "ci95_userbootstrap": [
+     0.1894,
+     0.2825
+    ],
+    "realised_session_fa": 0.0097,
+    "oracle_caught": 0.225
+   },
+   "S2_MEAN": {
+    "caught": 0.2562,
+    "caught_A_split": 0.2514,
+    "caught_B_split": 0.2577,
+    "split_sd": 0.0069,
+    "ci95_userbootstrap": [
+     0.167,
+     0.3545
+    ],
+    "realised_session_fa": 0.0123,
+    "oracle_caught": 0.2446
+   },
+   "S3_MAX": {
+    "caught": 0.2533,
+    "caught_A_split": 0.2582,
+    "caught_B_split": 0.2515,
+    "split_sd": 0.0045,
+    "ci95_userbootstrap": [
+     0.1984,
+     0.2986
+    ],
+    "realised_session_fa": 0.013,
+    "oracle_caught": 0.2443
+   },
+   "S4_TRIMMED": {
+    "caught": 0.2533,
+    "caught_A_split": 0.2429,
+    "caught_B_split": 0.2543,
+    "split_sd": 0.0065,
+    "ci95_userbootstrap": [
+     0.1878,
+     0.35
+    ],
+    "realised_session_fa": 0.0135,
+    "oracle_caught": 0.2292
+   },
+   "S5_LOGODDS": {
+    "caught": 0.2703,
+    "caught_A_split": 0.2642,
+    "caught_B_split": 0.2749,
+    "split_sd": 0.0038,
+    "ci95_userbootstrap": [
+     0.2161,
+     0.3181
+    ],
+    "realised_session_fa": 0.0117,
+    "oracle_caught": 0.2631
+   }
+  },
+  "price_of_detection": {
+   "S1_COUNT": {
+    "convention": "mean over the 18 cells of each cell's own price (user-disjoint, A-split)",
+    "mean_per_cell": {
+     "caught0.5": 0.1406,
+     "caught0.8": 0.6746,
+     "caught0.95": 0.9687
+    },
+    "median_per_cell": {
+     "caught0.5": 0.1266,
+     "caught0.8": 0.7331,
+     "caught0.95": 1.0
+    },
+    "range_per_cell": {
+     "caught0.5": [
+      0.0063,
+      0.2679
+     ],
+     "caught0.8": [
+      0.1392,
+      1.0
+     ],
+     "caught0.95": [
+      0.4367,
+      1.0
+     ]
+    },
+    "macro_curve_secondary": {
+     "caught0.5": 0.1001,
+     "caught0.8": 0.444,
+     "caught0.95": 1.0
+    }
+   },
+   "S2_MEAN": {
+    "convention": "mean over the 18 cells of each cell's own price (user-disjoint, A-split)",
+    "mean_per_cell": {
+     "caught0.5": 0.0723,
+     "caught0.8": 0.2723,
+     "caught0.95": 0.5918
+    },
+    "median_per_cell": {
+     "caught0.5": 0.0675,
+     "caught0.8": 0.2743,
+     "caught0.95": 0.6013
+    },
+    "range_per_cell": {
+     "caught0.5": [
+      0.0105,
+      0.1878
+     ],
+     "caught0.8": [
+      0.0232,
+      0.635
+     ],
+     "caught0.95": [
+      0.211,
+      0.8797
+     ]
+    },
+    "macro_curve_secondary": {
+     "caught0.5": 0.0556,
+     "caught0.8": 0.2693,
+     "caught0.95": 0.6954
+    }
+   },
+   "S3_MAX": {
+    "convention": "mean over the 18 cells of each cell's own price (user-disjoint, A-split)",
+    "mean_per_cell": {
+     "caught0.5": 0.1101,
+     "caught0.8": 0.492,
+     "caught0.95": 0.7901
+    },
+    "median_per_cell": {
+     "caught0.5": 0.1139,
+     "caught0.8": 0.4979,
+     "caught0.95": 0.8133
+    },
+    "range_per_cell": {
+     "caught0.5": [
+      0.0063,
+      0.27
+     ],
+     "caught0.8": [
+      0.0865,
+      0.7511
+     ],
+     "caught0.95": [
+      0.5274,
+      0.9114
+     ]
+    },
+    "macro_curve_secondary": {
+     "caught0.5": 0.1008,
+     "caught0.8": 0.5246,
+     "caught0.95": 0.8438
+    }
+   },
+   "S4_TRIMMED": {
+    "convention": "mean over the 18 cells of each cell's own price (user-disjoint, A-split)",
+    "mean_per_cell": {
+     "caught0.5": 0.0704,
+     "caught0.8": 0.381,
+     "caught0.95": 0.7139
+    },
+    "median_per_cell": {
+     "caught0.5": 0.0654,
+     "caught0.8": 0.3755,
+     "caught0.95": 0.7595
+    },
+    "range_per_cell": {
+     "caught0.5": [
+      0.0084,
+      0.2426
+     ],
+     "caught0.8": [
+      0.038,
+      0.7173
+     ],
+     "caught0.95": [
+      0.3882,
+      0.8861
+     ]
+    },
+    "macro_curve_secondary": {
+     "caught0.5": 0.0545,
+     "caught0.8": 0.4051,
+     "caught0.95": 0.7949
+    }
+   },
+   "S5_LOGODDS": {
+    "convention": "mean over the 18 cells of each cell's own price (user-disjoint, A-split)",
+    "mean_per_cell": {
+     "caught0.5": 0.1637,
+     "caught0.8": 0.3979,
+     "caught0.95": 0.5966
+    },
+    "median_per_cell": {
+     "caught0.5": 0.0854,
+     "caught0.8": 0.3534,
+     "caught0.95": 0.6224
+    },
+    "range_per_cell": {
+     "caught0.5": [
+      0.0042,
+      0.4241
+     ],
+     "caught0.8": [
+      0.0401,
+      0.6983
+     ],
+     "caught0.95": [
+      0.2152,
+      0.8797
+     ]
+    },
+    "macro_curve_secondary": {
+     "caught0.5": 0.1079,
+     "caught0.8": 0.4453,
+     "caught0.95": 0.7365
+    }
+   }
+  },
+  "count_rule": {
+   "definition": "flag session iff >= k events score >= their own (action,modality,detector) dev frr5 cut; macro-averaged over the 18 cells, all 20 users",
+   "table": {
+    "0": {
+     "session_fa": 1.0,
+     "caught": 1.0
+    },
+    "1": {
+     "session_fa": 0.466,
+     "caught": 0.8165
+    },
+    "2": {
+     "session_fa": 0.2331,
+     "caught": 0.6572
+    },
+    "3": {
+     "session_fa": 0.1195,
+     "caught": 0.5359
+    },
+    "4": {
+     "session_fa": 0.0665,
+     "caught": 0.4419
+    },
+    "5": {
+     "session_fa": 0.0384,
+     "caught": 0.3661
+    },
+    "6": {
+     "session_fa": 0.0244,
+     "caught": 0.3042
+    },
+    "7": {
+     "session_fa": 0.0124,
+     "caught": 0.2519
+    },
+    "8": {
+     "session_fa": 0.0069,
+     "caught": 0.2079
+    },
+    "9": {
+     "session_fa": 0.0039,
+     "caught": 0.1712
+    },
+    "10": {
+     "session_fa": 0.0027,
+     "caught": 0.1402
+    },
+    "11": {
+     "session_fa": 0.0016,
+     "caught": 0.1145
+    },
+    "12": {
+     "session_fa": 0.0009,
+     "caught": 0.0931
+    },
+    "13": {
+     "session_fa": 0.0005,
+     "caught": 0.0747
+    }
+   },
+   "best_k_under_5pct_macro_fa": 5,
+   "best_k_point": {
+    "fa": 0.0384,
+    "caught": 0.3661
+   },
+   "youden_best_k": 2,
+   "youden_point": {
+    "fa": 0.2331,
+    "caught": 0.6572
+   },
+   "youden_J": 0.4241
+  },
+  "calibration_gap": {
+   "S1_COUNT": {
+    "q0.05": -0.0026,
+    "q0.01": -0.0095
+   },
+   "S2_MEAN": {
+    "q0.05": -0.0017,
+    "q0.01": -0.0116
+   },
+   "S3_MAX": {
+    "q0.05": -0.0006,
+    "q0.01": -0.009
+   },
+   "S4_TRIMMED": {
+    "q0.05": 0.0036,
+    "q0.01": -0.0241
+   },
+   "S5_LOGODDS": {
+    "q0.05": 0.0012,
+    "q0.01": -0.0072
+   }
+  },
+  "per_modality_caught_at_frr5": {
+   "S1_COUNT": {
+    "trajectory_xytime": 0.3899,
+    "imu_only": 0.2562,
+    "imu_trajectory_xytime": 0.4491
+   },
+   "S2_MEAN": {
+    "trajectory_xytime": 0.4841,
+    "imu_only": 0.3383,
+    "imu_trajectory_xytime": 0.6419
+   },
+   "S3_MAX": {
+    "trajectory_xytime": 0.4202,
+    "imu_only": 0.3413,
+    "imu_trajectory_xytime": 0.4509
+   },
+   "S4_TRIMMED": {
+    "trajectory_xytime": 0.5141,
+    "imu_only": 0.3697,
+    "imu_trajectory_xytime": 0.6005
+   },
+   "S5_LOGODDS": {
+    "trajectory_xytime": 0.4304,
+    "imu_only": 0.2798,
+    "imu_trajectory_xytime": 0.4915
+   }
+  },
+  "per_detector_caught_at_frr5": {
+   "S1_COUNT": {
+    "hmog_style_svm": 0.2899,
+    "hmog_style_rf": 0.3783,
+    "paper_svm": 0.2628,
+    "paper_xgboost": 0.4659,
+    "behaveformer_stdat": 0.3045,
+    "authconformer": 0.489
+   },
+   "S2_MEAN": {
+    "hmog_style_svm": 0.3785,
+    "hmog_style_rf": 0.5302,
+    "paper_svm": 0.3242,
+    "paper_xgboost": 0.7006,
+    "behaveformer_stdat": 0.4007,
+    "authconformer": 0.5944
+   },
+   "S3_MAX": {
+    "hmog_style_svm": 0.2608,
+    "hmog_style_rf": 0.4561,
+    "paper_svm": 0.237,
+    "paper_xgboost": 0.6192,
+    "behaveformer_stdat": 0.373,
+    "authconformer": 0.4785
+   },
+   "S4_TRIMMED": {
+    "hmog_style_svm": 0.3825,
+    "hmog_style_rf": 0.563,
+    "paper_svm": 0.3229,
+    "paper_xgboost": 0.7105,
+    "behaveformer_stdat": 0.4104,
+    "authconformer": 0.5794
+   },
+   "S5_LOGODDS": {
+    "hmog_style_svm": 0.1756,
+    "hmog_style_rf": 0.3916,
+    "paper_svm": 0.1609,
+    "paper_xgboost": 0.5341,
+    "behaveformer_stdat": 0.4892,
+    "authconformer": 0.6518
+   }
+  },
+  "breakout_split_sd": {
+   "S1_COUNT": {
+    "MOD:trajectory_xytime": 0.0053,
+    "MOD:imu_only": 0.008,
+    "MOD:imu_trajectory_xytime": 0.0067,
+    "DET:hmog_style_svm": 0.0066,
+    "DET:hmog_style_rf": 0.009,
+    "DET:paper_svm": 0.0102,
+    "DET:paper_xgboost": 0.0103,
+    "DET:behaveformer_stdat": 0.0091,
+    "DET:authconformer": 0.0111,
+    "ALL": 0.0042
+   },
+   "S2_MEAN": {
+    "MOD:trajectory_xytime": 0.0081,
+    "MOD:imu_only": 0.0053,
+    "MOD:imu_trajectory_xytime": 0.0054,
+    "DET:hmog_style_svm": 0.0115,
+    "DET:hmog_style_rf": 0.0047,
+    "DET:paper_svm": 0.013,
+    "DET:paper_xgboost": 0.0073,
+    "DET:behaveformer_stdat": 0.0114,
+    "DET:authconformer": 0.0089,
+    "ALL": 0.0043
+   },
+   "S3_MAX": {
+    "MOD:trajectory_xytime": 0.0059,
+    "MOD:imu_only": 0.0042,
+    "MOD:imu_trajectory_xytime": 0.0055,
+    "DET:hmog_style_svm": 0.0083,
+    "DET:hmog_style_rf": 0.0032,
+    "DET:paper_svm": 0.0124,
+    "DET:paper_xgboost": 0.0045,
+    "DET:behaveformer_stdat": 0.0057,
+    "DET:authconformer": 0.0044,
+    "ALL": 0.0034
+   },
+   "S4_TRIMMED": {
+    "MOD:trajectory_xytime": 0.0058,
+    "MOD:imu_only": 0.0059,
+    "MOD:imu_trajectory_xytime": 0.0083,
+    "DET:hmog_style_svm": 0.0104,
+    "DET:hmog_style_rf": 0.0062,
+    "DET:paper_svm": 0.0131,
+    "DET:paper_xgboost": 0.006,
+    "DET:behaveformer_stdat": 0.0085,
+    "DET:authconformer": 0.0075,
+    "ALL": 0.0041
+   },
+   "S5_LOGODDS": {
+    "MOD:trajectory_xytime": 0.0043,
+    "MOD:imu_only": 0.005,
+    "MOD:imu_trajectory_xytime": 0.0038,
+    "DET:hmog_style_svm": 0.0069,
+    "DET:hmog_style_rf": 0.0047,
+    "DET:paper_svm": 0.0063,
+    "DET:paper_xgboost": 0.0069,
+    "DET:behaveformer_stdat": 0.0032,
+    "DET:authconformer": 0.0067,
+    "ALL": 0.0029
+   }
+  },
+  "per_cell_extremes_S2": {
+   "worst": [
+    0.1806735232067511,
+    "imu_only|authconformer"
+   ],
+   "best": [
+    0.8632394514767937,
+    "imu_trajectory_xytime|authconformer"
+   ]
+  },
+  "mnt_secondary": {
+   "S1_COUNT": {
+    "caught_at_frr5": 0.6063,
+    "caught_at_frr1": 0.4714,
+    "auc": 0.8778,
+    "price_mean_per_cell": {
+     "caught0.5": 0.0619,
+     "caught0.8": 0.3195,
+     "caught0.95": 0.5767
+    }
+   },
+   "S2_MEAN": {
+    "caught_at_frr5": 0.7678,
+    "caught_at_frr1": 0.6728,
+    "auc": 0.935,
+    "price_mean_per_cell": {
+     "caught0.5": 0.0302,
+     "caught0.8": 0.116,
+     "caught0.95": 0.2752
+    }
+   },
+   "S3_MAX": {
+    "caught_at_frr5": 0.7077,
+    "caught_at_frr1": 0.5897,
+    "auc": 0.8884,
+    "price_mean_per_cell": {
+     "caught0.5": 0.0566,
+     "caught0.8": 0.2301,
+     "caught0.95": 0.3848
+    }
+   },
+   "S4_TRIMMED": {
+    "caught_at_frr5": 0.7507,
+    "caught_at_frr1": 0.668,
+    "auc": 0.9251,
+    "price_mean_per_cell": {
+     "caught0.5": 0.0376,
+     "caught0.8": 0.1418,
+     "caught0.95": 0.2996
+    }
+   },
+   "S5_LOGODDS": {
+    "caught_at_frr5": 0.6939,
+    "caught_at_frr1": 0.623,
+    "auc": 0.8988,
+    "price_mean_per_cell": {
+     "caught0.5": 0.0714,
+     "caught0.8": 0.1851,
+     "caught0.95": 0.3299
+    }
+   }
+  },
+  "mnt_count_rule": {
+   "best_k_under_5pct": 5,
+   "point": {
+    "fa": 0.0312,
+    "caught": 0.5953
+   },
+   "youden_k": 3,
+   "youden_J": 0.6336
+  },
+  "event_level": {
+   "far_at_frr5_mean_over_90_cells": 0.774575,
+   "frr_at_frr5_mean_over_90_cells": 0.052332,
+   "mnt_far_at_frr5": 0.444733
+  }
+ }
+}
