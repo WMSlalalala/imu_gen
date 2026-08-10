@@ -32,6 +32,10 @@ ACTREAL = Path("/mnt/share/mwang49/data7/actreal_agent")
 
 ACTIONS = ("tap", "scroll", "swipe", "pinch", "keystroke")
 # Below this a "gap" is really one gesture continuing, not a new action start.
+# Filled by genuine_sessions() and written out by main(); the rejects are a
+# result in their own right, not a debug aside.
+REJECT_REPORT: dict = {}
+
 MIN_GAP_S = 0.0
 # Above this the user put the phone down; not part of a continuous rhythm.
 MAX_GAP_S = 120.0
@@ -65,28 +69,75 @@ def genuine_sessions() -> list[dict]:
                     (float(st[a]), float(st[b - 1]), action)
                 )
 
-    sessions = []
+    sessions, rejected, short = [], [], []
     for (user, session), evs in events.items():
         evs.sort()
         if len(evs) < 3:
             continue
         actions = [e[2] for e in evs]
+        durations = [(e[1] - e[0]) / 1000.0 for e in evs]
         gaps = [0.0]
         for prev, cur in zip(evs, evs[1:]):
             gaps.append((cur[0] - prev[1]) / 1000.0)
-        # Keep only sessions whose gaps are a plausible continuous stretch.
-        inner = [g for g in gaps[1:] if MIN_GAP_S <= g <= MAX_GAP_S]
-        if len(inner) < 2:
+
+        # A session is kept only if *every* inner gap is physically possible.
+        #
+        # The earlier rule asked only that two gaps be plausible and then stored
+        # the rest as they came, which let a session through carrying negative
+        # gaps -- a later event starting before the previous one ended -- and
+        # clock jumps as large as 1.4e15 seconds.  Those were not caught
+        # downstream either: the feature builder clipped gaps into [0, 120], so
+        # an impossible timeline silently became a merely unusual one and the
+        # detector was asked to tell a human from a clock fault.
+        #
+        # Anomalies are counted rather than repaired, because a repaired gap is
+        # a number nobody measured.
+        inner = gaps[1:]
+        bad_negative = sum(1 for g in inner if g < 0.0)
+        bad_long = sum(1 for g in inner if g > MAX_GAP_S)
+        if bad_negative or bad_long:
+            rejected.append({
+                "user": user, "session": session, "events": len(evs),
+                "negative_gaps": bad_negative, "gaps_over_max": bad_long,
+                "worst_gap_s": max(inner) if inner else None,
+                "most_negative_gap_s": min(inner) if inner else None,
+            })
             continue
+        if sum(1 for g in inner if MIN_GAP_S <= g <= MAX_GAP_S) < 2:
+            short.append({"user": user, "session": session, "events": len(evs)})
+            continue
+
         sessions.append(
             {
                 "user": user,
                 "session": session,
                 "actions": actions,
+                # Kept so onset times can include how long each action lasted;
+                # accumulating gaps alone places every onset too early by the
+                # total gesture time before it.
+                "durations_s": [round(d, 4) for d in durations],
                 "gaps_s": [round(g, 4) for g in gaps],
                 "source": "genuine",
             }
         )
+
+    if rejected or short:
+        summary = {
+            "kept": len(sessions),
+            "rejected_impossible_timeline": len(rejected),
+            "rejected_too_few_usable_gaps": len(short),
+            "negative_gaps_total": sum(r["negative_gaps"] for r in rejected),
+            "gaps_over_max_total": sum(r["gaps_over_max"] for r in rejected),
+            "worst_gap_s": max((r["worst_gap_s"] for r in rejected
+                                if r["worst_gap_s"] is not None), default=None),
+            "detail": rejected[:20],
+        }
+        REJECT_REPORT.clear()
+        REJECT_REPORT.update(summary)
+        print(f"  rejected {len(rejected)} sessions with impossible timelines "
+              f"({summary['negative_gaps_total']} negative gaps, "
+              f"{summary['gaps_over_max_total']} over {MAX_GAP_S}s); "
+              f"see session_rejects.json")
     return sessions
 
 
@@ -224,6 +275,9 @@ def main() -> int:
         },
     }
     (out / "assemble_summary.json").write_text(json.dumps(summary, indent=2))
+    if REJECT_REPORT:
+        (out / "session_rejects.json").write_text(
+            json.dumps(REJECT_REPORT, indent=2), encoding="utf-8")
     print(json.dumps(summary, indent=2))
     return 0
 

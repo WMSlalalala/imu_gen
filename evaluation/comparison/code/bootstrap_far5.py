@@ -113,6 +113,35 @@ def load_method(method: str) -> dict:
     return cells
 
 
+def eer_on(fake: np.ndarray, genuine: np.ndarray) -> float:
+    """The equal-error point located on whatever sample is handed in.
+
+    Deliberately re-located per replicate rather than held at the full-sample
+    cut: the test EER *is* a cut chosen from the data, so an interval that froze
+    that cut would describe a different quantity from the one reported.
+    """
+    if len(fake) == 0 or len(genuine) == 0:
+        return float("nan")
+    best = None
+    for cut in np.unique(np.concatenate([fake, genuine])):
+        far = float((fake < cut).mean())
+        frr = float((genuine >= cut).mean())
+        gap = abs(far - frr)
+        if best is None or gap < best[0]:
+            best = (gap, (far + frr) / 2.0)
+    return best[1]
+
+
+def paired_eer(cells: dict, names: list) -> float:
+    """Mean test EER over a cell set for one resampled user multiset."""
+    out = []
+    for _cut, per_user in cells.values():
+        fake = np.concatenate([per_user[n][0] for n in names])
+        genuine = np.concatenate([per_user[n][1] for n in names])
+        out.append(eer_on(fake, genuine))
+    return float(np.mean(out))
+
+
 def paired_far(cells: dict, names: list) -> float:
     """Mean FAR over a cell set for one resampled user multiset."""
     out = []
@@ -178,6 +207,8 @@ def main() -> None:
     parser.add_argument("--replicates", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--out", type=Path, default=None)
+    parser.add_argument("--metric", default="far5", choices=["far5", "test_eer"],
+                        help="far5 brackets FAR at the frozen FRR=5% cut; test_eer\n                             re-locates the equal-error point in every replicate")
     parser.add_argument("--method", default=None,
                         help="a baseline or ablation arm under final/ instead of the "
                              "release; the cells are located the same way "
@@ -216,8 +247,12 @@ def main() -> None:
         for key, (cut, per_user) in cells.items():
             fake = np.concatenate([per_user[n][0] for n in names])
             genuine = np.concatenate([per_user[n][1] for n in names])
-            fars[key] = float((fake < cut).mean())
-            frrs[key] = float((genuine >= cut).mean())
+            if args.metric == "test_eer":
+                fars[key] = eer_on(fake, genuine)
+                frrs[key] = fars[key]      # at the equal-error point the two coincide
+            else:
+                fars[key] = float((fake < cut).mean())
+                frrs[key] = float((genuine >= cut).mean())
             per_cell[key].append(fars[key])
         aggregate.append(float(np.mean(list(fars.values()))))
         aggregate_frr.append(float(np.mean(list(frrs.values()))))

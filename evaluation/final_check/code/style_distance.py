@@ -63,15 +63,21 @@ def load_user_events(action: str, user: str):
         offsets = d["offsets"]
         traj, imu = d["trajectory_flat"], d["imu_flat"]
         idx = np.flatnonzero(keep)
-        fake, real = [], []
+        sessions = d["session_id"] if "session_id" in d.files else None
+        fake, real, real_sess = [], [], []
         for i in idx:
             s, e = int(offsets[i]), int(offsets[i + 1])
             if e - s < 2:
                 continue
             f = event_features(traj[s:e], imu[s:e])
-            (fake if d["label"][i] == 1 else real).append(f)
+            if d["label"][i] == 1:
+                fake.append(f)
+            else:
+                real.append(f)
+                real_sess.append(str(sessions[i]) if sessions is not None else "")
     return (np.vstack(fake) if fake else None,
-            np.vstack(real) if real else None)
+            np.vstack(real) if real else None,
+            np.asarray(real_sess) if real_sess else None)
 
 
 def median_dist_to_centroid(points: np.ndarray, centroid: np.ndarray) -> float:
@@ -92,16 +98,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default="/mnt/share/mwang49/data7/session_rhythm_detector/results/style_distance.json")
     parser.add_argument("--actions", default="tap,scroll,swipe,pinch,keystroke")
+    parser.add_argument("--seed", type=int, default=42,
+                        help="draws the equal-sized sample from each other user for D_inter")
     args = parser.parse_args()
 
     split = json.loads(SPLIT.read_text())
     test_users = [f"hmog_u{u:03d}" for u in split["test_users"]]
+    # The metric is fitted on these and never on the split it reports.
+    train_users = [f"hmog_u{u:03d}" for u in split["train_users"]]
 
     report = {
         "spec": "D_fake=D(fake_u,real_u); D_inter=D(real_v,real_u); D_intra=D(real_u1,real_u2)",
         "claim": "fake preserves target style  <=>  D_fake < D_inter (distance, not similarity)",
         "ideal_chain": "D_intra <= D_fake < D_inter",
         "test_users": len(test_users),
+        "metric_fitted_on": f"{len(train_users)} train users, genuine events only",
         "actions": {},
     }
 
@@ -109,33 +120,63 @@ def main() -> int:
         # Load all test users' events for this action.
         per_user = {}
         for u in test_users:
-            fake, real = load_user_events(action, u)
+            fake, real, sess = load_user_events(action, u)
             if real is not None and len(real) >= 4:
-                per_user[u] = (fake, real)
+                per_user[u] = (fake, real, sess)
         if len(per_user) < 3:
             report["actions"][action] = {"skipped": "too few users with real events"}
             continue
 
-        # Standardize features across all events of this action.
-        allf = np.vstack([r for f, r in per_user.values()]
-                         + [f for f, r in per_user.values() if f is not None])
+        # Standardise on TRAIN users' genuine events only.
+        #
+        # This was fitted on every event of the action, test genuine and test
+        # fake together.  Two things were wrong with that: the fake side moved
+        # the scale the fake side is then measured against, and the whole
+        # statistic was fitted on the split it reports.  Fitting on train genuine
+        # keeps the metric fixed before any test event is seen.
+        fit_rows = []
+        for tu in train_users:
+            _f, r, _s = load_user_events(action, tu)
+            if r is not None:
+                fit_rows.append(r)
+        if not fit_rows:
+            report["actions"][action] = {"skipped": "no train-user genuine events to fit the metric"}
+            continue
+        allf = np.vstack(fit_rows)
         mu, sd = allf.mean(0), allf.std(0) + 1e-9
 
         def z(x):
             return (x - mu) / sd
 
-        centroids = {u: z(r).mean(0) for u, (f, r) in per_user.items()}
+        centroids = {u: z(r).mean(0) for u, (f, r, _s) in per_user.items()}
+        rng = np.random.default_rng(args.seed)
         deltas, rows = [], {}
-        for u, (fake, real) in per_user.items():
+        for u, (fake, real, sess) in per_user.items():
             rz = z(real)
-            # D_intra: split this user's real events in two, distance across.
-            half = len(rz) // 2
-            c1 = rz[:half].mean(0)
-            d_intra = median_dist_to_centroid(rz[half:], c1)
+            # D_intra across *sessions*, not across a positional split.
+            #
+            # Halving the array put events from the same sitting on both sides,
+            # so this measured within-session similarity and understated how much
+            # one person varies -- which is the very quantity D_fake is compared
+            # against.  Disjoint sessions make it a real same-person, different-
+            # occasion distance.  With only one session it cannot be formed and
+            # is reported as nan rather than as a positional split.
+            d_intra = float("nan")
+            if sess is not None and len(np.unique(sess)) >= 2:
+                uniq = list(np.unique(sess))
+                cut = len(uniq) // 2
+                a_mask = np.isin(sess, uniq[:cut])
+                if a_mask.any() and (~a_mask).any():
+                    d_intra = median_dist_to_centroid(rz[~a_mask], rz[a_mask].mean(0))
             # D_fake: this user's fakes to their own real centroid.
             d_fake = median_dist_to_centroid(z(fake), centroids[u]) if fake is not None else float("nan")
-            # D_inter: other users' reals to this user's real centroid.
-            others = np.vstack([z(per_user[v][1]) for v in per_user if v != u])
+            # D_inter: every other user contributes the same number of events, so
+            # a user who happens to have more of them cannot dominate the median.
+            per_other = min(len(per_user[v][1]) for v in per_user if v != u)
+            others = np.vstack([
+                z(per_user[v][1])[rng.choice(len(per_user[v][1]), per_other, replace=False)]
+                for v in per_user if v != u
+            ])
             d_inter = median_dist_to_centroid(others, centroids[u])
             if not np.isnan(d_fake):
                 deltas.append(d_inter - d_fake)
