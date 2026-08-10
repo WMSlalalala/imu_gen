@@ -1,7 +1,7 @@
 {
  "schema_version": "half_attack_joint_v1",
- "status": "BUILD PHASE COMPLETE -- NO GRID RESULTS YET",
- "written_before_any_arm_was_scored_on_the_grid": true,
+ "status": "COMPLETE -- three new arms scored on the 20 classical joint cells",
+ "written_before_any_arm_was_scored_on_the_grid": false,
  "experiment": "partial-attack joint ablation (fake-one-channel + real-other, with mismatch control)",
  "modality": "imu_trajectory_xytime",
  "scope": {
@@ -42,17 +42,29 @@
     "keystroke__imu_trajectory_xytime__behaveformer_stdat",
     "keystroke__imu_trajectory_xytime__authconformer"
    ],
-   "events_built_per_action": 120000,
-   "events_total": 600000,
-   "forward_passes": 1200000,
-   "padded_input_elements_float32": 3643200000,
-   "padded_input_bytes_float32": 14572800000,
+   "arms_covered": [
+    "row3",
+    "row4",
+    "row5",
+    "row5_unmatched"
+   ],
+   "events_built_per_action": 160000,
+   "events_total": 800000,
+   "forward_passes": 1600000,
+   "padded_input_elements_float32": 4857600000,
+   "padded_input_bytes_float32": 19430400000,
    "per_action_window_samples": {
     "tap": 16,
     "scroll": 208,
     "swipe": 176,
     "pinch": 100,
     "keystroke": 512
+   },
+   "keystroke_share_of_padded_volume": 0.5059,
+   "classical_cost_measured_here": {
+    "wall_clock_seconds_for_the_same_events_on_4_cpu_workers": 616.6,
+    "events_built_and_scored": 800000,
+    "note": "classical only; the deep cells re-use the SAME built events, so only the scoring half of this cost would be replaced by GPU forward passes."
    },
    "wall_clock": "NOT PROJECTED -- a GPU throughput benchmark is required and this session is under a no-GPU constraint. The counts above are computed; any hours figure would be invented."
   }
@@ -82,12 +94,14 @@
   "F3": "parity table below lists event count, action composition, duration and T distributions and the mechanical steps per arm; row3/row5 are matched event for event on T and duration, row4/row2 are matched as multisets.",
   "F4": "rows 3 and 4 consume exactly 5 distinct real recordings per (victim, action) (measured: max 5). Row 5 is a control on pairing mechanics, not an attack, and is declared OUT of the five-shot budget: it drew from up to 84 distinct genuine recordings per (victim, action, repetition).",
   "F5": "shot choice is a balanced random assignment over the published shot ordinals; row 5 template choice is by nearest event length to row 3 paired fake template. Inputs are event identities and lengths only -- no detector output, label or test quantity enters any selection.",
-  "F6": "detectors read-only; sha256 of all 20 model.joblib and thresholds.json recorded before and after: unchanged = True",
+  "F6": "detectors read-only; sha256 of all 20 model.joblib and all 20 thresholds.json taken immediately before and immediately after the scoring run: unchanged = True",
   "F7": "coverage declaration below.",
   "F8": "rows 3, 4 and 5 undergo step-for-step identical mechanics (S0..S4 below); row 5 is the same-mechanics genuine-only control.",
-  "F9": "the resampling unit for every interval will be the user (20 test users as clusters, 2000 replicates, one shared user multiset per replicate across cells). No interval is reported in this build-phase file.",
+  "F9": "every interval is a user-clustered bootstrap: the 20 test users are resampled as clusters, 2000 replicates, ONE shared user multiset per replicate across all 20 cells and all six arms, so every paired difference is paired within the replicate and carries its own interval.",
   "F13": "preregistered_outcomes above, committed before any arm was scored.",
-  "F15": "coverage/shortfall blocks below; build rejects counted (0)."
+  "F15": "coverage/shortfall blocks below; build rejects counted (0).",
+  "F2": "NOT APPLICABLE and no new calibration was performed. The operating point is the released cell own frr5 scalar, whose thresholds.json records selection_split=development; it is the identical threshold the published main table uses. No threshold was re-derived from test scores here, so there is no split-versus-oracle gap to show for this experiment.",
+  "F14": "the two known degeneracies are labelled AT the number: every row4_minus_row2 difference for tap and scroll carries the near-tautology label, and every rows-3/4 against rows-1/2 difference for pinch and keystroke carries the not-a-valid-comparison label. Negative and null results are reported as they fell."
  },
  "coverage_declaration_F7": {
   "entitled_cells": "the 20 classical imu_trajectory_xytime cells only (10 deep joint cells GPU-deferred).",
@@ -3400,7 +3414,174 @@
     "thresholds.json": "3493464d8b82eaa61b50d19ea2589b4487bf15bafa8aed5b4bb8dcfbbeedc9d6"
    }
   },
-  "unchanged": true
+  "unchanged": true,
+  "scoring_phase_before": {
+   "tap__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "d369e9677402ec59af867d07ed5474ceb1e68b9524af427a12fcd94d6df23a01",
+    "thresholds.json": "1a8090e3ad30e05a440949a0a99beb87799ced3f84e27deaa2ad2103129d02e0"
+   },
+   "tap__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "87370d51188f5f0f084d1255d3a270ffccf4ad74cc6b44812949e24d0ea8d967",
+    "thresholds.json": "522663f59b0b597e1032e778fc523e8d3444b0eb5a0e7145e486b9ed544a8eaf"
+   },
+   "tap__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "219ab7bd005f85c7e505087629c3f62b3cd3f3aa7cf5b12d2af28dec66d41c94",
+    "thresholds.json": "58b4a6c0b4821ba97fef5deacb0d2bc71d061b9c1f3a9b209dbc689cbf701953"
+   },
+   "tap__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "062895b1bd12ae2344fd672f191714650137685daa8641213c3c82975fa4ac59",
+    "thresholds.json": "38f24471fdef771364cf99472b9fada39c3c525092ad38fdfead06dc64a472b3"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "e98ef3d0dc0a446e92cdaf55e90b52047fbf102e452506a5981330eb1eb90c4f",
+    "thresholds.json": "a55e5869878087d07b4c15ba157c76985388a99a4a09b363b42ed4a32c95c588"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "793fc8ac9b229db0efa04d76e05aa4ea3245100e260e1e94f64ba9aa7054da8d",
+    "thresholds.json": "432508008dc7f53f470013078128c2db642a9de373ac75af5f68c9a84827e0b0"
+   },
+   "scroll__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "77c615081ae448f4d62fec5b4c475cd10319b503a4fb8de3f616ab0890ff3d96",
+    "thresholds.json": "7db91880e95f991d6240d3e4fdb487701434e75a760c29876ff139c448344e16"
+   },
+   "scroll__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "bc77c98fb7a1d461fc10def143905112ec7898c69d9aa1b58248b994ce4e44a0",
+    "thresholds.json": "01f40f84561e592d42caa904268a23ace0133aa268a4045e9e3f317be66c9ed7"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "efcab8b5b80e377ae151f97091f375f735f63f6ee5a5cb05cf1a4da97e4c19c6",
+    "thresholds.json": "d455269a8b87300f80cf9ec5a1c9493b5bbf8aaec19ba75cb9a8a3837552da0f"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "ff2cab3d0739de2e786e1a0e648dab6ccc100d43c52dfa08afb0f1757d3f5182",
+    "thresholds.json": "eb0be34d2ab02d091e646812649601877eed1f89534b74f2a2d09dc394320515"
+   },
+   "swipe__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "0e803e0c4ed588b39666627215e77dfdf9d2b51ad74e9d0febd4685527dccd31",
+    "thresholds.json": "b9f2477d0745de073be34bc369f09f08aae973c1221dccaeedb247e7b7f88d89"
+   },
+   "swipe__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "d070ecd9d0f6433df0947838e580c310e64cf76f9da53337aaa84b4b07628554",
+    "thresholds.json": "97ba5b770bcf7f13a01011db6028ee1189889264f161464709b4deec0b11fa01"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "bec9181cfb44b4f317f4a6988a7b7093d37bddb8de396c3bb0db1c87f228bb2d",
+    "thresholds.json": "e7bdf32b6f756cbbaca20481c2579523de3ab59f4bb29a46cf42c1d61313633f"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "4413e69dad22ae26241a941610ed4cd14c975f40862c8960f30bfbda1d334332",
+    "thresholds.json": "fa4ec1089eb8b2a8081e23718d4b7a679d55ace593e949ede20c8da3fbec80bf"
+   },
+   "pinch__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "437db76c6d8d29e2e4548607c784affa00fabc6b0cee965243106aa71fc5348d",
+    "thresholds.json": "550fb3916c01abfe88227aee293b8edcd271d7ab30131d67a0adca54e7fed628"
+   },
+   "pinch__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "c158ebdbf2b3170efd4c853f54d85bc1e1aafd688045f64e8df9c817ed4235da",
+    "thresholds.json": "89c059a298d5d0bb0c29d1f57d177d81a9622cac0036ecc437b676ee12c23f87"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "6905d4a398f685e1e41227d18da78e35b67eb289101a588e0817f5a3110170e6",
+    "thresholds.json": "1e0ab2eca077ae31526b581b06ea2d70189fa9b70f4038b0d2d161e7199fdfd3"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "6cdf89e773951829cfa16b3fcef858534dd08506976fb333995a8b5f1b0890f8",
+    "thresholds.json": "8966b3d96c0efff7a0a8d60bee6a6b9672d591df057d38b95d3bdd3798c5e1cf"
+   },
+   "keystroke__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "6cfc2931696ff639f922e796e3deedfe0387e7d43fd2b5549d88f731b869e9af",
+    "thresholds.json": "b7807f7bbf8cf2affc3785b59767ed7047989f6aefcf76f8da2d90ccc22d1f8e"
+   },
+   "keystroke__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "fa17b0c35aceb9dc9931e90270987f8786ee616173aabe4fc7f974f0d0439185",
+    "thresholds.json": "3493464d8b82eaa61b50d19ea2589b4487bf15bafa8aed5b4bb8dcfbbeedc9d6"
+   }
+  },
+  "scoring_phase_after": {
+   "tap__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "d369e9677402ec59af867d07ed5474ceb1e68b9524af427a12fcd94d6df23a01",
+    "thresholds.json": "1a8090e3ad30e05a440949a0a99beb87799ced3f84e27deaa2ad2103129d02e0"
+   },
+   "tap__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "87370d51188f5f0f084d1255d3a270ffccf4ad74cc6b44812949e24d0ea8d967",
+    "thresholds.json": "522663f59b0b597e1032e778fc523e8d3444b0eb5a0e7145e486b9ed544a8eaf"
+   },
+   "tap__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "219ab7bd005f85c7e505087629c3f62b3cd3f3aa7cf5b12d2af28dec66d41c94",
+    "thresholds.json": "58b4a6c0b4821ba97fef5deacb0d2bc71d061b9c1f3a9b209dbc689cbf701953"
+   },
+   "tap__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "062895b1bd12ae2344fd672f191714650137685daa8641213c3c82975fa4ac59",
+    "thresholds.json": "38f24471fdef771364cf99472b9fada39c3c525092ad38fdfead06dc64a472b3"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "e98ef3d0dc0a446e92cdaf55e90b52047fbf102e452506a5981330eb1eb90c4f",
+    "thresholds.json": "a55e5869878087d07b4c15ba157c76985388a99a4a09b363b42ed4a32c95c588"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "793fc8ac9b229db0efa04d76e05aa4ea3245100e260e1e94f64ba9aa7054da8d",
+    "thresholds.json": "432508008dc7f53f470013078128c2db642a9de373ac75af5f68c9a84827e0b0"
+   },
+   "scroll__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "77c615081ae448f4d62fec5b4c475cd10319b503a4fb8de3f616ab0890ff3d96",
+    "thresholds.json": "7db91880e95f991d6240d3e4fdb487701434e75a760c29876ff139c448344e16"
+   },
+   "scroll__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "bc77c98fb7a1d461fc10def143905112ec7898c69d9aa1b58248b994ce4e44a0",
+    "thresholds.json": "01f40f84561e592d42caa904268a23ace0133aa268a4045e9e3f317be66c9ed7"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "efcab8b5b80e377ae151f97091f375f735f63f6ee5a5cb05cf1a4da97e4c19c6",
+    "thresholds.json": "d455269a8b87300f80cf9ec5a1c9493b5bbf8aaec19ba75cb9a8a3837552da0f"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "ff2cab3d0739de2e786e1a0e648dab6ccc100d43c52dfa08afb0f1757d3f5182",
+    "thresholds.json": "eb0be34d2ab02d091e646812649601877eed1f89534b74f2a2d09dc394320515"
+   },
+   "swipe__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "0e803e0c4ed588b39666627215e77dfdf9d2b51ad74e9d0febd4685527dccd31",
+    "thresholds.json": "b9f2477d0745de073be34bc369f09f08aae973c1221dccaeedb247e7b7f88d89"
+   },
+   "swipe__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "d070ecd9d0f6433df0947838e580c310e64cf76f9da53337aaa84b4b07628554",
+    "thresholds.json": "97ba5b770bcf7f13a01011db6028ee1189889264f161464709b4deec0b11fa01"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "bec9181cfb44b4f317f4a6988a7b7093d37bddb8de396c3bb0db1c87f228bb2d",
+    "thresholds.json": "e7bdf32b6f756cbbaca20481c2579523de3ab59f4bb29a46cf42c1d61313633f"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "4413e69dad22ae26241a941610ed4cd14c975f40862c8960f30bfbda1d334332",
+    "thresholds.json": "fa4ec1089eb8b2a8081e23718d4b7a679d55ace593e949ede20c8da3fbec80bf"
+   },
+   "pinch__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "437db76c6d8d29e2e4548607c784affa00fabc6b0cee965243106aa71fc5348d",
+    "thresholds.json": "550fb3916c01abfe88227aee293b8edcd271d7ab30131d67a0adca54e7fed628"
+   },
+   "pinch__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "c158ebdbf2b3170efd4c853f54d85bc1e1aafd688045f64e8df9c817ed4235da",
+    "thresholds.json": "89c059a298d5d0bb0c29d1f57d177d81a9622cac0036ecc437b676ee12c23f87"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "6905d4a398f685e1e41227d18da78e35b67eb289101a588e0817f5a3110170e6",
+    "thresholds.json": "1e0ab2eca077ae31526b581b06ea2d70189fa9b70f4038b0d2d161e7199fdfd3"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "6cdf89e773951829cfa16b3fcef858534dd08506976fb333995a8b5f1b0890f8",
+    "thresholds.json": "8966b3d96c0efff7a0a8d60bee6a6b9672d591df057d38b95d3bdd3798c5e1cf"
+   },
+   "keystroke__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "6cfc2931696ff639f922e796e3deedfe0387e7d43fd2b5549d88f731b869e9af",
+    "thresholds.json": "b7807f7bbf8cf2affc3785b59767ed7047989f6aefcf76f8da2d90ccc22d1f8e"
+   },
+   "keystroke__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "fa17b0c35aceb9dc9931e90270987f8786ee616173aabe4fc7f974f0d0439185",
+    "thresholds.json": "3493464d8b82eaa61b50d19ea2589b4487bf15bafa8aed5b4bb8dcfbbeedc9d6"
+   }
+  },
+  "scoring_phase_unchanged": true,
+  "sha256_identical_across_build_phase_and_scoring_phase": true,
+  "note": "the build-phase blocks carry extra bookkeeping keys (file size, frr5, bundle); the sha256 fields are what is compared and they are identical in all four snapshots."
  },
  "threshold_provenance": {
   "tap__imu_trajectory_xytime__hmog_style_svm": {
@@ -3524,8 +3705,5804 @@
    "frr5": 0.8247122168540955
   }
  },
- "results": null,
- "results_note": "BUILD PHASE ONLY. No arm has been scored on the 20-cell grid. FAR, user-clustered bootstrap intervals, paired differences and per-action / per-detector breakdowns are not in this file and must not be inferred from the smoke scoring above.",
+ "results": {
+  "metric": "FAR at the development-selected FRR=5 percent cut (the frr5 scalar of each cell thresholds.json). Accepted iff score < threshold; score_direction is larger_is_more_fake in all 20 cells and is asserted at load time.",
+  "aggregation": "a group number is the MEAN OVER CELLS of the per-cell FAR, which is the aggregation the published main table uses (reproduced: mean over the 90 released cells = 0.774575, joint modality 30 cells = 0.711267, trajectory 0.777475, inertial 0.834983).",
+  "pipeline_validation": {
+   "what": "the release own published test_scores re-scored with the same extract_event_features + classical_scores path used for every new arm, on ALL 20 cells (the spec asks for at least 3)",
+   "cells_checked": 20,
+   "worst_max_abs_diff": 0.0,
+   "exact_bitwise_fraction_min": 1.0,
+   "published_events_not_found_in_shards": 0,
+   "shard_events_not_in_published": 0,
+   "per_cell": [
+    {
+     "cell": "tap__imu_trajectory_xytime__hmog_style_svm",
+     "published_events": 5042,
+     "rescored_events": 5042,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.41130172784580726,
+     "published_far5_label1": 0.886,
+     "rescored_far5_label1": 0.886
+    },
+    {
+     "cell": "tap__imu_trajectory_xytime__hmog_style_rf",
+     "published_events": 5042,
+     "rescored_events": 5042,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.8361243906790622,
+     "published_far5_label1": 0.835,
+     "rescored_far5_label1": 0.835
+    },
+    {
+     "cell": "tap__imu_trajectory_xytime__paper_svm",
+     "published_events": 5042,
+     "rescored_events": 5042,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.37705433607438976,
+     "published_far5_label1": 0.88325,
+     "rescored_far5_label1": 0.88325
+    },
+    {
+     "cell": "tap__imu_trajectory_xytime__paper_xgboost",
+     "published_events": 5042,
+     "rescored_events": 5042,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.8815332055091858,
+     "published_far5_label1": 0.79725,
+     "rescored_far5_label1": 0.79725
+    },
+    {
+     "cell": "scroll__imu_trajectory_xytime__hmog_style_svm",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.3897405773813395,
+     "published_far5_label1": 0.70875,
+     "rescored_far5_label1": 0.70875
+    },
+    {
+     "cell": "scroll__imu_trajectory_xytime__hmog_style_rf",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.6953935286935286,
+     "published_far5_label1": 0.484,
+     "rescored_far5_label1": 0.484
+    },
+    {
+     "cell": "scroll__imu_trajectory_xytime__paper_svm",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.4024686547410442,
+     "published_far5_label1": 0.715,
+     "rescored_far5_label1": 0.715
+    },
+    {
+     "cell": "scroll__imu_trajectory_xytime__paper_xgboost",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.7534279227256775,
+     "published_far5_label1": 0.48225,
+     "rescored_far5_label1": 0.48225
+    },
+    {
+     "cell": "swipe__imu_trajectory_xytime__hmog_style_svm",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.3820763522221499,
+     "published_far5_label1": 0.7465,
+     "rescored_far5_label1": 0.7465
+    },
+    {
+     "cell": "swipe__imu_trajectory_xytime__hmog_style_rf",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.753670732569555,
+     "published_far5_label1": 0.55725,
+     "rescored_far5_label1": 0.55725
+    },
+    {
+     "cell": "swipe__imu_trajectory_xytime__paper_svm",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.3678906496109886,
+     "published_far5_label1": 0.7405,
+     "rescored_far5_label1": 0.7405
+    },
+    {
+     "cell": "swipe__imu_trajectory_xytime__paper_xgboost",
+     "published_events": 6000,
+     "rescored_events": 6000,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.8281400203704834,
+     "published_far5_label1": 0.59775,
+     "rescored_far5_label1": 0.59775
+    },
+    {
+     "cell": "pinch__imu_trajectory_xytime__hmog_style_svm",
+     "published_events": 5999,
+     "rescored_events": 5999,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.3156723298646055,
+     "published_far5_label1": 0.6955,
+     "rescored_far5_label1": 0.6955
+    },
+    {
+     "cell": "pinch__imu_trajectory_xytime__hmog_style_rf",
+     "published_events": 5999,
+     "rescored_events": 5999,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.7237348982514366,
+     "published_far5_label1": 0.542,
+     "rescored_far5_label1": 0.542
+    },
+    {
+     "cell": "pinch__imu_trajectory_xytime__paper_svm",
+     "published_events": 5999,
+     "rescored_events": 5999,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.3408228124730942,
+     "published_far5_label1": 0.806,
+     "rescored_far5_label1": 0.806
+    },
+    {
+     "cell": "pinch__imu_trajectory_xytime__paper_xgboost",
+     "published_events": 5999,
+     "rescored_events": 5999,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.7972422242164612,
+     "published_far5_label1": 0.523,
+     "rescored_far5_label1": 0.523
+    },
+    {
+     "cell": "keystroke__imu_trajectory_xytime__hmog_style_svm",
+     "published_events": 5950,
+     "rescored_events": 5950,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.48262799997688316,
+     "published_far5_label1": 0.73875,
+     "rescored_far5_label1": 0.73875
+    },
+    {
+     "cell": "keystroke__imu_trajectory_xytime__hmog_style_rf",
+     "published_events": 5950,
+     "rescored_events": 5950,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.6926227924162547,
+     "published_far5_label1": 0.82225,
+     "rescored_far5_label1": 0.82225
+    },
+    {
+     "cell": "keystroke__imu_trajectory_xytime__paper_svm",
+     "published_events": 5950,
+     "rescored_events": 5950,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.5684425316649094,
+     "published_far5_label1": 0.79575,
+     "rescored_far5_label1": 0.79575
+    },
+    {
+     "cell": "keystroke__imu_trajectory_xytime__paper_xgboost",
+     "published_events": 5950,
+     "rescored_events": 5950,
+     "published_not_found_in_shards": 0,
+     "shard_events_not_in_published": 0,
+     "max_abs_diff": 0.0,
+     "mean_abs_diff": 0.0,
+     "exact_bitwise_fraction": 1.0,
+     "threshold_frr5": 0.8247122168540955,
+     "published_far5_label1": 0.663,
+     "rescored_far5_label1": 0.663
+    }
+   ]
+  },
+  "events_scored": {
+   "row1": 8991,
+   "row2": 20000,
+   "row3": 200000,
+   "row4": 200000,
+   "row5": 200000,
+   "row5_unmatched": 200000
+  },
+  "events_scored_per_action": {
+   "row1": {
+    "tap": 1042,
+    "scroll": 2000,
+    "swipe": 2000,
+    "pinch": 1999,
+    "keystroke": 1950
+   },
+   "row2": {
+    "tap": 4000,
+    "scroll": 4000,
+    "swipe": 4000,
+    "pinch": 4000,
+    "keystroke": 4000
+   },
+   "row3": {
+    "tap": 40000,
+    "scroll": 40000,
+    "swipe": 40000,
+    "pinch": 40000,
+    "keystroke": 40000
+   },
+   "row4": {
+    "tap": 40000,
+    "scroll": 40000,
+    "swipe": 40000,
+    "pinch": 40000,
+    "keystroke": 40000
+   },
+   "row5": {
+    "tap": 40000,
+    "scroll": 40000,
+    "swipe": 40000,
+    "pinch": 40000,
+    "keystroke": 40000
+   },
+   "row5_unmatched": {
+    "tap": 40000,
+    "scroll": 40000,
+    "swipe": 40000,
+    "pinch": 40000,
+    "keystroke": 40000
+   }
+  },
+  "build_rejects_F15": {},
+  "bootstrap": {
+   "unit": "user",
+   "n_users": 20,
+   "replicates": 2000,
+   "shared_multiset_across_cells": true,
+   "seed": 909090
+  },
+  "far_by_arm": {
+   "all_20_cells": {
+    "row1": {
+     "far_at_frr5": 0.9451,
+     "ci95_user_clustered": [
+      0.9368,
+      0.9533
+     ],
+     "bootstrap_sd": 0.00425
+    },
+    "row2": {
+     "far_at_frr5": 0.701,
+     "ci95_user_clustered": [
+      0.6838,
+      0.7189
+     ],
+     "bootstrap_sd": 0.00904
+    },
+    "row3": {
+     "far_at_frr5": 0.794,
+     "ci95_user_clustered": [
+      0.7719,
+      0.8151
+     ],
+     "bootstrap_sd": 0.01143
+    },
+    "row4": {
+     "far_at_frr5": 0.7121,
+     "ci95_user_clustered": [
+      0.6943,
+      0.7304
+     ],
+     "bootstrap_sd": 0.00926
+    },
+    "row5": {
+     "far_at_frr5": 0.8348,
+     "ci95_user_clustered": [
+      0.8193,
+      0.85
+     ],
+     "bootstrap_sd": 0.00792
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8435,
+     "ci95_user_clustered": [
+      0.8252,
+      0.8599
+     ],
+     "bootstrap_sd": 0.00897
+    }
+   },
+   "tap_scroll_swipe_12_cells": {
+    "row1": {
+     "far_at_frr5": 0.9413,
+     "ci95_user_clustered": [
+      0.9316,
+      0.9513
+     ],
+     "bootstrap_sd": 0.00501
+    },
+    "row2": {
+     "far_at_frr5": 0.7028,
+     "ci95_user_clustered": [
+      0.6786,
+      0.7263
+     ],
+     "bootstrap_sd": 0.01213
+    },
+    "row3": {
+     "far_at_frr5": 0.855,
+     "ci95_user_clustered": [
+      0.8255,
+      0.8823
+     ],
+     "bootstrap_sd": 0.01459
+    },
+    "row4": {
+     "far_at_frr5": 0.7321,
+     "ci95_user_clustered": [
+      0.7113,
+      0.7515
+     ],
+     "bootstrap_sd": 0.01057
+    },
+    "row5": {
+     "far_at_frr5": 0.8764,
+     "ci95_user_clustered": [
+      0.8533,
+      0.8985
+     ],
+     "bootstrap_sd": 0.01137
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8782,
+     "ci95_user_clustered": [
+      0.8534,
+      0.9014
+     ],
+     "bootstrap_sd": 0.01214
+    }
+   }
+  },
+  "paired_differences": {
+   "all_20_cells": {
+    "row3_minus_row2": {
+     "difference": 0.093,
+     "ci95_on_the_difference": [
+      0.0736,
+      0.1116
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row4_minus_row2": {
+     "difference": 0.0112,
+     "ci95_on_the_difference": [
+      0.0019,
+      0.0208
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+      "Contains tap and scroll, where this difference is near-tautological (F14).",
+      "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+     ]
+    },
+    "row3_minus_row5": {
+     "difference": -0.0408,
+     "ci95_on_the_difference": [
+      -0.0539,
+      -0.029
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+     ]
+    },
+    "row4_minus_row5": {
+     "difference": -0.1227,
+     "ci95_on_the_difference": [
+      -0.1388,
+      -0.1083
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row5_minus_row2": {
+     "difference": 0.1339,
+     "ci95_on_the_difference": [
+      0.118,
+      0.1498
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row3_minus_row5_unmatched": {
+     "difference": -0.0494,
+     "ci95_on_the_difference": [
+      -0.0663,
+      -0.0349
+     ],
+     "excludes_zero": true
+    },
+    "row5_minus_row5_unmatched": {
+     "difference": -0.0086,
+     "ci95_on_the_difference": [
+      -0.0181,
+      0.0003
+     ],
+     "excludes_zero": false
+    },
+    "row2_minus_row1": {
+     "difference": -0.2441,
+     "ci95_on_the_difference": [
+      -0.261,
+      -0.2269
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row3_minus_row1": {
+     "difference": -0.1511,
+     "ci95_on_the_difference": [
+      -0.1724,
+      -0.1321
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    }
+   },
+   "tap_scroll_swipe_12_cells": {
+    "row3_minus_row2": {
+     "difference": 0.1523,
+     "ci95_on_the_difference": [
+      0.1286,
+      0.1756
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row4_minus_row2": {
+     "difference": 0.0293,
+     "ci95_on_the_difference": [
+      0.014,
+      0.0456
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "Contains tap and scroll, where this difference is near-tautological (F14).",
+      "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+     ]
+    },
+    "row3_minus_row5": {
+     "difference": -0.0213,
+     "ci95_on_the_difference": [
+      -0.041,
+      -0.0031
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+     ]
+    },
+    "row4_minus_row5": {
+     "difference": -0.1442,
+     "ci95_on_the_difference": [
+      -0.1617,
+      -0.1271
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row5_minus_row2": {
+     "difference": 0.1736,
+     "ci95_on_the_difference": [
+      0.1455,
+      0.2003
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row3_minus_row5_unmatched": {
+     "difference": -0.0231,
+     "ci95_on_the_difference": [
+      -0.0416,
+      -0.0076
+     ],
+     "excludes_zero": true
+    },
+    "row5_minus_row5_unmatched": {
+     "difference": -0.0018,
+     "ci95_on_the_difference": [
+      -0.0109,
+      0.0057
+     ],
+     "excludes_zero": false
+    },
+    "row2_minus_row1": {
+     "difference": -0.2385,
+     "ci95_on_the_difference": [
+      -0.2651,
+      -0.2115
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    },
+    "row3_minus_row1": {
+     "difference": -0.0862,
+     "ci95_on_the_difference": [
+      -0.1122,
+      -0.0606
+     ],
+     "excludes_zero": true,
+     "labels": [
+      "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+     ]
+    }
+   }
+  },
+  "per_action": {
+   "tap": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9374,
+      "ci95_user_clustered": [
+       0.917,
+       0.9572
+      ],
+      "bootstrap_sd": 0.01034
+     },
+     "row2": {
+      "far_at_frr5": 0.8504,
+      "ci95_user_clustered": [
+       0.8263,
+       0.8708
+      ],
+      "bootstrap_sd": 0.01124
+     },
+     "row3": {
+      "far_at_frr5": 0.9038,
+      "ci95_user_clustered": [
+       0.8323,
+       0.9609
+      ],
+      "bootstrap_sd": 0.03303
+     },
+     "row4": {
+      "far_at_frr5": 0.8535,
+      "ci95_user_clustered": [
+       0.8327,
+       0.8716
+      ],
+      "bootstrap_sd": 0.00996
+     },
+     "row5": {
+      "far_at_frr5": 0.9032,
+      "ci95_user_clustered": [
+       0.8441,
+       0.9514
+      ],
+      "bootstrap_sd": 0.0272
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.9079,
+      "ci95_user_clustered": [
+       0.8483,
+       0.9553
+      ],
+      "bootstrap_sd": 0.02739
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0535,
+      "ci95_on_the_difference": [
+       -0.0085,
+       0.1052
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0031,
+      "ci95_on_the_difference": [
+       -0.0042,
+       0.0123
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0006,
+      "ci95_on_the_difference": [
+       -0.0151,
+       0.014
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0497,
+      "ci95_on_the_difference": [
+       -0.0925,
+       0.0024
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0528,
+      "ci95_on_the_difference": [
+       0.0023,
+       0.0945
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0041,
+      "ci95_on_the_difference": [
+       -0.0182,
+       0.0083
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0047,
+      "ci95_on_the_difference": [
+       -0.0121,
+       0.0029
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.087,
+      "ci95_on_the_difference": [
+       -0.1149,
+       -0.0619
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0335,
+      "ci95_on_the_difference": [
+       -0.0886,
+       0.0086
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "scroll": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.95,
+      "ci95_user_clustered": [
+       0.9387,
+       0.961
+      ],
+      "bootstrap_sd": 0.00567
+     },
+     "row2": {
+      "far_at_frr5": 0.5975,
+      "ci95_user_clustered": [
+       0.5399,
+       0.6483
+      ],
+      "bootstrap_sd": 0.02801
+     },
+     "row3": {
+      "far_at_frr5": 0.8805,
+      "ci95_user_clustered": [
+       0.8507,
+       0.9086
+      ],
+      "bootstrap_sd": 0.01498
+     },
+     "row4": {
+      "far_at_frr5": 0.567,
+      "ci95_user_clustered": [
+       0.5116,
+       0.6175
+      ],
+      "bootstrap_sd": 0.02712
+     },
+     "row5": {
+      "far_at_frr5": 0.8633,
+      "ci95_user_clustered": [
+       0.8298,
+       0.8959
+      ],
+      "bootstrap_sd": 0.01702
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8523,
+      "ci95_user_clustered": [
+       0.8214,
+       0.8821
+      ],
+      "bootstrap_sd": 0.01578
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.283,
+      "ci95_on_the_difference": [
+       0.2342,
+       0.3322
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0305,
+      "ci95_on_the_difference": [
+       -0.0405,
+       -0.0215
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0173,
+      "ci95_on_the_difference": [
+       -0.0017,
+       0.0419
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.2963,
+      "ci95_on_the_difference": [
+       -0.3454,
+       -0.245
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.2658,
+      "ci95_on_the_difference": [
+       0.2105,
+       0.3194
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0283,
+      "ci95_on_the_difference": [
+       0.0138,
+       0.043
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.011,
+      "ci95_on_the_difference": [
+       -0.0133,
+       0.0304
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.3525,
+      "ci95_on_the_difference": [
+       -0.4079,
+       -0.3008
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0695,
+      "ci95_on_the_difference": [
+       -0.0986,
+       -0.0407
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "swipe": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9365,
+      "ci95_user_clustered": [
+       0.9193,
+       0.9532
+      ],
+      "bootstrap_sd": 0.00855
+     },
+     "row2": {
+      "far_at_frr5": 0.6605,
+      "ci95_user_clustered": [
+       0.6105,
+       0.7092
+      ],
+      "bootstrap_sd": 0.02502
+     },
+     "row3": {
+      "far_at_frr5": 0.7807,
+      "ci95_user_clustered": [
+       0.7359,
+       0.8213
+      ],
+      "bootstrap_sd": 0.022
+     },
+     "row4": {
+      "far_at_frr5": 0.7759,
+      "ci95_user_clustered": [
+       0.7402,
+       0.8084
+      ],
+      "bootstrap_sd": 0.01775
+     },
+     "row5": {
+      "far_at_frr5": 0.8626,
+      "ci95_user_clustered": [
+       0.8355,
+       0.8894
+      ],
+      "bootstrap_sd": 0.01391
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8743,
+      "ci95_user_clustered": [
+       0.8422,
+       0.903
+      ],
+      "bootstrap_sd": 0.01549
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1202,
+      "ci95_on_the_difference": [
+       0.0798,
+       0.1578
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.1154,
+      "ci95_on_the_difference": [
+       0.0663,
+       0.1699
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0818,
+      "ci95_on_the_difference": [
+       -0.1308,
+       -0.0435
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0867,
+      "ci95_on_the_difference": [
+       -0.122,
+       -0.0505
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.2021,
+      "ci95_on_the_difference": [
+       0.1392,
+       0.2611
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0935,
+      "ci95_on_the_difference": [
+       -0.1478,
+       -0.0493
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0117,
+      "ci95_on_the_difference": [
+       -0.0287,
+       0.003
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.276,
+      "ci95_on_the_difference": [
+       -0.3273,
+       -0.226
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1558,
+      "ci95_on_the_difference": [
+       -0.2047,
+       -0.1136
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "pinch": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.946,
+      "ci95_user_clustered": [
+       0.9322,
+       0.9585
+      ],
+      "bootstrap_sd": 0.0066
+     },
+     "row2": {
+      "far_at_frr5": 0.6416,
+      "ci95_user_clustered": [
+       0.5986,
+       0.6874
+      ],
+      "bootstrap_sd": 0.02244
+     },
+     "row3": {
+      "far_at_frr5": 0.6077,
+      "ci95_user_clustered": [
+       0.5657,
+       0.6523
+      ],
+      "bootstrap_sd": 0.02211
+     },
+     "row4": {
+      "far_at_frr5": 0.6596,
+      "ci95_user_clustered": [
+       0.6135,
+       0.7068
+      ],
+      "bootstrap_sd": 0.02402
+     },
+     "row5": {
+      "far_at_frr5": 0.7202,
+      "ci95_user_clustered": [
+       0.6876,
+       0.7527
+      ],
+      "bootstrap_sd": 0.01653
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.7579,
+      "ci95_user_clustered": [
+       0.7128,
+       0.7998
+      ],
+      "bootstrap_sd": 0.02251
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.0339,
+      "ci95_on_the_difference": [
+       -0.0794,
+       0.0154
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.018,
+      "ci95_on_the_difference": [
+       0.0016,
+       0.0313
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.1124,
+      "ci95_on_the_difference": [
+       -0.1414,
+       -0.0831
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0605,
+      "ci95_on_the_difference": [
+       -0.1158,
+       -0.0093
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0785,
+      "ci95_on_the_difference": [
+       0.0282,
+       0.131
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.1502,
+      "ci95_on_the_difference": [
+       -0.1924,
+       -0.108
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0378,
+      "ci95_on_the_difference": [
+       -0.0655,
+       -0.0115
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.3043,
+      "ci95_on_the_difference": [
+       -0.3412,
+       -0.2668
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.3382,
+      "ci95_on_the_difference": [
+       -0.376,
+       -0.2992
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "keystroke": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9556,
+      "ci95_user_clustered": [
+       0.9406,
+       0.9684
+      ],
+      "bootstrap_sd": 0.00743
+     },
+     "row2": {
+      "far_at_frr5": 0.7549,
+      "ci95_user_clustered": [
+       0.685,
+       0.8203
+      ],
+      "bootstrap_sd": 0.03419
+     },
+     "row3": {
+      "far_at_frr5": 0.7973,
+      "ci95_user_clustered": [
+       0.7575,
+       0.8343
+      ],
+      "bootstrap_sd": 0.01964
+     },
+     "row4": {
+      "far_at_frr5": 0.7047,
+      "ci95_user_clustered": [
+       0.6414,
+       0.7645
+      ],
+      "bootstrap_sd": 0.03147
+     },
+     "row5": {
+      "far_at_frr5": 0.825,
+      "ci95_user_clustered": [
+       0.786,
+       0.862
+      ],
+      "bootstrap_sd": 0.01985
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8249,
+      "ci95_user_clustered": [
+       0.7877,
+       0.8586
+      ],
+      "bootstrap_sd": 0.0188
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0424,
+      "ci95_on_the_difference": [
+       -0.0195,
+       0.1052
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0502,
+      "ci95_on_the_difference": [
+       -0.069,
+       -0.0322
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0277,
+      "ci95_on_the_difference": [
+       -0.0384,
+       -0.0168
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1203,
+      "ci95_on_the_difference": [
+       -0.1823,
+       -0.062
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0701,
+      "ci95_on_the_difference": [
+       0.0029,
+       0.1368
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0276,
+      "ci95_on_the_difference": [
+       -0.0386,
+       -0.0166
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0001,
+      "ci95_on_the_difference": [
+       -0.009,
+       0.0099
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.2007,
+      "ci95_on_the_difference": [
+       -0.2616,
+       -0.1421
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1583,
+      "ci95_on_the_difference": [
+       -0.1871,
+       -0.1313
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   }
+  },
+  "per_detector": {
+   "hmog_style_svm": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9444,
+      "ci95_user_clustered": [
+       0.9357,
+       0.9527
+      ],
+      "bootstrap_sd": 0.00426
+     },
+     "row2": {
+      "far_at_frr5": 0.7551,
+      "ci95_user_clustered": [
+       0.7354,
+       0.7761
+      ],
+      "bootstrap_sd": 0.01041
+     },
+     "row3": {
+      "far_at_frr5": 0.8257,
+      "ci95_user_clustered": [
+       0.801,
+       0.8493
+      ],
+      "bootstrap_sd": 0.01271
+     },
+     "row4": {
+      "far_at_frr5": 0.7706,
+      "ci95_user_clustered": [
+       0.7473,
+       0.7948
+      ],
+      "bootstrap_sd": 0.01201
+     },
+     "row5": {
+      "far_at_frr5": 0.8722,
+      "ci95_user_clustered": [
+       0.8556,
+       0.8893
+      ],
+      "bootstrap_sd": 0.00858
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8808,
+      "ci95_user_clustered": [
+       0.8621,
+       0.8984
+      ],
+      "bootstrap_sd": 0.00952
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0706,
+      "ci95_on_the_difference": [
+       0.0447,
+       0.0997
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0155,
+      "ci95_on_the_difference": [
+       0.0017,
+       0.0289
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "Contains tap and scroll, where this difference is near-tautological (F14).",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0465,
+      "ci95_on_the_difference": [
+       -0.0666,
+       -0.0295
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1016,
+      "ci95_on_the_difference": [
+       -0.1248,
+       -0.0806
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1171,
+      "ci95_on_the_difference": [
+       0.0973,
+       0.1389
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0551,
+      "ci95_on_the_difference": [
+       -0.0768,
+       -0.0366
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0086,
+      "ci95_on_the_difference": [
+       -0.0202,
+       0.0013
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.1893,
+      "ci95_on_the_difference": [
+       -0.2095,
+       -0.1687
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1187,
+      "ci95_on_the_difference": [
+       -0.1453,
+       -0.0951
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "hmog_style_rf": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9431,
+      "ci95_user_clustered": [
+       0.9348,
+       0.9521
+      ],
+      "bootstrap_sd": 0.00447
+     },
+     "row2": {
+      "far_at_frr5": 0.6481,
+      "ci95_user_clustered": [
+       0.6279,
+       0.6691
+      ],
+      "bootstrap_sd": 0.01068
+     },
+     "row3": {
+      "far_at_frr5": 0.7892,
+      "ci95_user_clustered": [
+       0.7605,
+       0.8158
+      ],
+      "bootstrap_sd": 0.01482
+     },
+     "row4": {
+      "far_at_frr5": 0.6788,
+      "ci95_user_clustered": [
+       0.6584,
+       0.6981
+      ],
+      "bootstrap_sd": 0.01031
+     },
+     "row5": {
+      "far_at_frr5": 0.824,
+      "ci95_user_clustered": [
+       0.8034,
+       0.8433
+      ],
+      "bootstrap_sd": 0.01038
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8307,
+      "ci95_user_clustered": [
+       0.8085,
+       0.8512
+      ],
+      "bootstrap_sd": 0.01101
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1411,
+      "ci95_on_the_difference": [
+       0.1161,
+       0.1644
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0307,
+      "ci95_on_the_difference": [
+       0.0191,
+       0.0426
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "Contains tap and scroll, where this difference is near-tautological (F14).",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0348,
+      "ci95_on_the_difference": [
+       -0.0494,
+       -0.0221
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1452,
+      "ci95_on_the_difference": [
+       -0.1663,
+       -0.126
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1759,
+      "ci95_on_the_difference": [
+       0.1546,
+       0.1974
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0415,
+      "ci95_on_the_difference": [
+       -0.0569,
+       -0.0265
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0066,
+      "ci95_on_the_difference": [
+       -0.0178,
+       0.003
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.295,
+      "ci95_on_the_difference": [
+       -0.3142,
+       -0.2749
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1539,
+      "ci95_on_the_difference": [
+       -0.1819,
+       -0.1291
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "paper_svm": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9434,
+      "ci95_user_clustered": [
+       0.9313,
+       0.9541
+      ],
+      "bootstrap_sd": 0.00586
+     },
+     "row2": {
+      "far_at_frr5": 0.7881,
+      "ci95_user_clustered": [
+       0.7643,
+       0.8103
+      ],
+      "bootstrap_sd": 0.01184
+     },
+     "row3": {
+      "far_at_frr5": 0.7698,
+      "ci95_user_clustered": [
+       0.7463,
+       0.7925
+      ],
+      "bootstrap_sd": 0.01186
+     },
+     "row4": {
+      "far_at_frr5": 0.7408,
+      "ci95_user_clustered": [
+       0.7177,
+       0.7631
+      ],
+      "bootstrap_sd": 0.01186
+     },
+     "row5": {
+      "far_at_frr5": 0.8147,
+      "ci95_user_clustered": [
+       0.794,
+       0.8356
+      ],
+      "bootstrap_sd": 0.01079
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8188,
+      "ci95_user_clustered": [
+       0.7956,
+       0.8394
+      ],
+      "bootstrap_sd": 0.01156
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.0183,
+      "ci95_on_the_difference": [
+       -0.0411,
+       0.0077
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0473,
+      "ci95_on_the_difference": [
+       -0.0599,
+       -0.0353
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "Contains tap and scroll, where this difference is near-tautological (F14).",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0449,
+      "ci95_on_the_difference": [
+       -0.0598,
+       -0.03
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.074,
+      "ci95_on_the_difference": [
+       -0.1006,
+       -0.0494
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0266,
+      "ci95_on_the_difference": [
+       0.0008,
+       0.0542
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.049,
+      "ci95_on_the_difference": [
+       -0.0668,
+       -0.0328
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0041,
+      "ci95_on_the_difference": [
+       -0.0139,
+       0.006
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.1553,
+      "ci95_on_the_difference": [
+       -0.1812,
+       -0.1333
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1736,
+      "ci95_on_the_difference": [
+       -0.1922,
+       -0.1563
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "paper_xgboost": {
+    "far_by_arm": {
+     "row1": {
+      "far_at_frr5": 0.9495,
+      "ci95_user_clustered": [
+       0.9411,
+       0.9585
+      ],
+      "bootstrap_sd": 0.00451
+     },
+     "row2": {
+      "far_at_frr5": 0.6127,
+      "ci95_user_clustered": [
+       0.5891,
+       0.636
+      ],
+      "bootstrap_sd": 0.01206
+     },
+     "row3": {
+      "far_at_frr5": 0.7914,
+      "ci95_user_clustered": [
+       0.7685,
+       0.814
+      ],
+      "bootstrap_sd": 0.0114
+     },
+     "row4": {
+      "far_at_frr5": 0.6584,
+      "ci95_user_clustered": [
+       0.6413,
+       0.676
+      ],
+      "bootstrap_sd": 0.00912
+     },
+     "row5": {
+      "far_at_frr5": 0.8284,
+      "ci95_user_clustered": [
+       0.8107,
+       0.8459
+      ],
+      "bootstrap_sd": 0.00902
+     },
+     "row5_unmatched": {
+      "far_at_frr5": 0.8436,
+      "ci95_user_clustered": [
+       0.8242,
+       0.8619
+      ],
+      "bootstrap_sd": 0.00967
+     }
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1788,
+      "ci95_on_the_difference": [
+       0.1583,
+       0.1993
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0457,
+      "ci95_on_the_difference": [
+       0.034,
+       0.0574
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "Contains tap and scroll, where this difference is near-tautological (F14).",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.037,
+      "ci95_on_the_difference": [
+       -0.0492,
+       -0.0252
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.17,
+      "ci95_on_the_difference": [
+       -0.1826,
+       -0.1584
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.2157,
+      "ci95_on_the_difference": [
+       0.2001,
+       0.2313
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0521,
+      "ci95_on_the_difference": [
+       -0.0681,
+       -0.0369
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0152,
+      "ci95_on_the_difference": [
+       -0.0265,
+       -0.0041
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.3368,
+      "ci95_on_the_difference": [
+       -0.3595,
+       -0.3134
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1581,
+      "ci95_on_the_difference": [
+       -0.1797,
+       -0.1359
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MIXED VALIDITY. This aggregate spans pinch and keystroke, whose rows 3/4 are not entitled to a comparison against rows 1/2 (S2 is the identity there). Use the tap_scroll_swipe_12_cells group for any row1/row2 comparison.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   }
+  },
+  "per_cell": {
+   "tap__imu_trajectory_xytime__hmog_style_svm": {
+    "threshold_frr5": 0.41130172784580726,
+    "row1": {
+     "far_at_frr5": 0.9453,
+     "ci95": [
+      0.923,
+      0.9647
+     ],
+     "events": 1042,
+     "mean_score": -0.0916
+    },
+    "row2": {
+     "far_at_frr5": 0.886,
+     "ci95": [
+      0.854,
+      0.9108
+     ],
+     "events": 4000,
+     "mean_score": 0.04707
+    },
+    "row3": {
+     "far_at_frr5": 0.924,
+     "ci95": [
+      0.862,
+      0.9762
+     ],
+     "events": 40000,
+     "mean_score": -0.11366
+    },
+    "row4": {
+     "far_at_frr5": 0.8868,
+     "ci95": [
+      0.8562,
+      0.9122
+     ],
+     "events": 40000,
+     "mean_score": 0.05013
+    },
+    "row5": {
+     "far_at_frr5": 0.9032,
+     "ci95": [
+      0.8439,
+      0.9542
+     ],
+     "events": 40000,
+     "mean_score": -0.08416
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9145,
+     "ci95": [
+      0.8613,
+      0.9585
+     ],
+     "events": 40000,
+     "mean_score": -0.09359
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.038,
+      "ci95_on_the_difference": [
+       -0.02,
+       0.0867
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0008,
+      "ci95_on_the_difference": [
+       -0.0071,
+       0.0085
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0208,
+      "ci95_on_the_difference": [
+       0.0065,
+       0.0388
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0165,
+      "ci95_on_the_difference": [
+       -0.0682,
+       0.0422
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0172,
+      "ci95_on_the_difference": [
+       -0.0381,
+       0.0662
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0095,
+      "ci95_on_the_difference": [
+       -0.0051,
+       0.023
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0113,
+      "ci95_on_the_difference": [
+       -0.0285,
+       0.0034
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.0593,
+      "ci95_on_the_difference": [
+       -0.0908,
+       -0.0277
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0213,
+      "ci95_on_the_difference": [
+       -0.0727,
+       0.0182
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "tap__imu_trajectory_xytime__hmog_style_rf": {
+    "threshold_frr5": 0.8361243906790622,
+    "row1": {
+     "far_at_frr5": 0.9453,
+     "ci95": [
+      0.9156,
+      0.9704
+     ],
+     "events": 1042,
+     "mean_score": 0.65213
+    },
+    "row2": {
+     "far_at_frr5": 0.835,
+     "ci95": [
+      0.8103,
+      0.8605
+     ],
+     "events": 4000,
+     "mean_score": 0.74781
+    },
+    "row3": {
+     "far_at_frr5": 0.9085,
+     "ci95": [
+      0.8059,
+      0.9829
+     ],
+     "events": 40000,
+     "mean_score": 0.68458
+    },
+    "row4": {
+     "far_at_frr5": 0.8441,
+     "ci95": [
+      0.8199,
+      0.8664
+     ],
+     "events": 40000,
+     "mean_score": 0.74724
+    },
+    "row5": {
+     "far_at_frr5": 0.9197,
+     "ci95": [
+      0.8492,
+      0.9752
+     ],
+     "events": 40000,
+     "mean_score": 0.67914
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9204,
+     "ci95": [
+      0.8421,
+      0.9786
+     ],
+     "events": 40000,
+     "mean_score": 0.67806
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0735,
+      "ci95_on_the_difference": [
+       -0.0246,
+       0.1511
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0091,
+      "ci95_on_the_difference": [
+       -0.0044,
+       0.024
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0112,
+      "ci95_on_the_difference": [
+       -0.0555,
+       0.0251
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0755,
+      "ci95_on_the_difference": [
+       -0.1294,
+       -0.0149
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0847,
+      "ci95_on_the_difference": [
+       0.0234,
+       0.139
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0119,
+      "ci95_on_the_difference": [
+       -0.0428,
+       0.0147
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0007,
+      "ci95_on_the_difference": [
+       -0.0133,
+       0.0163
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.1103,
+      "ci95_on_the_difference": [
+       -0.1464,
+       -0.0773
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0368,
+      "ci95_on_the_difference": [
+       -0.1205,
+       0.0239
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "tap__imu_trajectory_xytime__paper_svm": {
+    "threshold_frr5": 0.37705433607438976,
+    "row1": {
+     "far_at_frr5": 0.9299,
+     "ci95": [
+      0.9045,
+      0.9546
+     ],
+     "events": 1042,
+     "mean_score": -0.03922
+    },
+    "row2": {
+     "far_at_frr5": 0.8832,
+     "ci95": [
+      0.8355,
+      0.921
+     ],
+     "events": 4000,
+     "mean_score": 0.07153
+    },
+    "row3": {
+     "far_at_frr5": 0.8736,
+     "ci95": [
+      0.7985,
+      0.9383
+     ],
+     "events": 40000,
+     "mean_score": -0.0083
+    },
+    "row4": {
+     "far_at_frr5": 0.881,
+     "ci95": [
+      0.8314,
+      0.9186
+     ],
+     "events": 40000,
+     "mean_score": 0.0791
+    },
+    "row5": {
+     "far_at_frr5": 0.8773,
+     "ci95": [
+      0.8187,
+      0.9253
+     ],
+     "events": 40000,
+     "mean_score": 0.0007
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.873,
+     "ci95": [
+      0.8123,
+      0.9247
+     ],
+     "events": 40000,
+     "mean_score": 0.00035
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.0096,
+      "ci95_on_the_difference": [
+       -0.0684,
+       0.0406
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0023,
+      "ci95_on_the_difference": [
+       -0.0094,
+       0.0047
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0037,
+      "ci95_on_the_difference": [
+       -0.0416,
+       0.027
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": 0.0037,
+      "ci95_on_the_difference": [
+       -0.0467,
+       0.0629
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": -0.006,
+      "ci95_on_the_difference": [
+       -0.0659,
+       0.0435
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0006,
+      "ci95_on_the_difference": [
+       -0.0293,
+       0.0248
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0042,
+      "ci95_on_the_difference": [
+       -0.0093,
+       0.0188
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.0467,
+      "ci95_on_the_difference": [
+       -0.0935,
+       -0.004
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0563,
+      "ci95_on_the_difference": [
+       -0.119,
+       -0.0058
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "tap__imu_trajectory_xytime__paper_xgboost": {
+    "threshold_frr5": 0.8815332055091858,
+    "row1": {
+     "far_at_frr5": 0.929,
+     "ci95": [
+      0.8985,
+      0.9545
+     ],
+     "events": 1042,
+     "mean_score": 0.62556
+    },
+    "row2": {
+     "far_at_frr5": 0.7973,
+     "ci95": [
+      0.7735,
+      0.8197
+     ],
+     "events": 4000,
+     "mean_score": 0.76285
+    },
+    "row3": {
+     "far_at_frr5": 0.9093,
+     "ci95": [
+      0.8295,
+      0.9718
+     ],
+     "events": 40000,
+     "mean_score": 0.67565
+    },
+    "row4": {
+     "far_at_frr5": 0.8022,
+     "ci95": [
+      0.7833,
+      0.8209
+     ],
+     "events": 40000,
+     "mean_score": 0.76959
+    },
+    "row5": {
+     "far_at_frr5": 0.9127,
+     "ci95": [
+      0.8426,
+      0.9677
+     ],
+     "events": 40000,
+     "mean_score": 0.67059
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9237,
+     "ci95": [
+      0.8575,
+      0.9765
+     ],
+     "events": 40000,
+     "mean_score": 0.6686
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1121,
+      "ci95_on_the_difference": [
+       0.0427,
+       0.1715
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.005,
+      "ci95_on_the_difference": [
+       -0.0092,
+       0.0221
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0033,
+      "ci95_on_the_difference": [
+       -0.0254,
+       0.0177
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1105,
+      "ci95_on_the_difference": [
+       -0.1624,
+       -0.0504
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1154,
+      "ci95_on_the_difference": [
+       0.0552,
+       0.1678
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0144,
+      "ci95_on_the_difference": [
+       -0.0299,
+       -0.0011
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0111,
+      "ci95_on_the_difference": [
+       -0.0242,
+       -0.0006
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.1317,
+      "ci95_on_the_difference": [
+       -0.164,
+       -0.1021
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0197,
+      "ci95_on_the_difference": [
+       -0.0759,
+       0.0253
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_svm": {
+    "threshold_frr5": 0.3897405773813395,
+    "row1": {
+     "far_at_frr5": 0.9525,
+     "ci95": [
+      0.938,
+      0.9675
+     ],
+     "events": 2000,
+     "mean_score": -0.3692
+    },
+    "row2": {
+     "far_at_frr5": 0.7087,
+     "ci95": [
+      0.646,
+      0.7628
+     ],
+     "events": 4000,
+     "mean_score": 0.15304
+    },
+    "row3": {
+     "far_at_frr5": 0.9109,
+     "ci95": [
+      0.8523,
+      0.9562
+     ],
+     "events": 40000,
+     "mean_score": -0.14886
+    },
+    "row4": {
+     "far_at_frr5": 0.6899,
+     "ci95": [
+      0.6329,
+      0.7396
+     ],
+     "events": 40000,
+     "mean_score": 0.14965
+    },
+    "row5": {
+     "far_at_frr5": 0.8924,
+     "ci95": [
+      0.839,
+      0.9423
+     ],
+     "events": 40000,
+     "mean_score": -0.11747
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8886,
+     "ci95": [
+      0.8422,
+      0.9318
+     ],
+     "events": 40000,
+     "mean_score": -0.11144
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.2021,
+      "ci95_on_the_difference": [
+       0.1282,
+       0.2668
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0189,
+      "ci95_on_the_difference": [
+       -0.029,
+       -0.0084
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0184,
+      "ci95_on_the_difference": [
+       -0.0057,
+       0.0484
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.2026,
+      "ci95_on_the_difference": [
+       -0.2701,
+       -0.1311
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1837,
+      "ci95_on_the_difference": [
+       0.1089,
+       0.2557
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0223,
+      "ci95_on_the_difference": [
+       -0.002,
+       0.0459
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0039,
+      "ci95_on_the_difference": [
+       -0.0302,
+       0.0333
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.2438,
+      "ci95_on_the_difference": [
+       -0.302,
+       -0.19
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0416,
+      "ci95_on_the_difference": [
+       -0.0887,
+       -0.0016
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_rf": {
+    "threshold_frr5": 0.6953935286935286,
+    "row1": {
+     "far_at_frr5": 0.9415,
+     "ci95": [
+      0.926,
+      0.956
+     ],
+     "events": 2000,
+     "mean_score": 0.43463
+    },
+    "row2": {
+     "far_at_frr5": 0.484,
+     "ci95": [
+      0.4152,
+      0.5553
+     ],
+     "events": 4000,
+     "mean_score": 0.70416
+    },
+    "row3": {
+     "far_at_frr5": 0.8536,
+     "ci95": [
+      0.7974,
+      0.9042
+     ],
+     "events": 40000,
+     "mean_score": 0.52908
+    },
+    "row4": {
+     "far_at_frr5": 0.4644,
+     "ci95": [
+      0.3993,
+      0.5309
+     ],
+     "events": 40000,
+     "mean_score": 0.71665
+    },
+    "row5": {
+     "far_at_frr5": 0.8131,
+     "ci95": [
+      0.7588,
+      0.8666
+     ],
+     "events": 40000,
+     "mean_score": 0.54425
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.7921,
+     "ci95": [
+      0.7309,
+      0.8481
+     ],
+     "events": 40000,
+     "mean_score": 0.54964
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.3696,
+      "ci95_on_the_difference": [
+       0.3058,
+       0.434
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0196,
+      "ci95_on_the_difference": [
+       -0.0364,
+       0.0
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0405,
+      "ci95_on_the_difference": [
+       0.0187,
+       0.0681
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.3487,
+      "ci95_on_the_difference": [
+       -0.4056,
+       -0.2937
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.3291,
+      "ci95_on_the_difference": [
+       0.2647,
+       0.3965
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0615,
+      "ci95_on_the_difference": [
+       0.0399,
+       0.0865
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0211,
+      "ci95_on_the_difference": [
+       -0.0089,
+       0.044
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.4575,
+      "ci95_on_the_difference": [
+       -0.5248,
+       -0.3872
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0879,
+      "ci95_on_the_difference": [
+       -0.141,
+       -0.0383
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "scroll__imu_trajectory_xytime__paper_svm": {
+    "threshold_frr5": 0.4024686547410442,
+    "row1": {
+     "far_at_frr5": 0.958,
+     "ci95": [
+      0.9445,
+      0.97
+     ],
+     "events": 2000,
+     "mean_score": -0.35559
+    },
+    "row2": {
+     "far_at_frr5": 0.715,
+     "ci95": [
+      0.649,
+      0.7715
+     ],
+     "events": 4000,
+     "mean_score": 0.16078
+    },
+    "row3": {
+     "far_at_frr5": 0.9293,
+     "ci95": [
+      0.8964,
+      0.9592
+     ],
+     "events": 40000,
+     "mean_score": -0.12544
+    },
+    "row4": {
+     "far_at_frr5": 0.6795,
+     "ci95": [
+      0.6142,
+      0.7349
+     ],
+     "events": 40000,
+     "mean_score": 0.17566
+    },
+    "row5": {
+     "far_at_frr5": 0.9226,
+     "ci95": [
+      0.8841,
+      0.9572
+     ],
+     "events": 40000,
+     "mean_score": -0.11872
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9095,
+     "ci95": [
+      0.8699,
+      0.9442
+     ],
+     "events": 40000,
+     "mean_score": -0.10122
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.2143,
+      "ci95_on_the_difference": [
+       0.1521,
+       0.2904
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0354,
+      "ci95_on_the_difference": [
+       -0.0487,
+       -0.0242
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0067,
+      "ci95_on_the_difference": [
+       -0.0188,
+       0.0343
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.2431,
+      "ci95_on_the_difference": [
+       -0.3241,
+       -0.1745
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.2077,
+      "ci95_on_the_difference": [
+       0.1391,
+       0.2904
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0198,
+      "ci95_on_the_difference": [
+       0.0006,
+       0.0391
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0131,
+      "ci95_on_the_difference": [
+       -0.0157,
+       0.0397
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.243,
+      "ci95_on_the_difference": [
+       -0.3117,
+       -0.1825
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0287,
+      "ci95_on_the_difference": [
+       -0.0605,
+       0.0007
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "scroll__imu_trajectory_xytime__paper_xgboost": {
+    "threshold_frr5": 0.7534279227256775,
+    "row1": {
+     "far_at_frr5": 0.948,
+     "ci95": [
+      0.9325,
+      0.9635
+     ],
+     "events": 2000,
+     "mean_score": 0.391
+    },
+    "row2": {
+     "far_at_frr5": 0.4823,
+     "ci95": [
+      0.4305,
+      0.5308
+     ],
+     "events": 4000,
+     "mean_score": 0.73196
+    },
+    "row3": {
+     "far_at_frr5": 0.8284,
+     "ci95": [
+      0.7807,
+      0.873
+     ],
+     "events": 40000,
+     "mean_score": 0.52111
+    },
+    "row4": {
+     "far_at_frr5": 0.4341,
+     "ci95": [
+      0.3831,
+      0.4841
+     ],
+     "events": 40000,
+     "mean_score": 0.75377
+    },
+    "row5": {
+     "far_at_frr5": 0.8248,
+     "ci95": [
+      0.7688,
+      0.8785
+     ],
+     "events": 40000,
+     "mean_score": 0.52946
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8189,
+     "ci95": [
+      0.7684,
+      0.867
+     ],
+     "events": 40000,
+     "mean_score": 0.53393
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.3462,
+      "ci95_on_the_difference": [
+       0.2914,
+       0.4005
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.0482,
+      "ci95_on_the_difference": [
+       -0.0666,
+       -0.0324
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NEAR-TAUTOLOGICAL (F14). For this action the released fake touch IS the victim own held recording transported to the carrier endpoints -- rebuilding it from the five reproduces the released trajectory to float32 ulp -- so row 4 is the release arm re-derived with a re-drawn shot and a null here is guaranteed by construction, not measured.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": 0.0036,
+      "ci95_on_the_difference": [
+       -0.0271,
+       0.0358
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.3907,
+      "ci95_on_the_difference": [
+       -0.4443,
+       -0.3315
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.3426,
+      "ci95_on_the_difference": [
+       0.2844,
+       0.4014
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": 0.0095,
+      "ci95_on_the_difference": [
+       -0.0172,
+       0.0369
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0059,
+      "ci95_on_the_difference": [
+       -0.0147,
+       0.026
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.4657,
+      "ci95_on_the_difference": [
+       -0.517,
+       -0.4152
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1196,
+      "ci95_on_the_difference": [
+       -0.166,
+       -0.0715
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_svm": {
+    "threshold_frr5": 0.3820763522221499,
+    "row1": {
+     "far_at_frr5": 0.942,
+     "ci95": [
+      0.9235,
+      0.96
+     ],
+     "events": 2000,
+     "mean_score": -0.19458
+    },
+    "row2": {
+     "far_at_frr5": 0.7465,
+     "ci95": [
+      0.695,
+      0.7963
+     ],
+     "events": 4000,
+     "mean_score": 0.18108
+    },
+    "row3": {
+     "far_at_frr5": 0.8119,
+     "ci95": [
+      0.7452,
+      0.8612
+     ],
+     "events": 40000,
+     "mean_score": -0.00926
+    },
+    "row4": {
+     "far_at_frr5": 0.8713,
+     "ci95": [
+      0.8386,
+      0.9015
+     ],
+     "events": 40000,
+     "mean_score": -0.13478
+    },
+    "row5": {
+     "far_at_frr5": 0.8962,
+     "ci95": [
+      0.8715,
+      0.9173
+     ],
+     "events": 40000,
+     "mean_score": -0.18975
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9136,
+     "ci95": [
+      0.892,
+      0.9333
+     ],
+     "events": 40000,
+     "mean_score": -0.21552
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0654,
+      "ci95_on_the_difference": [
+       0.0296,
+       0.1002
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.1248,
+      "ci95_on_the_difference": [
+       0.0716,
+       0.1841
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0844,
+      "ci95_on_the_difference": [
+       -0.1493,
+       -0.0413
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0249,
+      "ci95_on_the_difference": [
+       -0.0579,
+       0.0125
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1497,
+      "ci95_on_the_difference": [
+       0.1006,
+       0.2007
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.1018,
+      "ci95_on_the_difference": [
+       -0.1722,
+       -0.0517
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0174,
+      "ci95_on_the_difference": [
+       -0.0388,
+       0.0012
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.1955,
+      "ci95_on_the_difference": [
+       -0.2525,
+       -0.1438
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1301,
+      "ci95_on_the_difference": [
+       -0.2021,
+       -0.0729
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_rf": {
+    "threshold_frr5": 0.753670732569555,
+    "row1": {
+     "far_at_frr5": 0.9275,
+     "ci95": [
+      0.9075,
+      0.946
+     ],
+     "events": 2000,
+     "mean_score": 0.49506
+    },
+    "row2": {
+     "far_at_frr5": 0.5573,
+     "ci95": [
+      0.5035,
+      0.6142
+     ],
+     "events": 4000,
+     "mean_score": 0.72324
+    },
+    "row3": {
+     "far_at_frr5": 0.7193,
+     "ci95": [
+      0.676,
+      0.7659
+     ],
+     "events": 40000,
+     "mean_score": 0.65107
+    },
+    "row4": {
+     "far_at_frr5": 0.6716,
+     "ci95": [
+      0.6336,
+      0.7084
+     ],
+     "events": 40000,
+     "mean_score": 0.68585
+    },
+    "row5": {
+     "far_at_frr5": 0.8107,
+     "ci95": [
+      0.7662,
+      0.8527
+     ],
+     "events": 40000,
+     "mean_score": 0.61482
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.814,
+     "ci95": [
+      0.7658,
+      0.8576
+     ],
+     "events": 40000,
+     "mean_score": 0.60774
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1621,
+      "ci95_on_the_difference": [
+       0.1004,
+       0.22
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.1144,
+      "ci95_on_the_difference": [
+       0.0616,
+       0.1681
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0914,
+      "ci95_on_the_difference": [
+       -0.1337,
+       -0.0492
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1391,
+      "ci95_on_the_difference": [
+       -0.1855,
+       -0.0899
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.2535,
+      "ci95_on_the_difference": [
+       0.1666,
+       0.3273
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0947,
+      "ci95_on_the_difference": [
+       -0.1405,
+       -0.0464
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0033,
+      "ci95_on_the_difference": [
+       -0.0185,
+       0.0107
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.3702,
+      "ci95_on_the_difference": [
+       -0.4258,
+       -0.31
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.2082,
+      "ci95_on_the_difference": [
+       -0.2517,
+       -0.1626
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "swipe__imu_trajectory_xytime__paper_svm": {
+    "threshold_frr5": 0.3678906496109886,
+    "row1": {
+     "far_at_frr5": 0.9285,
+     "ci95": [
+      0.908,
+      0.9485
+     ],
+     "events": 2000,
+     "mean_score": -0.18047
+    },
+    "row2": {
+     "far_at_frr5": 0.7405,
+     "ci95": [
+      0.6905,
+      0.791
+     ],
+     "events": 4000,
+     "mean_score": 0.17313
+    },
+    "row3": {
+     "far_at_frr5": 0.7883,
+     "ci95": [
+      0.7312,
+      0.8391
+     ],
+     "events": 40000,
+     "mean_score": -0.08221
+    },
+    "row4": {
+     "far_at_frr5": 0.8696,
+     "ci95": [
+      0.8271,
+      0.9068
+     ],
+     "events": 40000,
+     "mean_score": -0.22529
+    },
+    "row5": {
+     "far_at_frr5": 0.8941,
+     "ci95": [
+      0.8686,
+      0.9191
+     ],
+     "events": 40000,
+     "mean_score": -0.27116
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9093,
+     "ci95": [
+      0.8826,
+      0.9343
+     ],
+     "events": 40000,
+     "mean_score": -0.29393
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0478,
+      "ci95_on_the_difference": [
+       0.0099,
+       0.0843
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.129,
+      "ci95_on_the_difference": [
+       0.0758,
+       0.1863
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.1058,
+      "ci95_on_the_difference": [
+       -0.1626,
+       -0.0654
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0245,
+      "ci95_on_the_difference": [
+       -0.0652,
+       0.0149
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1536,
+      "ci95_on_the_difference": [
+       0.105,
+       0.2052
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.121,
+      "ci95_on_the_difference": [
+       -0.1837,
+       -0.0749
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0152,
+      "ci95_on_the_difference": [
+       -0.0374,
+       0.0056
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.188,
+      "ci95_on_the_difference": [
+       -0.2402,
+       -0.1377
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1402,
+      "ci95_on_the_difference": [
+       -0.2003,
+       -0.0888
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "swipe__imu_trajectory_xytime__paper_xgboost": {
+    "threshold_frr5": 0.8281400203704834,
+    "row1": {
+     "far_at_frr5": 0.948,
+     "ci95": [
+      0.934,
+      0.9625
+     ],
+     "events": 2000,
+     "mean_score": 0.48475
+    },
+    "row2": {
+     "far_at_frr5": 0.5978,
+     "ci95": [
+      0.5462,
+      0.6495
+     ],
+     "events": 4000,
+     "mean_score": 0.75413
+    },
+    "row3": {
+     "far_at_frr5": 0.8035,
+     "ci95": [
+      0.7637,
+      0.8441
+     ],
+     "events": 40000,
+     "mean_score": 0.63949
+    },
+    "row4": {
+     "far_at_frr5": 0.6911,
+     "ci95": [
+      0.6537,
+      0.7269
+     ],
+     "events": 40000,
+     "mean_score": 0.71729
+    },
+    "row5": {
+     "far_at_frr5": 0.8493,
+     "ci95": [
+      0.8059,
+      0.8887
+     ],
+     "events": 40000,
+     "mean_score": 0.60164
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8601,
+     "ci95": [
+      0.8165,
+      0.8975
+     ],
+     "events": 40000,
+     "mean_score": 0.59356
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.2057,
+      "ci95_on_the_difference": [
+       0.1472,
+       0.2627
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0934,
+      "ci95_on_the_difference": [
+       0.047,
+       0.1446
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0458,
+      "ci95_on_the_difference": [
+       -0.0913,
+       -0.0035
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1582,
+      "ci95_on_the_difference": [
+       -0.2084,
+       -0.1024
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.2516,
+      "ci95_on_the_difference": [
+       0.1673,
+       0.3283
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0566,
+      "ci95_on_the_difference": [
+       -0.104,
+       -0.0105
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0108,
+      "ci95_on_the_difference": [
+       -0.0259,
+       0.0032
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.3502,
+      "ci95_on_the_difference": [
+       -0.404,
+       -0.299
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1445,
+      "ci95_on_the_difference": [
+       -0.1868,
+       -0.1016
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_svm": {
+    "threshold_frr5": 0.3156723298646055,
+    "row1": {
+     "far_at_frr5": 0.9335,
+     "ci95": [
+      0.9174,
+      0.949
+     ],
+     "events": 1999,
+     "mean_score": -0.16563
+    },
+    "row2": {
+     "far_at_frr5": 0.6955,
+     "ci95": [
+      0.65,
+      0.7433
+     ],
+     "events": 4000,
+     "mean_score": 0.18987
+    },
+    "row3": {
+     "far_at_frr5": 0.6042,
+     "ci95": [
+      0.5388,
+      0.676
+     ],
+     "events": 40000,
+     "mean_score": 0.24879
+    },
+    "row4": {
+     "far_at_frr5": 0.6945,
+     "ci95": [
+      0.6456,
+      0.7438
+     ],
+     "events": 40000,
+     "mean_score": 0.17393
+    },
+    "row5": {
+     "far_at_frr5": 0.7589,
+     "ci95": [
+      0.7129,
+      0.8017
+     ],
+     "events": 40000,
+     "mean_score": 0.09487
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.7922,
+     "ci95": [
+      0.7381,
+      0.8422
+     ],
+     "events": 40000,
+     "mean_score": 0.04201
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.0913,
+      "ci95_on_the_difference": [
+       -0.1486,
+       -0.0352
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.001,
+      "ci95_on_the_difference": [
+       -0.0278,
+       0.0254
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.1547,
+      "ci95_on_the_difference": [
+       -0.2015,
+       -0.1044
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0644,
+      "ci95_on_the_difference": [
+       -0.1311,
+       0.0028
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0634,
+      "ci95_on_the_difference": [
+       0.0035,
+       0.1248
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.188,
+      "ci95_on_the_difference": [
+       -0.2426,
+       -0.1289
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0333,
+      "ci95_on_the_difference": [
+       -0.0619,
+       -0.0048
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.238,
+      "ci95_on_the_difference": [
+       -0.2798,
+       -0.1965
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.3293,
+      "ci95_on_the_difference": [
+       -0.388,
+       -0.2656
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_rf": {
+    "threshold_frr5": 0.7237348982514366,
+    "row1": {
+     "far_at_frr5": 0.95,
+     "ci95": [
+      0.9334,
+      0.9655
+     ],
+     "events": 1999,
+     "mean_score": 0.51078
+    },
+    "row2": {
+     "far_at_frr5": 0.542,
+     "ci95": [
+      0.4812,
+      0.6058
+     ],
+     "events": 4000,
+     "mean_score": 0.71344
+    },
+    "row3": {
+     "far_at_frr5": 0.5249,
+     "ci95": [
+      0.4836,
+      0.5682
+     ],
+     "events": 40000,
+     "mean_score": 0.69031
+    },
+    "row4": {
+     "far_at_frr5": 0.5561,
+     "ci95": [
+      0.4952,
+      0.6172
+     ],
+     "events": 40000,
+     "mean_score": 0.70598
+    },
+    "row5": {
+     "far_at_frr5": 0.6272,
+     "ci95": [
+      0.5853,
+      0.6658
+     ],
+     "events": 40000,
+     "mean_score": 0.64945
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.6741,
+     "ci95": [
+      0.6198,
+      0.7241
+     ],
+     "events": 40000,
+     "mean_score": 0.62988
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.0171,
+      "ci95_on_the_difference": [
+       -0.0847,
+       0.0509
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0141,
+      "ci95_on_the_difference": [
+       -0.0028,
+       0.0318
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.1023,
+      "ci95_on_the_difference": [
+       -0.1378,
+       -0.0645
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0711,
+      "ci95_on_the_difference": [
+       -0.1416,
+       0.0006
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0852,
+      "ci95_on_the_difference": [
+       0.0079,
+       0.1554
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.1492,
+      "ci95_on_the_difference": [
+       -0.2002,
+       -0.0994
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0469,
+      "ci95_on_the_difference": [
+       -0.0794,
+       -0.0172
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.408,
+      "ci95_on_the_difference": [
+       -0.459,
+       -0.3505
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.4251,
+      "ci95_on_the_difference": [
+       -0.4615,
+       -0.386
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "pinch__imu_trajectory_xytime__paper_svm": {
+    "threshold_frr5": 0.3408228124730942,
+    "row1": {
+     "far_at_frr5": 0.9515,
+     "ci95": [
+      0.9349,
+      0.9655
+     ],
+     "events": 1999,
+     "mean_score": -0.10318
+    },
+    "row2": {
+     "far_at_frr5": 0.806,
+     "ci95": [
+      0.7798,
+      0.8327
+     ],
+     "events": 4000,
+     "mean_score": 0.12582
+    },
+    "row3": {
+     "far_at_frr5": 0.7711,
+     "ci95": [
+      0.7186,
+      0.8291
+     ],
+     "events": 40000,
+     "mean_score": 0.125
+    },
+    "row4": {
+     "far_at_frr5": 0.816,
+     "ci95": [
+      0.7823,
+      0.8483
+     ],
+     "events": 40000,
+     "mean_score": 0.09762
+    },
+    "row5": {
+     "far_at_frr5": 0.8345,
+     "ci95": [
+      0.789,
+      0.8831
+     ],
+     "events": 40000,
+     "mean_score": 0.04537
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8585,
+     "ci95": [
+      0.8078,
+      0.9058
+     ],
+     "events": 40000,
+     "mean_score": 0.01757
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.0349,
+      "ci95_on_the_difference": [
+       -0.0874,
+       0.0216
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.01,
+      "ci95_on_the_difference": [
+       -0.0127,
+       0.0308
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0634,
+      "ci95_on_the_difference": [
+       -0.0899,
+       -0.0384
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0185,
+      "ci95_on_the_difference": [
+       -0.0832,
+       0.044
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.0285,
+      "ci95_on_the_difference": [
+       -0.0244,
+       0.0827
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0874,
+      "ci95_on_the_difference": [
+       -0.1199,
+       -0.0543
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.024,
+      "ci95_on_the_difference": [
+       -0.0471,
+       -0.0033
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.1455,
+      "ci95_on_the_difference": [
+       -0.1727,
+       -0.1162
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.1804,
+      "ci95_on_the_difference": [
+       -0.2258,
+       -0.1322
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "pinch__imu_trajectory_xytime__paper_xgboost": {
+    "threshold_frr5": 0.7972422242164612,
+    "row1": {
+     "far_at_frr5": 0.949,
+     "ci95": [
+      0.9349,
+      0.9625
+     ],
+     "events": 1999,
+     "mean_score": 0.46471
+    },
+    "row2": {
+     "far_at_frr5": 0.523,
+     "ci95": [
+      0.4615,
+      0.5865
+     ],
+     "events": 4000,
+     "mean_score": 0.75075
+    },
+    "row3": {
+     "far_at_frr5": 0.5308,
+     "ci95": [
+      0.49,
+      0.5718
+     ],
+     "events": 40000,
+     "mean_score": 0.72614
+    },
+    "row4": {
+     "far_at_frr5": 0.5718,
+     "ci95": [
+      0.5071,
+      0.6371
+     ],
+     "events": 40000,
+     "mean_score": 0.73452
+    },
+    "row5": {
+     "far_at_frr5": 0.66,
+     "ci95": [
+      0.6228,
+      0.696
+     ],
+     "events": 40000,
+     "mean_score": 0.66992
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.707,
+     "ci95": [
+      0.6581,
+      0.7539
+     ],
+     "events": 40000,
+     "mean_score": 0.64153
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.0078,
+      "ci95_on_the_difference": [
+       -0.0584,
+       0.0698
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0488,
+      "ci95_on_the_difference": [
+       0.0271,
+       0.0706
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.1292,
+      "ci95_on_the_difference": [
+       -0.1641,
+       -0.0965
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0882,
+      "ci95_on_the_difference": [
+       -0.1635,
+       -0.0157
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.137,
+      "ci95_on_the_difference": [
+       0.0621,
+       0.2126
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.1762,
+      "ci95_on_the_difference": [
+       -0.2273,
+       -0.1284
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.047,
+      "ci95_on_the_difference": [
+       -0.0844,
+       -0.0128
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.426,
+      "ci95_on_the_difference": [
+       -0.4758,
+       -0.37
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.4182,
+      "ci95_on_the_difference": [
+       -0.456,
+       -0.3822
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+    "threshold_frr5": 0.48262799997688316,
+    "row1": {
+     "far_at_frr5": 0.9487,
+     "ci95": [
+      0.9362,
+      0.9615
+     ],
+     "events": 1950,
+     "mean_score": -0.27482
+    },
+    "row2": {
+     "far_at_frr5": 0.7388,
+     "ci95": [
+      0.6382,
+      0.8253
+     ],
+     "events": 4000,
+     "mean_score": 0.20052
+    },
+    "row3": {
+     "far_at_frr5": 0.8777,
+     "ci95": [
+      0.8256,
+      0.9267
+     ],
+     "events": 40000,
+     "mean_score": -0.03078
+    },
+    "row4": {
+     "far_at_frr5": 0.7107,
+     "ci95": [
+      0.6108,
+      0.8008
+     ],
+     "events": 40000,
+     "mean_score": 0.25362
+    },
+    "row5": {
+     "far_at_frr5": 0.9104,
+     "ci95": [
+      0.8632,
+      0.9533
+     ],
+     "events": 40000,
+     "mean_score": -0.17791
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.8952,
+     "ci95": [
+      0.845,
+      0.9418
+     ],
+     "events": 40000,
+     "mean_score": -0.14758
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1389,
+      "ci95_on_the_difference": [
+       0.0419,
+       0.2474
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.028,
+      "ci95_on_the_difference": [
+       -0.0471,
+       -0.0091
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0328,
+      "ci95_on_the_difference": [
+       -0.0563,
+       -0.0131
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1997,
+      "ci95_on_the_difference": [
+       -0.2988,
+       -0.1101
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1717,
+      "ci95_on_the_difference": [
+       0.0879,
+       0.2703
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0175,
+      "ci95_on_the_difference": [
+       -0.034,
+       -0.0009
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0153,
+      "ci95_on_the_difference": [
+       0.0032,
+       0.0305
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.21,
+      "ci95_on_the_difference": [
+       -0.3069,
+       -0.124
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0711,
+      "ci95_on_the_difference": [
+       -0.1241,
+       -0.0208
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+    "threshold_frr5": 0.6926227924162547,
+    "row1": {
+     "far_at_frr5": 0.9513,
+     "ci95": [
+      0.9213,
+      0.977
+     ],
+     "events": 1950,
+     "mean_score": 0.3817
+    },
+    "row2": {
+     "far_at_frr5": 0.8223,
+     "ci95": [
+      0.7467,
+      0.895
+     ],
+     "events": 4000,
+     "mean_score": 0.48448
+    },
+    "row3": {
+     "far_at_frr5": 0.9398,
+     "ci95": [
+      0.8862,
+      0.9832
+     ],
+     "events": 40000,
+     "mean_score": 0.40764
+    },
+    "row4": {
+     "far_at_frr5": 0.8576,
+     "ci95": [
+      0.785,
+      0.9254
+     ],
+     "events": 40000,
+     "mean_score": 0.4861
+    },
+    "row5": {
+     "far_at_frr5": 0.9494,
+     "ci95": [
+      0.8982,
+      0.9916
+     ],
+     "events": 40000,
+     "mean_score": 0.39919
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.9528,
+     "ci95": [
+      0.9033,
+      0.9935
+     ],
+     "events": 40000,
+     "mean_score": 0.39867
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.1175,
+      "ci95_on_the_difference": [
+       0.0583,
+       0.182
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.0354,
+      "ci95_on_the_difference": [
+       0.0227,
+       0.0481
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0096,
+      "ci95_on_the_difference": [
+       -0.0177,
+       -0.003
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0918,
+      "ci95_on_the_difference": [
+       -0.1558,
+       -0.0333
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.1272,
+      "ci95_on_the_difference": [
+       0.0673,
+       0.1934
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.013,
+      "ci95_on_the_difference": [
+       -0.023,
+       -0.0048
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.0034,
+      "ci95_on_the_difference": [
+       -0.0079,
+       0.0004
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.129,
+      "ci95_on_the_difference": [
+       -0.1832,
+       -0.0787
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0115,
+      "ci95_on_the_difference": [
+       -0.0449,
+       0.0171
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "keystroke__imu_trajectory_xytime__paper_svm": {
+    "threshold_frr5": 0.5684425316649094,
+    "row1": {
+     "far_at_frr5": 0.9492,
+     "ci95": [
+      0.9247,
+      0.971
+     ],
+     "events": 1950,
+     "mean_score": -0.21977
+    },
+    "row2": {
+     "far_at_frr5": 0.7957,
+     "ci95": [
+      0.7322,
+      0.858
+     ],
+     "events": 4000,
+     "mean_score": 0.14284
+    },
+    "row3": {
+     "far_at_frr5": 0.4868,
+     "ci95": [
+      0.44,
+      0.5348
+     ],
+     "events": 40000,
+     "mean_score": 3.64854
+    },
+    "row4": {
+     "far_at_frr5": 0.4578,
+     "ci95": [
+      0.3946,
+      0.5241
+     ],
+     "events": 40000,
+     "mean_score": 2.30761
+    },
+    "row5": {
+     "far_at_frr5": 0.5452,
+     "ci95": [
+      0.4944,
+      0.5975
+     ],
+     "events": 40000,
+     "mean_score": 2.61303
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.5436,
+     "ci95": [
+      0.4877,
+      0.5992
+     ],
+     "events": 40000,
+     "mean_score": 2.72908
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": -0.3089,
+      "ci95_on_the_difference": [
+       -0.3674,
+       -0.244
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": -0.338,
+      "ci95_on_the_difference": [
+       -0.3829,
+       -0.292
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.0583,
+      "ci95_on_the_difference": [
+       -0.0857,
+       -0.0322
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.0874,
+      "ci95_on_the_difference": [
+       -0.1688,
+       -0.0077
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": -0.2506,
+      "ci95_on_the_difference": [
+       -0.3281,
+       -0.1671
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0568,
+      "ci95_on_the_difference": [
+       -0.0858,
+       -0.0277
+      ],
+      "excludes_zero": true
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": 0.0015,
+      "ci95_on_the_difference": [
+       -0.0269,
+       0.0325
+      ],
+      "excludes_zero": false
+     },
+     "row2_minus_row1": {
+      "difference": -0.1535,
+      "ci95_on_the_difference": [
+       -0.2145,
+       -0.0942
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.4624,
+      "ci95_on_the_difference": [
+       -0.4966,
+       -0.427
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   },
+   "keystroke__imu_trajectory_xytime__paper_xgboost": {
+    "threshold_frr5": 0.8247122168540955,
+    "row1": {
+     "far_at_frr5": 0.9733,
+     "ci95": [
+      0.9575,
+      0.9869
+     ],
+     "events": 1950,
+     "mean_score": 0.31123
+    },
+    "row2": {
+     "far_at_frr5": 0.663,
+     "ci95": [
+      0.566,
+      0.7523
+     ],
+     "events": 4000,
+     "mean_score": 0.61576
+    },
+    "row3": {
+     "far_at_frr5": 0.885,
+     "ci95": [
+      0.8505,
+      0.918
+     ],
+     "events": 40000,
+     "mean_score": 0.36954
+    },
+    "row4": {
+     "far_at_frr5": 0.7926,
+     "ci95": [
+      0.7226,
+      0.8586
+     ],
+     "events": 40000,
+     "mean_score": 0.49938
+    },
+    "row5": {
+     "far_at_frr5": 0.895,
+     "ci95": [
+      0.854,
+      0.9357
+     ],
+     "events": 40000,
+     "mean_score": 0.34694
+    },
+    "row5_unmatched": {
+     "far_at_frr5": 0.908,
+     "ci95": [
+      0.8754,
+      0.9389
+     ],
+     "events": 40000,
+     "mean_score": 0.34441
+    },
+    "paired_differences": {
+     "row3_minus_row2": {
+      "difference": 0.222,
+      "ci95_on_the_difference": [
+       0.1409,
+       0.3048
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row4_minus_row2": {
+      "difference": 0.1296,
+      "ci95_on_the_difference": [
+       0.0803,
+       0.181
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "MATCHED as multisets on T and duration (row 4 carriers are the release fake pool)."
+      ]
+     },
+     "row3_minus_row5": {
+      "difference": -0.01,
+      "ci95_on_the_difference": [
+       -0.0398,
+       0.0183
+      ],
+      "excludes_zero": false,
+      "labels": [
+       "MATCHED event for event on T and duration (rows 3 and 5 share the carrier)."
+      ]
+     },
+     "row4_minus_row5": {
+      "difference": -0.1024,
+      "ci95_on_the_difference": [
+       -0.1679,
+       -0.0387
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row5_minus_row2": {
+      "difference": 0.232,
+      "ci95_on_the_difference": [
+       0.1414,
+       0.3271
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row5_unmatched": {
+      "difference": -0.0231,
+      "ci95_on_the_difference": [
+       -0.0477,
+       0.0003
+      ],
+      "excludes_zero": false
+     },
+     "row5_minus_row5_unmatched": {
+      "difference": -0.013,
+      "ci95_on_the_difference": [
+       -0.0265,
+       -0.0
+      ],
+      "excludes_zero": true
+     },
+     "row2_minus_row1": {
+      "difference": -0.3103,
+      "ci95_on_the_difference": [
+       -0.397,
+       -0.2287
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     },
+     "row3_minus_row1": {
+      "difference": -0.0884,
+      "ci95_on_the_difference": [
+       -0.1145,
+       -0.0622
+      ],
+      "excludes_zero": true,
+      "labels": [
+       "NOT A VALID COMPARISON. For this action the release second stage cannot be reconstructed (pinch needs live two-pointer endpoint geometry a fake donor does not carry; keystroke touch is composed from key anchors, not transported), so S2 is the identity in rows 3/4/5 and those rows carry an uncontrolled screen-position treatment relative to rows 1/2. Rows 3 and 4 for this action are read ONLY against row 5.",
+       "DURATION-CONFOUNDED. The build phase measured that these two arms do not share a T/duration distribution; read the duration-standardised table alongside."
+      ]
+     }
+    }
+   }
+  },
+  "construction_spread_over_R_repetitions": {
+   "all_20_cells": {
+    "row3": {
+     "sd_over_R_repetitions": 0.00132,
+     "range": 0.00464,
+     "mean": 0.794,
+     "per_repetition_far": [
+      0.7943,
+      0.7947,
+      0.7965,
+      0.7947,
+      0.7931,
+      0.7919,
+      0.7947,
+      0.7943,
+      0.7935,
+      0.7925
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00083,
+     "range": 0.00271,
+     "mean": 0.7121,
+     "per_repetition_far": [
+      0.7122,
+      0.7123,
+      0.7107,
+      0.7134,
+      0.7123,
+      0.7115,
+      0.713,
+      0.7123,
+      0.7127,
+      0.7111
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00103,
+     "range": 0.00291,
+     "mean": 0.8348,
+     "per_repetition_far": [
+      0.8354,
+      0.8365,
+      0.835,
+      0.8359,
+      0.8352,
+      0.834,
+      0.8355,
+      0.8336,
+      0.8336,
+      0.8338
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00103,
+     "range": 0.00301,
+     "mean": 0.8435,
+     "per_repetition_far": [
+      0.8435,
+      0.8425,
+      0.8453,
+      0.8446,
+      0.8426,
+      0.8424,
+      0.8443,
+      0.8437,
+      0.8435,
+      0.8422
+     ]
+    }
+   },
+   "tap_scroll_swipe_12_cells": {
+    "row3": {
+     "sd_over_R_repetitions": 0.00136,
+     "range": 0.00452,
+     "mean": 0.855,
+     "per_repetition_far": [
+      0.8546,
+      0.8563,
+      0.8575,
+      0.8547,
+      0.8548,
+      0.8529,
+      0.8547,
+      0.8566,
+      0.8546,
+      0.8537
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00116,
+     "range": 0.00319,
+     "mean": 0.7321,
+     "per_repetition_far": [
+      0.7309,
+      0.7327,
+      0.7305,
+      0.7332,
+      0.7324,
+      0.7309,
+      0.7324,
+      0.7337,
+      0.7334,
+      0.7312
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00103,
+     "range": 0.00306,
+     "mean": 0.8764,
+     "per_repetition_far": [
+      0.8768,
+      0.8776,
+      0.8779,
+      0.8754,
+      0.8768,
+      0.8761,
+      0.877,
+      0.8752,
+      0.876,
+      0.8748
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00103,
+     "range": 0.0035,
+     "mean": 0.8782,
+     "per_repetition_far": [
+      0.8788,
+      0.8782,
+      0.88,
+      0.8788,
+      0.8766,
+      0.8781,
+      0.8785,
+      0.8778,
+      0.8784,
+      0.8765
+     ]
+    }
+   },
+   "action:tap": {
+    "row3": {
+     "sd_over_R_repetitions": 0.00097,
+     "range": 0.00331,
+     "mean": 0.9038,
+     "per_repetition_far": [
+      0.9025,
+      0.9047,
+      0.9035,
+      0.9038,
+      0.9042,
+      0.9038,
+      0.9027,
+      0.9058,
+      0.9041,
+      0.9033
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00131,
+     "range": 0.00475,
+     "mean": 0.8535,
+     "per_repetition_far": [
+      0.8534,
+      0.854,
+      0.8524,
+      0.854,
+      0.8536,
+      0.8514,
+      0.8537,
+      0.8542,
+      0.8562,
+      0.8522
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00109,
+     "range": 0.0035,
+     "mean": 0.9032,
+     "per_repetition_far": [
+      0.9051,
+      0.9036,
+      0.9038,
+      0.9022,
+      0.9044,
+      0.9021,
+      0.9027,
+      0.9031,
+      0.9036,
+      0.9016
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00045,
+     "range": 0.00156,
+     "mean": 0.9079,
+     "per_repetition_far": [
+      0.9088,
+      0.9081,
+      0.9073,
+      0.9083,
+      0.9078,
+      0.9079,
+      0.9076,
+      0.9082,
+      0.9076,
+      0.9076
+     ]
+    }
+   },
+   "action:scroll": {
+    "row3": {
+     "sd_over_R_repetitions": 0.0019,
+     "range": 0.00637,
+     "mean": 0.8805,
+     "per_repetition_far": [
+      0.8796,
+      0.8797,
+      0.8851,
+      0.8792,
+      0.8805,
+      0.8802,
+      0.8823,
+      0.8808,
+      0.8792,
+      0.8788
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00196,
+     "range": 0.00669,
+     "mean": 0.567,
+     "per_repetition_far": [
+      0.5654,
+      0.5673,
+      0.563,
+      0.5689,
+      0.5674,
+      0.5664,
+      0.5697,
+      0.5687,
+      0.5657,
+      0.5676
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00216,
+     "range": 0.00681,
+     "mean": 0.8633,
+     "per_repetition_far": [
+      0.8672,
+      0.8651,
+      0.8648,
+      0.8617,
+      0.8626,
+      0.8619,
+      0.8652,
+      0.8624,
+      0.8604,
+      0.8614
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00164,
+     "range": 0.00544,
+     "mean": 0.8523,
+     "per_repetition_far": [
+      0.8517,
+      0.8531,
+      0.8552,
+      0.8518,
+      0.8523,
+      0.8514,
+      0.852,
+      0.851,
+      0.8546,
+      0.8498
+     ]
+    }
+   },
+   "action:swipe": {
+    "row3": {
+     "sd_over_R_repetitions": 0.0028,
+     "range": 0.00962,
+     "mean": 0.7807,
+     "per_repetition_far": [
+      0.7816,
+      0.7845,
+      0.7837,
+      0.7811,
+      0.7797,
+      0.7749,
+      0.779,
+      0.7831,
+      0.7805,
+      0.7792
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00173,
+     "range": 0.00456,
+     "mean": 0.7759,
+     "per_repetition_far": [
+      0.7739,
+      0.7769,
+      0.7762,
+      0.7768,
+      0.7763,
+      0.775,
+      0.7737,
+      0.7783,
+      0.7782,
+      0.7737
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00215,
+     "range": 0.00681,
+     "mean": 0.8626,
+     "per_repetition_far": [
+      0.8582,
+      0.8642,
+      0.865,
+      0.8623,
+      0.8635,
+      0.8643,
+      0.863,
+      0.8601,
+      0.864,
+      0.8614
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00233,
+     "range": 0.00769,
+     "mean": 0.8743,
+     "per_repetition_far": [
+      0.8758,
+      0.8733,
+      0.8774,
+      0.8764,
+      0.8697,
+      0.8752,
+      0.8759,
+      0.8742,
+      0.8729,
+      0.872
+     ]
+    }
+   },
+   "action:pinch": {
+    "row3": {
+     "sd_over_R_repetitions": 0.0032,
+     "range": 0.00844,
+     "mean": 0.6077,
+     "per_repetition_far": [
+      0.6114,
+      0.6064,
+      0.6118,
+      0.6108,
+      0.6048,
+      0.6051,
+      0.6109,
+      0.6054,
+      0.6073,
+      0.6034
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00223,
+     "range": 0.007,
+     "mean": 0.6596,
+     "per_repetition_far": [
+      0.6619,
+      0.6563,
+      0.657,
+      0.6613,
+      0.6603,
+      0.6597,
+      0.6633,
+      0.6587,
+      0.6576,
+      0.6601
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00437,
+     "range": 0.01369,
+     "mean": 0.7202,
+     "per_repetition_far": [
+      0.7235,
+      0.7238,
+      0.7179,
+      0.7294,
+      0.7213,
+      0.7157,
+      0.72,
+      0.717,
+      0.7164,
+      0.7166
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00322,
+     "range": 0.01019,
+     "mean": 0.7579,
+     "per_repetition_far": [
+      0.7597,
+      0.7551,
+      0.7616,
+      0.7614,
+      0.7589,
+      0.7514,
+      0.7595,
+      0.7591,
+      0.7577,
+      0.7549
+     ]
+    }
+   },
+   "action:keystroke": {
+    "row3": {
+     "sd_over_R_repetitions": 0.00118,
+     "range": 0.00325,
+     "mean": 0.7973,
+     "per_repetition_far": [
+      0.7964,
+      0.7982,
+      0.7984,
+      0.7984,
+      0.7963,
+      0.7955,
+      0.7988,
+      0.7964,
+      0.7966,
+      0.7981
+     ]
+    },
+    "row4": {
+     "sd_over_R_repetitions": 0.00169,
+     "range": 0.00512,
+     "mean": 0.7047,
+     "per_repetition_far": [
+      0.7063,
+      0.7069,
+      0.7047,
+      0.706,
+      0.704,
+      0.7051,
+      0.7044,
+      0.7018,
+      0.7055,
+      0.7021
+     ]
+    },
+    "row5": {
+     "sd_over_R_repetitions": 0.00167,
+     "range": 0.005,
+     "mean": 0.825,
+     "per_repetition_far": [
+      0.8229,
+      0.8259,
+      0.8233,
+      0.824,
+      0.8241,
+      0.8263,
+      0.8266,
+      0.8255,
+      0.8235,
+      0.8279
+     ]
+    },
+    "row5_unmatched": {
+     "sd_over_R_repetitions": 0.00167,
+     "range": 0.0055,
+     "mean": 0.8249,
+     "per_repetition_far": [
+      0.8215,
+      0.8231,
+      0.8248,
+      0.8253,
+      0.8243,
+      0.8261,
+      0.8266,
+      0.8258,
+      0.8245,
+      0.827
+     ]
+    }
+   }
+  },
+  "duration_standardised_to_the_release_duration_distribution": {
+   "all_20_cells": {
+    "row1": 0.9377472395909481,
+    "row2": 0.7009875,
+    "row3": 0.7928139632023358,
+    "row4": 0.7121437500000001,
+    "row5": 0.8333905076783026,
+    "row5_unmatched": 0.8413175864076028,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.09182646320233578,
+    "row4_minus_row5": -0.12124675767830251,
+    "row5_minus_row2": 0.1324030076783026,
+    "row3_minus_row5": -0.040576544475966814,
+    "row4_minus_row2": 0.01115625000000009
+   },
+   "tap_scroll_swipe_12_cells": {
+    "row1": 0.9323442331066186,
+    "row2": 0.7027916666666667,
+    "row3": 0.8503621508316624,
+    "row4": 0.7321375,
+    "row5": 0.8717338401607795,
+    "row5_unmatched": 0.8725934859164273,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.14757048416499574,
+    "row4_minus_row5": -0.1395963401607795,
+    "row5_minus_row2": 0.16894217349411278,
+    "row3_minus_row5": -0.02137168932911704,
+    "row4_minus_row2": 0.029345833333333293
+   },
+   "action:tap": {
+    "row1": 0.9296689449550046,
+    "row2": 0.8503750000000001,
+    "row3": 0.8916558837776807,
+    "row4": 0.8535125000000001,
+    "row5": 0.8934100341683056,
+    "row5_unmatched": 0.8970652280922202,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.04128088377768058,
+    "row4_minus_row5": -0.03989753416830544,
+    "row5_minus_row2": 0.04303503416830545,
+    "row3_minus_row5": -0.0017541503906248757,
+    "row4_minus_row2": 0.0031375000000000153
+   },
+   "action:scroll": {
+    "row1": 0.9477576770441429,
+    "row2": 0.5975,
+    "row3": 0.8889212568260731,
+    "row4": 0.5670000000000001,
+    "row5": 0.871162525173611,
+    "row5_unmatched": 0.8605698684895833,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.2914212568260731,
+    "row4_minus_row5": -0.304162525173611,
+    "row5_minus_row2": 0.273662525173611,
+    "row3_minus_row5": 0.017758731652462112,
+    "row4_minus_row2": -0.03049999999999997
+   },
+   "action:swipe": {
+    "row1": 0.919606077320709,
+    "row2": 0.6605,
+    "row3": 0.7705093118912337,
+    "row4": 0.7759,
+    "row5": 0.8506289611404221,
+    "row5_unmatched": 0.8601453611674783,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.11000931189123375,
+    "row4_minus_row5": -0.07472896114042205,
+    "row5_minus_row2": 0.1901289611404221,
+    "row3_minus_row5": -0.08011964924918835,
+    "row4_minus_row2": 0.11540000000000006
+   },
+   "action:pinch": {
+    "row1": 0.9358497126172329,
+    "row2": 0.641625,
+    "row3": 0.6155774040178571,
+    "row4": 0.6596125,
+    "row5": 0.7256887633928572,
+    "row5_unmatched": 0.7640956529017857,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": -0.0260475959821429,
+    "row4_minus_row5": -0.0660762633928571,
+    "row5_minus_row2": 0.08406376339285715,
+    "row3_minus_row5": -0.11011135937500005,
+    "row4_minus_row2": 0.017987500000000045
+   },
+   "action:keystroke": {
+    "row1": 0.9558537860176496,
+    "row2": 0.7549375,
+    "row3": 0.7974059594988345,
+    "row4": 0.70469375,
+    "row5": 0.826062254516317,
+    "row5_unmatched": 0.8247118213869464,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.04246845949883449,
+    "row4_minus_row5": -0.12136850451631698,
+    "row5_minus_row2": 0.07112475451631695,
+    "row3_minus_row5": -0.028656295017482458,
+    "row4_minus_row2": -0.05024375000000003
+   },
+   "detector:hmog_style_svm": {
+    "row1": 0.9365873848626819,
+    "row2": 0.7550999999999999,
+    "row3": 0.8256657376815892,
+    "row4": 0.77064,
+    "row5": 0.8718980003968255,
+    "row5_unmatched": 0.8793749044837107,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.07056573768158936,
+    "row4_minus_row5": -0.10125800039682553,
+    "row5_minus_row2": 0.11679800039682564,
+    "row3_minus_row5": -0.04623226271523628,
+    "row4_minus_row2": 0.01554000000000011
+   },
+   "detector:hmog_style_rf": {
+    "row1": 0.9370037103575213,
+    "row2": 0.6481000000000001,
+    "row3": 0.7864505120840966,
+    "row4": 0.6788000000000001,
+    "row5": 0.8197145693436771,
+    "row5_unmatched": 0.8259344878917956,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.13835051208409643,
+    "row4_minus_row5": -0.14091456934367708,
+    "row5_minus_row2": 0.17161456934367703,
+    "row3_minus_row5": -0.03326405725958059,
+    "row4_minus_row2": 0.03069999999999995
+   },
+   "detector:paper_svm": {
+    "row1": 0.934807777627922,
+    "row2": 0.7881,
+    "row3": 0.7669741731653762,
+    "row4": 0.740765,
+    "row5": 0.8125999887513528,
+    "row5_unmatched": 0.8150862472341893,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": -0.02112582683462383,
+    "row4_minus_row5": -0.07183498875135275,
+    "row5_minus_row2": 0.02449998875135273,
+    "row3_minus_row5": -0.04562581558597656,
+    "row4_minus_row2": -0.047335000000000016
+   },
+   "detector:paper_xgboost": {
+    "row1": 0.9425900855156663,
+    "row2": 0.61265,
+    "row3": 0.7921654298782814,
+    "row4": 0.65837,
+    "row5": 0.829349472221355,
+    "row5_unmatched": 0.8448747060207153,
+    "_reference_distribution": "row2, the release fake pool, its own duration deciles per action",
+    "row3_minus_row2": 0.1795154298782814,
+    "row4_minus_row5": -0.170979472221355,
+    "row5_minus_row2": 0.216699472221355,
+    "row3_minus_row5": -0.0371840423430736,
+    "row4_minus_row2": 0.04571999999999998
+   }
+  },
+  "duration_standardisation_effect": {
+   "what": "how far any paired difference moves when the duration distribution of every arm is standardised to the release arm own duration deciles per action",
+   "max_abs_move_on_any_difference_any_group": 0.01219,
+   "max_abs_move_at_the_20_cell_aggregate": 0.00146,
+   "reading": "the three duration-confounded differences survive standardisation essentially unchanged -- at the 20-cell aggregate they move by less than a fifth of the width of their own interval -- so duration is not what is driving them."
+  },
+  "construction_spread_vs_interval": {
+   "max_sd_over_R_repetitions_any_arm_any_group": 0.00437,
+   "min_bootstrap_ci_halfwidth_20_cell_arms": 0.01533,
+   "reading": "the spread induced by re-drawing which of the five shots is used is an order of magnitude smaller than the user-clustered interval, so the construction is not what limits the precision -- the 20 users are."
+  },
+  "row2_crosscheck": {
+   "what": "the release arm FAR recomputed here, per cell, against the FAR computed straight off the published test_scores",
+   "max_abs_diff": 0.0
+  },
+  "outcome_against_preregistration": {
+   "row3_below_row5": true,
+   "row4_below_row5": true,
+   "row3_indistinguishable_from_row5": false,
+   "row4_indistinguishable_from_row5": false,
+   "row5_close_to_row2": false,
+   "row5_ACCEPTED_MORE_than_row2": true,
+   "row3_ACCEPTED_MORE_than_row2": true,
+   "row4_ACCEPTED_MORE_than_row2": true,
+   "row3_below_row5_per_action": {
+    "tap": false,
+    "scroll": false,
+    "swipe": true,
+    "pinch": true,
+    "keystroke": true
+   },
+   "row4_below_row5_per_action": {
+    "tap": false,
+    "scroll": true,
+    "swipe": true,
+    "pinch": true,
+    "keystroke": true
+   },
+   "branch_literally_matched": "claim_holds",
+   "branch_conclusion_contradicted_by_the_same_table": true,
+   "branch_reported": "inconclusive -- pattern not enumerated by the pre-registration",
+   "why": "The literal antecedent of the claim_holds branch (rows 3 and 4 both markedly below row 5, paired intervals excluding 0) IS satisfied at the 20-cell aggregate. Its stated conclusion -- \"half attacks are caught on their merits, and synthesising both channels is necessary\" -- is contradicted by the same table: both half attacks are accepted AT LEAST AS OFTEN as the release full dual-channel attack (row3 - row2 and row4 - row2 are both positive with intervals excluding 0). The cross_pairing_undetectable branch does not apply either, because row 5 is not close to row 2: it is markedly ABOVE it, in the opposite direction to the one that branch anticipated. The observed pattern is therefore the \"anything else\" case and is labelled inconclusive for the intended claim, while the substantive reading -- rows 3 and 4 measured against the release, row 2 -- REFUTES it."
+  },
+  "plain_statement": [
+   "Over the 20 classical joint cells, mean of the per-cell FAR at the development-selected FRR=5% cut: row 2 (the release, both channels synthesised) 0.701, row 3 (fake touch + real five-shot IMU) 0.794, row 4 (real five-shot touch + fake IMU) 0.712, row 5 (the same-mechanics genuine-only mismatch control) 0.835. Row 1, the genuine arm, is accepted at 0.945 (that is 1 - FRR on test, not a FAR).",
+   "The comparison the experiment turns on, row 3 minus row 5, is -0.041 with a user-clustered 95% interval of [-0.054, -0.029]; row 4 minus row 5 is -0.123 [-0.139, -0.108]; row 5 minus row 2 is 0.134 [0.118, 0.150].",
+   "Restricted to the 12 tap/scroll/swipe cells, the only ones whose rows 3/4/5 carry the release's own second-stage placement and are therefore entitled to a comparison against rows 1/2: row 2 0.703, row 3 0.855, row 4 0.732, row 5 0.876.",
+   "Ordering of the arms, most accepted first: row 1 genuine 0.945 > row 5 mismatch control 0.835 > row 3 0.794 > row 4 0.712 > row 2 the release 0.701. The mismatch control is the most accepted arm of the four under test. Cross-pairing two genuine recordings of the same victim is not caught -- it is accepted MORE often than the release's own fully synthesised event.",
+   "Consequence for the intended claim: the joint detector does NOT catch a half attack. Row 3 (fake touch, real five-shot inertial window) is accepted 0.093 MORE often than the release arm that synthesises both channels, and row 4 (real five-shot touch, fake inertial window) 0.011 more often. Synthesising both channels is not shown to be necessary by this experiment; on these 20 cells it is shown to be counter-productive for row 3.",
+   "What row 5 settles for the standing audit item: the joint modality's comparative weakness for the attack is NOT a cross-channel content consistency check. A detector that read content consistency would reject a mismatched pair of two genuine recordings; these cells accept it at 0.835, above the release and only 0.110 below the genuine arm.",
+   "Pre-registered branch whose literal antecedent is matched: claim_holds. Branch reported after checking the branch's own conclusion against the same table: inconclusive -- pattern not enumerated by the pre-registration."
+  ],
+  "frozen_detectors_unchanged_F6": true,
+  "caveats_that_bound_this_result": [
+   "Row 5 is OUT of the five-shot budget by design (F4): it draws its touch template from the victim full genuine pool, up to 84 distinct recordings per victim-action-repetition, against exactly 5 for rows 3 and 4. It is a control on pairing mechanics, not an attack, and must never appear inside a five-shot table.",
+   "For pinch and keystroke the release second stage could not be reconstructed, so S2 is the identity in rows 3, 4 and 5 alike. Rows 3 and 4 for those two actions are valid only against row 5.",
+   "For tap and scroll row4 - row2 is near-tautological (F14): the released fake touch for those actions IS the victim own held recording transported to the carrier endpoints.",
+   "row3 - row5 is not uniform across actions: it is negative for swipe, pinch and keystroke and NULL for tap and scroll. The 20-cell aggregate hides that split.",
+   "A residual resample-ratio gap between row 3 and row 5 remains for swipe (mean log2 0.099 vs 0.052) and pinch (0.178 vs 0.124); those are exactly the two actions with the largest row3 - row5 gap, so part of that gap may be resampling rather than content. The row5_unmatched diagnostic bounds the effect of the length match at row5 - row5_unmatched = -0.0086",
+   "These are event-level rates on the 20 classical joint cells only. The 10 deep joint cells are GPU-deferred and could order the arms differently."
+  ],
+  "what_this_settles_for_the_standing_audit_item": "The joint modality deficit is NOT a cross-channel content consistency check. The dual-channel control that did not previously exist now exists and shows that a mismatched pair of two genuine recordings of the same victim -- maximally content-inconsistent, zero synthetic material -- is the MOST accepted of the four arms under test, above the release fake and only 0.11 below the genuine arm. Whatever these joint cells are reading, it is a property of the synthesised material itself, not the agreement between the two channels."
+ },
  "seed": {
   "base": 20260810,
   "repetitions": 10,
@@ -3533,6 +9510,7 @@
  },
  "scratch_and_code": {
   "builder": "/mnt/share/mwang49/real-human/imu_gen/final/evaluation/final_check/code/half_attack/build_arms.py",
+  "scorer": "/mnt/share/mwang49/real-human/imu_gen/final/evaluation/final_check/code/half_attack/score_arms.py",
   "scratch": "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/halfattack"
  }
 }
