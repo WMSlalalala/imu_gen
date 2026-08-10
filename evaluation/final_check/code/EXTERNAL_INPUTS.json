@@ -1,0 +1,240 @@
+{
+  "_comment": "Large, generated, or externally-versioned inputs that the drivers in final_check/code/pipeline/ read or write, recorded here instead of being committed. Sizes and hashes were measured, not transcribed. sha256 is given for every single file at or under 100 MB; directories and the git clones carry a pinned commit instead.",
+  "generated_at": "2026-08-10T10:26:06-04:00",
+  "generated_by": "one-off script for the final_check/code/pipeline archival lane",
+  "size_limit_for_sha256_bytes": 104857600,
+  "total_recorded_bytes": 160705689054,
+  "entries": [
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines",
+      "kind": "external_source_tree",
+      "size_bytes": 35354310,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "The live, unversioned working tree these drivers execute from. 'git rev-parse' here fails: not a git repository. Every queue script hardcodes it as C= and cd's into it, so the archived copies under final_check/code/pipeline/ run THIS tree's Python, not their own siblings.",
+      "produced_by": "hand-authored over 2026-08-05..08-10; the archived subset is copied into evaluation/final_check/code/pipeline/, evaluation/comparison/code/ and evaluation/ablation/code/"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/CSDI",
+      "kind": "external_dependency_git_clone",
+      "size_bytes": 6072372,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "Diffusion baseline (ermongroup/CSDI). Contains its own .git; 'git add' on it would create a broken gitlink.",
+      "produced_by": "git clone of the pinned upstream commit",
+      "remote": "https://github.com/ermongroup/CSDI",
+      "pinned_commit": "7f24a436f08d98853a6b43d4f7f04e5a65ecdf27",
+      "restore": "git clone https://github.com/ermongroup/CSDI CSDI && git -C CSDI checkout 7f24a436f08d98853a6b43d4f7f04e5a65ecdf27"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/DiffusionTS",
+      "kind": "external_dependency_git_clone",
+      "size_bytes": 8523894,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "Diffusion-TS (Y-debug-sys/Diffusion-TS), ICLR 2024. Also supplies the discriminative/predictive metric code used by code/score_generator_quality.py.",
+      "produced_by": "git clone of the pinned upstream commit",
+      "remote": "https://github.com/Y-debug-sys/Diffusion-TS",
+      "pinned_commit": "566307e6cf2d8095e58de4c6e3a6ae965b69b5b5",
+      "restore": "git clone https://github.com/Y-debug-sys/Diffusion-TS DiffusionTS && git -C DiffusionTS checkout 566307e6cf2d8095e58de4c6e3a6ae965b69b5b5"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/ImagenTime",
+      "kind": "external_dependency_git_clone",
+      "size_bytes": 1097325,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "ImagenTime (azencot-group/ImagenTime). NOT clean: three untracked local additions are load-bearing and are committed separately at final_check/code/pipeline/vendor/ImagenTime_additions/.",
+      "produced_by": "git clone of the pinned upstream commit",
+      "remote": "https://github.com/azencot-group/ImagenTime",
+      "pinned_commit": "f372626ed20a7dc60ae47aa853155a528a3e11b8",
+      "restore": "git clone https://github.com/azencot-group/ImagenTime ImagenTime && git -C ImagenTime checkout f372626ed20a7dc60ae47aa853155a528a3e11b8"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/TTSGAN",
+      "kind": "external_dependency_git_clone",
+      "size_bytes": 18388975,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "TTS-GAN (imics-lab/tts-gan). Ships two pretrained checkpoints and a 1.8 MB notebook.",
+      "produced_by": "git clone of the pinned upstream commit",
+      "remote": "https://github.com/imics-lab/tts-gan",
+      "pinned_commit": "3f8b36ab84d1c00d48021d6e7c5dbd461686844e",
+      "restore": "git clone https://github.com/imics-lab/tts-gan TTSGAN && git -C TTSGAN checkout 3f8b36ab84d1c00d48021d6e7c5dbd461686844e"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/pyclick",
+      "kind": "external_dependency_git_clone",
+      "size_bytes": 153504,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "pyclick Bezier pointer library (patrikoss/pyclick), baseline 01.",
+      "produced_by": "git clone of the pinned upstream commit",
+      "remote": "https://github.com/patrikoss/pyclick",
+      "pinned_commit": "bf0edd19892de54fcae0d78f65b46fd4d6f19f82",
+      "restore": "git clone https://github.com/patrikoss/pyclick pyclick && git -C pyclick checkout bf0edd19892de54fcae0d78f65b46fd4d6f19f82"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/TTSGAN/pre-trained-models/RunningGAN_checkpoint",
+      "kind": "external_dependency_pretrained_weights",
+      "size_bytes": 3816148,
+      "mtime": "2026-08-05T20:34:15-04:00",
+      "sha256": "03abfbd049d672d5bb172d1f24a0b58844c10c79ec1f9e4eab9daa69a2fbfe40",
+      "what": "Upstream TTS-GAN pretrained checkpoint shipped in the clone; not fitted here.",
+      "produced_by": "shipped/downloaded by the upstream repository"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/TTSGAN/pre-trained-models/JumpingGAN_checkpoint",
+      "kind": "external_dependency_pretrained_weights",
+      "size_bytes": 3816148,
+      "mtime": "2026-08-05T20:34:15-04:00",
+      "sha256": "61f133cd2eaeb2848b410f5f37a376a95ef87338f693674ba460226419b26c8c",
+      "what": "Upstream TTS-GAN pretrained checkpoint shipped in the clone; not fitted here.",
+      "produced_by": "shipped/downloaded by the upstream repository"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/CSDI/save/pretrained/model.pth",
+      "kind": "external_dependency_pretrained_weights",
+      "size_bytes": 1716818,
+      "mtime": "2026-08-06T18:41:14-04:00",
+      "sha256": "9acb4ee828a0c271466814c703d00c666caecb826fc5e9c2438ae39bd8d72771",
+      "what": "Upstream CSDI pretrained weights downloaded by the authors' setup; not fitted here.",
+      "produced_by": "shipped/downloaded by the upstream repository"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/results/direct100k/baselines",
+      "kind": "generated_output",
+      "size_bytes": 159371843416,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "$B in every driver: all baseline sample banks, built datasets, detector-grid cells, logs, PROGRESS.txt/STATUS.md. This is where essentially every number in the comparison tables is read from.",
+      "produced_by": "queues/run_everything.sh, run_remaining.sh, grid_queue.sh, crossscore_queue.sh and the sweeps, over 2026-08-05..08-10"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_zoh",
+      "kind": "external_input_dataset",
+      "size_bytes": 1019537929,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "The carrier dataset every baseline overwrites the fake events of; genuine events are byte-identical across all derived datasets. Passed as --dataset-dir / <carrier-dataset-dir>.",
+      "produced_by": "the direct100k release pipeline (outside this repo)"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_zoh/event_manifest.jsonl",
+      "kind": "external_input_dataset_index",
+      "size_bytes": 33401,
+      "mtime": "2026-08-05T18:56:16-04:00",
+      "sha256": "e6043091894d58dbf724204a42d0da962fe1e1a28cbfddbef86998bdca6804b8",
+      "what": "Manifest the detector grid is pointed at (--manifest) by queues/run_baseline_grid.sh.",
+      "produced_by": "the direct100k release pipeline"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/direct100k",
+      "kind": "external_source_tree",
+      "size_bytes": 126962393,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "The detector-grid code. Not a git repository either. queues/run_baseline_grid.sh sets C to it and runs scripts/run_hmog_direct100k_detectors.py; runners/*.sh reach it through DETECTOR_CODE.",
+      "produced_by": "hand-authored, outside this repo"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/direct100k/scripts/run_hmog_direct100k_detectors.py",
+      "kind": "external_dependency_entrypoint",
+      "size_bytes": 13991,
+      "mtime": "2026-08-05T18:49:38-04:00",
+      "sha256": "647b9bcce7a2412833f61775aedd2e2d8f279f6a3fdf1185e57ac69b01766c41",
+      "what": "The detector-grid entrypoint: 6 detectors x actions x modality, 20 epochs, 10,000 bootstrap replicates, seed 42. Hashed here so the grid code behind the published cells is pinned even though its tree is not versioned.",
+      "produced_by": "hand-authored, outside this repo"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/direct100k/security_exp/hmog_direct100k_test.py",
+      "kind": "external_dependency_entrypoint",
+      "size_bytes": 17354,
+      "mtime": "2026-08-04T22:06:02-04:00",
+      "sha256": "2fe154b4307f5f54a94b76c767ec0e1197cd459afc6500436349692f485ee045",
+      "what": "The underlying HMOG direct100k test harness the grid entrypoint drives.",
+      "produced_by": "hand-authored, outside this repo"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/session_rhythm_detector/results",
+      "kind": "generated_output",
+      "size_bytes": 53989788,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "The declared output directory of the final_check reproduction (README defines OUT= here). Holds the five session JSONL arms plus the live assemble_summary.json and session_rejects.json.",
+      "produced_by": "final_check/code/assemble_sessions.py"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/session_rhythm_detector/results/sessions_genuine.jsonl",
+      "kind": "generated_output",
+      "size_bytes": 10807762,
+      "mtime": "2026-08-10T10:03:04-04:00",
+      "sha256": "8b7022a3556de7610c2e25f1ec244ab381f3c3fbde6725bfdc0dd42e3e7a182a",
+      "what": "Assembled sessions for the 'genuine' arm, one JSON object per session. ~10 MB each, 54 MB for the five; kept external by design.",
+      "produced_by": "final_check/code/assemble_sessions.py (last rewritten 2026-08-10 10:03; this hash is a snapshot of a file another workflow still regenerates)"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/session_rhythm_detector/results/sessions_naive.jsonl",
+      "kind": "generated_output",
+      "size_bytes": 10316665,
+      "mtime": "2026-08-10T10:03:05-04:00",
+      "sha256": "2dfde5989c5e77bd4f76efd1269efa00df584530df3366113fca9728f0daeb42",
+      "what": "Assembled sessions for the 'naive' arm, one JSON object per session. ~10 MB each, 54 MB for the five; kept external by design.",
+      "produced_by": "final_check/code/assemble_sessions.py (last rewritten 2026-08-10 10:03; this hash is a snapshot of a file another workflow still regenerates)"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/session_rhythm_detector/results/sessions_naive_jitter.jsonl",
+      "kind": "generated_output",
+      "size_bytes": 11058971,
+      "mtime": "2026-08-10T10:03:05-04:00",
+      "sha256": "74ed2b4e71ebe27e1ca2ae15c8afd2d367a24e956e3246fe5774f853be1941dc",
+      "what": "Assembled sessions for the 'naive_jitter' arm, one JSON object per session. ~10 MB each, 54 MB for the five; kept external by design.",
+      "produced_by": "final_check/code/assemble_sessions.py (last rewritten 2026-08-10 10:03; this hash is a snapshot of a file another workflow still regenerates)"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/session_rhythm_detector/results/sessions_paced.jsonl",
+      "kind": "generated_output",
+      "size_bytes": 10955679,
+      "mtime": "2026-08-10T10:03:05-04:00",
+      "sha256": "63867e3025074da99bc04952aa25e4c525565abd68655cd68327f3d7006cba1b",
+      "what": "Assembled sessions for the 'paced' arm, one JSON object per session. ~10 MB each, 54 MB for the five; kept external by design.",
+      "produced_by": "final_check/code/assemble_sessions.py (last rewritten 2026-08-10 10:03; this hash is a snapshot of a file another workflow still regenerates)"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/session_rhythm_detector/results/sessions_paced_emp.jsonl",
+      "kind": "generated_output",
+      "size_bytes": 10812478,
+      "mtime": "2026-08-10T10:03:05-04:00",
+      "sha256": "03665227b6165b2402d3485e9de86277fd808e0a2c512fa7f9fda418d0355e51",
+      "what": "Assembled sessions for the 'paced_emp' arm, one JSON object per session. ~10 MB each, 54 MB for the five; kept external by design.",
+      "produced_by": "final_check/code/assemble_sessions.py (last rewritten 2026-08-10 10:03; this hash is a snapshot of a file another workflow still regenerates)"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/__pycache__",
+      "kind": "generated_scratch",
+      "size_bytes": 352976,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "Bytecode cache, actively rewritten while jobs run; also holds stale .cpython-37 twins and .pyc for source files that no longer exist.",
+      "produced_by": "the Python interpreter / sampler runs"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/tests/__pycache__",
+      "kind": "generated_scratch",
+      "size_bytes": 38161,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "Bytecode cache for the smoke tests.",
+      "produced_by": "the Python interpreter / sampler runs"
+    },
+    {
+      "path": "/mnt/share/mwang49/data7/code/baselines/scroll",
+      "kind": "generated_scratch",
+      "size_bytes": 8596,
+      "sha256": null,
+      "sha256_omitted_because": "directory, not a single file",
+      "what": "Six 750 B scroll-sampler logs, 2026-08-10 00:24. Scratch.",
+      "produced_by": "the Python interpreter / sampler runs"
+    }
+  ]
+}
