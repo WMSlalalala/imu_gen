@@ -6,14 +6,14 @@
 
 ## 速览
 
-| # | 事项 | 判定 | 要不要动手 |
-|---|---|---|---|
-| 1 | 触摸与惯性是否共用同一组五条参考 | **不是**（四个手势动作） | **要，论文级** |
-| 2 | 主判据 FAR 有没有置信区间 | 之前没有 | 已补 |
-| 3 | 是否跑过多折 / 换划分 | 没有，只有一份划分 | 改表述 |
-| 4 | 「imu_only 在 3/5 动作上没测 IMU 攻击」 | **不成立**，虚警 | 不用动 |
-| 5 | 扩散先验来自哪个用户 | 来自**别的**用户 | 文中交代一句 |
-| 6 | 联合模态偏低是否源于参考错配 | **判不了**，缺对照 | 见 §6 |
+| # | 事项 | 判定 | 处置 | Issue |
+|---|---|---|---|---|
+| 1 | 触摸与惯性是否共用同一组五条参考 | **不是**（四个手势动作） | **重跑**（改表述已否决） | [#1](https://github.com/WMSlalalala/imu_gen/issues/1) |
+| 2 | 主判据 FAR 有没有置信区间 | 之前没有 | 已补 | — |
+| 3 | 是否跑过多折 / 换划分 | 没有，只有一份划分 | 待补 | [#4](https://github.com/WMSlalalala/imu_gen/issues/4) |
+| 4 | 「imu_only 在 3/5 动作上没测 IMU 攻击」 | **不成立**，虚警 | 不用动 | — |
+| 5 | 扩散先验来自哪个用户 | 来自**别的**用户 | 待查规则 | [#3](https://github.com/WMSlalalala/imu_gen/issues/3) |
+| 6 | 联合模态偏低是否源于参考错配 | **判不了**，缺对照 | 建双通道对照 | [#2](https://github.com/WMSlalalala/imu_gen/issues/2) |
 
 ---
 
@@ -55,11 +55,13 @@
 
 需要说清楚的是：**这不影响任何一个数字的正确性**，它们都是如实测出来的。受影响的是这些数字挂在什么标题下——「five-shot 攻击」这个说法在 4/5 的动作上与实际不符。
 
-### 两条出路
+### 处置：重跑，不改表述
 
-**改表述（不重跑）**：写成「四个手势动作：触摸 5 条 + 惯性 5 条，共 10 条；keystroke：5 条」，方法一节明说两侧从同一受害者事件池独立抽取。代价是审稿人会追问为什么不共用、10-shot 下还算不算 five-shot 攻击。
+曾考虑过「改表述」——写成「触摸 5 条 + 惯性 5 条，共 10 条」，不重跑任何实验。**这条已被否决。**
 
-**真做成 five-shot（重跑）**：把 `UserRefBank` 的候选限制到素材那五条，再重跑扩散缓存 → 事件合成 → 建库 → 72 格。按本项目实测速率约数天。
+要做的是真正实现 five-shot：把 `UserRefBank` 的候选限制到 `fiveshot_material` 那五条，再重跑扩散缓存（100 用户 × 4 动作 × 200 条）→ 事件合成 → 建库 → 72 格。按本项目实测速率约数天。keystroke 不用动。
+
+跟踪见 [#1](https://github.com/WMSlalalala/imu_gen/issues/1)。
 
 ### 自己验
 
@@ -144,3 +146,20 @@ FRR 全 90 格   0.052  [0.046, 0.059]     ← 盖住 5% 目标
 
 - [`scores/reference_overlap.json`](scores/reference_overlap.json) —— §1 的全量比对输出，含选择规则的自校验结果
 - 脚本在 [`../comparison/code/`](../comparison/code/)：`check_reference_sync.py`（§1）、`bootstrap_far5.py`（§2）
+
+---
+
+## 未决事项都已登记为 issue
+
+| Issue | 事项 | 标签 |
+|---|---|---|
+| [#1](https://github.com/WMSlalalala/imu_gen/issues/1) | 四个手势动作实际是 10-shot，不是 five-shot | `threat-model` `blocking-paper` |
+| [#2](https://github.com/WMSlalalala/imu_gen/issues/2) | 联合模态偏低的原因判不了，缺双通道真人对照 | `undetermined` |
+| [#3](https://github.com/WMSlalalala/imu_gen/issues/3) | 扩散先验来自别的用户，规则未查清 | `threat-model` `documentation` |
+| [#4](https://github.com/WMSlalalala/imu_gen/issues/4) | 只有一份用户划分，没有 k 折 | `statistics` |
+| [#5](https://github.com/WMSlalalala/imu_gen/issues/5) | 生成器重训的运行间方差从未测量 | `statistics` |
+| [#6](https://github.com/WMSlalalala/imu_gen/issues/6) | EER 表没有置信区间 | `statistics` |
+| [#7](https://github.com/WMSlalalala/imu_gen/issues/7) | 第三方基线用的是早停停止点，基线被低估 | `baseline-fairness` |
+| [#8](https://github.com/WMSlalalala/imu_gen/issues/8) | gitignore 的 `**/results/` 会静默丢文件 | `reproducibility` |
+
+本文只登记核查结果；进展在 issue 里跟。

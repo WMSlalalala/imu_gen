@@ -1,6 +1,6 @@
 # HMOG 五-shot 攻击：对比实验与消融实验完整说明
 
-生成于 2026-08-09 · 全部实验完成 · 两个操作点 · 用户整簇 bootstrap
+生成于 2026-08-09 · 全部实验完成 · 未决事项见 GitHub issues
 
 这份文档面向**不了解本项目的读者**：术语在首次出现处解释，每个数字都能在
 `RESULTS.md`、`comparison/notes/<方法>.md` / `ablation/notes/<臂>.md` 或逐格产物里查到出处，
@@ -1138,6 +1138,18 @@ TTS-GAN 这一例就足以说明问题：只报迁移口径，会把一个平均
 ## 7. 局限与可复现性
 
 已知会削弱结论的地方全部列在这里，包括对我们自己不利的。凡是没测的都写"未测量"，不推断。
+
+**未决的都登记成了 issue**，进展在那里跟，不在本文里改：
+[#1](https://github.com/WMSlalalala/imu_gen/issues/1)（四手势实际是 10-shot，定稿前必须解决）、
+[#2](https://github.com/WMSlalalala/imu_gen/issues/2)（联合模态判不了）、
+[#3](https://github.com/WMSlalalala/imu_gen/issues/3)（先验来自别的用户）、
+[#4](https://github.com/WMSlalalala/imu_gen/issues/4)（只有一份划分）、
+[#5](https://github.com/WMSlalalala/imu_gen/issues/5)（重训方差未测）、
+[#6](https://github.com/WMSlalalala/imu_gen/issues/6)（EER 无区间）、
+[#7](https://github.com/WMSlalalala/imu_gen/issues/7)（基线被低估）。
+完整核查见 [`final_check/AUDIT_CN.md`](final_check/AUDIT_CN.md)。
+
+**其中 #1 是新发现且最严重的**：威胁模型声称攻击者只有五条真人录制，但在 tap/scroll/swipe/pinch 上触摸与惯性各自独立抽了五条，400 组里 354 组完全不相交——实际消耗最多 10 条。90 格里 72 格建立在这个前提上。数字本身没错，错的是它们挂的标题。处置是**重跑**（改表述已否决）。
 
 ### 7.1 第三方基线采样用的是"早停那一刻"的模型，不是最优检查点
 
