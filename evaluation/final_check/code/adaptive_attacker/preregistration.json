@@ -1,0 +1,18 @@
+{
+  "experiment": "adaptive_attacker_and_duration_confound_agentB",
+  "written_before_any_result": true,
+  "preregistered_outcomes": {
+    "A2_collapse_at_r_le_10": "If the A2 self-consistency attacker (no PAD model of any kind) drives session caught-rate below the genuine session false-alarm rate at r <= 10, the session-level defence is defeated by a free, knowledge-free attacker. THAT is the finding.",
+    "only_A3_collapses": "If only the A3 oracle collapses it, the defence holds against realistic attackers and the oracle result is a curiosity.",
+    "A1_but_not_A2": "If A1 (surrogate-filtered) collapses it but A2 does not, the finding is that the defence costs the attacker one surrogate model, and the price of that model is the real security margin.",
+    "otherwise": "Anything else is inconclusive and will be reported as inconclusive."
+  },
+  "collapse_definition": "caught-rate at the calibrated operating point <= the genuine session false-alarm rate measured at that same operating point on the held-out users (i.e. the detector is at or below chance).",
+  "primary_session_statistic": "sum over scored events of a per-action 41-quantile score log-likelihood-ratio (LLR). Mean-LLR reported as a declared secondary variant.",
+  "mandatory_baselines": ["B0 count-of-caught-events rule", "B1 mean session score", "B2 duration-only session LLR"],
+  "calibration": "user-disjoint 2-fold split of the 20 test users (fixed by sorted user id, even/odd index); LLR bins and the session threshold are fitted on the calibration half and evaluated on the held-out half; folds swapped and pooled. Oracle (all-20) variant reported alongside with the gap.",
+  "duration_llr_fit_split": "development users only (10 users, user-disjoint from test), for B2 and all of Part B.",
+  "uncertainty": "user-clustered bootstrap over the 20 test users, 2000 replicates, F9.",
+  "denominator": "SESSION. Every false-alarm rate reported in Parts A and C is per genuine session unless explicitly labelled per-event.",
+  "part_B_acceptance_test": "After quantile-mapping fake durations onto the per-action genuine duration distribution, the duration-only session LLR must be at chance (caught within the bootstrap CI of the session false-alarm rate). If it is not, the mapping failed and that is reported as a failure."
+}

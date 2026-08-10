@@ -1,0 +1,311 @@
+{
+ "experiment": "adaptive_attacker_and_duration_confound_session_v1",
+ "reconciliation_method": {
+  "what_was_done": "Both scripts and both raw output trees were read. A third, independent referee implementation was written that re-reads the 90 released cells through release_cell_map.json, rebuilds the sessions from BOTH inventories, and implements BOTH agents' calibration constructions plus a third fully-disjoint one inside one codebase, so that every disagreement could be reproduced and attributed rather than guessed at.",
+  "referee_code": [
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/adaptive/R/referee.py",
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/adaptive/R/run_referee.py",
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/adaptive/R/partb_referee.py"
+  ],
+  "referee_outputs": [
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/adaptive/R/referee_partA.json",
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/adaptive/R/referee_partB.json",
+   "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/adaptive/R/referee_sessions.json"
+  ],
+  "plumbing_check_referee": {
+   "far_at_frr5_mean_over_90_release_cells": 0.774575,
+   "release_cell_map_far5_mean_release": 0.774575,
+   "tap__imu_only__paper_xgboost_far_at_frr5": 0.85425,
+   "accept_rule": "ACCEPTED iff score < thresholds.json frr5; score_direction larger_is_more_fake asserted for all 90 cells",
+   "note": "Independently reproduced from the release files by the referee, not copied from A or B. A and B each reported the same two numbers."
+  }
+ },
+
+ "the_one_number_that_matters_most": {
+  "question": "smallest rejection ratio r at which the knowledge-free attacker A2 drives session caught-rate below the genuine session false-alarm rate",
+  "answer": "NO SUCH r EXISTS FOR r <= 20. A2 never collapses the defence, in either regime, at alpha 0.05 or 0.01, under either self-consistency variant (pool-centroid distance or 10-NN pool density), under either of the two feature specifications the agents used, and under all three calibration constructions tested.",
+  "agents_agreed": true,
+  "referee_verdict": "CONFIRMED, and the margin is not close.",
+  "touch_regime_referee_three_way_disjoint_calibration": {
+   "genuine_session_FRR_at_5pct_target": 0.0442,
+   "A0_uniform_caught": 0.6594,
+   "A2_centroid_A_features": {"r2": 0.6285, "r5": 0.6372, "r10": 0.6518, "r20": 0.6482},
+   "A2_centroid_B_features": {"r2": 0.6465, "r5": 0.6661, "r10": 0.6846, "r20": 0.6847},
+   "A2_knn_A_features": {"r2": 0.6308, "r5": 0.6255, "r10": 0.5956, "r20": 0.5957},
+   "A2_knn_B_features": {"r2": 0.6550, "r5": 0.6541, "r10": 0.6437, "r20": 0.6397},
+   "lowest_A2_value_anywhere": 0.5956,
+   "ratio_of_lowest_A2_caught_to_genuine_FRR": 13.5
+  },
+  "keystroke_regime_referee_three_way_disjoint_calibration": {
+   "genuine_session_FRR_at_5pct_target": 0.0709,
+   "A0_uniform_caught": 0.2693,
+   "lowest_A2_value_anywhere_r_le_20": 0.2547,
+   "ratio_to_genuine_FRR": 3.6
+  },
+  "per_cell_view": {
+   "touch_cells_collapsing_under_A2_centroid_any_r_le_20": "0 of 18 under every calibration construction and both feature sets",
+   "touch_cells_collapsing_under_A2_knn": "0 to 2 of 18 depending on feature set and construction (B-style modality-matched features, knn, r=20: 2 of 18)",
+   "keystroke_cells_collapsing_under_A2": "2 to 6 of 18, but 2 to 3 of those are cells that are ALREADY at or below chance under A0 with no adaptation at all, i.e. broken detectors rather than a working attack"
+  },
+  "cannot_be_pushed_further": "r > 20 is not measurable on the published 200-event pool: at r=20 the filtered pool is 10 events while a single session needs up to 28 events of one action, already forcing 16.1% (touch) / 26.1% (keystroke) within-session reuse. r=10 is the largest clean ratio (0.74% / 2.36% forced reuse)."
+ },
+
+ "root_cause_of_the_part_A_disagreement": {
+  "name": "coupling between the score-LLR table and the calibration null",
+  "both_agents_used": "two-fold user-disjoint calibration, fold = parity of position in the sorted test-user list, alarm iff tail p-value <= alpha, tail_p = (#null >= stat + 1)/(n+1). Identical.",
+  "agent_A_construction": "for fold f: fit the 41-quantile score LLR on fold-f users; build the null from fold-f GENUINE SESSIONS scored with that same table; evaluate fold-(1-f) sessions with it. The null is IN-SAMPLE for the table it is scored with, the evaluated sessions are OUT-OF-SAMPLE. The null therefore sits low and the held-out genuine sessions over-alarm.",
+  "agent_B_construction": "every session is scored with the OTHER fold's table (slot_src = 1 - fold); the null for a fold-s session is the fold-(1-s) sessions scored with the fold-s table. Both the null and the evaluated statistic are out-of-sample for their own table, so the two are exchangeable up to table-to-table variation.",
+  "referee_third_construction": "three user groups by index mod 3; for each evaluation group e the table is fitted on group (e+1)%3 and the null is taken from group (e+2)%3 scored with that same table. Fit / null / evaluation users are pairwise disjoint. This is the unbiased reference.",
+  "realised_session_FRR_at_a_5pct_nominal_target_touch": {
+   "agent_A_construction": 0.0740,
+   "agent_B_construction": 0.0501,
+   "referee_three_way_disjoint": 0.0442,
+   "nominal_target": 0.05
+  },
+  "verdict": "Agent B's construction is right; agent A's runs the cut about 1.5x hotter than nominal. A's caught-rates are not wrong, they are correct numbers at an operating point that is not the 5% one A calls it. Every A-vs-B caught disagreement in Part A is explained by this and nothing else.",
+  "decisive_observational_proof_before_any_recomputation": "Every session statistic that does NOT depend on the fold-fitted LLR table agrees between A and B to about 0.001, and every statistic that does depend on it disagrees by 0.04-0.08: B0 count A 0.4199 / B 0.4211 at an identical FRR of 0.0326; B1 mean-score A 0.6132 / B 0.6121 at an identical FRR of 0.0465; B2 duration-only A 0.1734 / B 0.1724 at an identical FRR of 0.0382; whereas llr_sum A 0.7440 at FRR 0.0740 vs B 0.6689 at FRR 0.0501 and llr_mean A 0.6669 vs B 0.5838.",
+  "referee_reproduction_of_both": {
+   "A_construction_reproduces_agent_A": {
+    "touch_A0_caught": [0.7446, "agent A reported 0.7440"],
+    "touch_FRR": [0.0740, "agent A reported 0.0740"],
+    "touch_A2_centroid_r10": [0.7340, "agent A reported 0.7339"],
+    "touch_A1_same_modality_r10": [0.3431, "agent A reported 0.3429"],
+    "touch_A3_oracle_r10": [0.0015, "agent A reported 0.0014"]
+   },
+   "B_construction_reproduces_agent_B": {
+    "touch_A0_caught": [0.6706, "agent B reported 0.6689"],
+    "touch_FRR": [0.0501, "agent B reported 0.05007"],
+    "touch_A2_centroid_r10": [0.6976, "agent B reported 0.6978"],
+    "touch_A1_same_modality_r10": [0.2994, "agent B reported 0.2992"],
+    "touch_A1_ensemble5_r20": [0.0705, "agent B reported 0.0708"],
+    "touch_A3_oracle_r5": [0.0074, "agent B reported 0.0073"]
+   }
+  }
+ },
+
+ "disagreements": [
+  {
+   "quantity": "touch A0 uniform session caught-rate at the 5% target (llr_sum, 18 cells)",
+   "a_value": "0.7440 at realised session FRR 0.0740",
+   "b_value": "0.6689 at realised session FRR 0.0501",
+   "delta": 0.0751,
+   "cause": "calibration null construction (A's null is in-sample for the fold-fitted LLR table). Reproduced exactly by the referee from one codebase: A-style 0.7446/0.0740, B-style 0.6706/0.0501.",
+   "correct": "B. Referee three-way-disjoint reference: caught 0.6594 at realised FRR 0.0442. Quote 0.66 at a realised 5% session false-alarm rate."
+  },
+  {
+   "quantity": "touch A2 pool-centroid caught at r=10",
+   "a_value": 0.7339,
+   "b_value": 0.6978,
+   "delta": 0.0361,
+   "cause": "two effects partly cancelling: (i) the null construction, worth about +0.07 in A's favour; (ii) the A2 feature specification, worth about -0.03 in A's favour. A z-scores one fixed 54-d description (6 IMU channels x mean/std/p5/p50/p95/mean|diff| + duration + sample count + 8 trajectory channels x mean/std) for EVERY modality; B z-scores a modality-matched description (IMU-only 30-d, trajectory-only 20-d, joint 50-d).",
+   "correct": "Neither is wrong; they are different unsupervised statistics measured at different operating points. Referee at the three-way cut: A-features 0.6518, B-features 0.6846, against a genuine FRR of 0.0442. The conclusion is identical either way."
+  },
+  {
+   "quantity": "touch A1 single same-modality surrogate caught at r=10 (90 pairings, identical surrogate set)",
+   "a_value": 0.3429,
+   "b_value": 0.2992,
+   "delta": 0.0437,
+   "cause": "calibration null construction only. The surrogate sets are identical here (5 other detector families within the victim's modality).",
+   "correct": "B. Referee three-way: 0.2908."
+  },
+  {
+   "quantity": "touch A1 cross-modality surrogate caught at r=10",
+   "a_value": "0.5119 over 180 pairings",
+   "b_value": "0.4201 over 216 pairings",
+   "delta": 0.0918,
+   "cause": "different surrogate DEFINITION, not just calibration. A requires the surrogate's detector family to differ from the victim's (15 surrogates per victim), so A never lets the attacker own the same family trained on another modality. B allows every non-victim cell (17 surrogates per victim), which adds the 2 same-family-different-modality surrogates; those transfer unusually well, so B's cross-modality mean is lower. A's exclusion also means A's per-surrogate table cannot contain the strongest surrogate for several victims.",
+   "correct": "B's definition. Under Kerckhoffs there is no reason the attacker's model must be a different family from the victim's; excluding same-family-different-modality surrogates removes an attack the attacker can obviously mount. Report both scopes and label them (A's is 'different family only')."
+  },
+  {
+   "quantity": "A1 ENSEMBLE of surrogates (mean pool rank over 5 same-modality PADs)",
+   "a_value": "not measured - arm absent from A's design",
+   "b_value": "touch 0.1611 at r=5, 0.1028 at r=10, 0.0708 at r=20",
+   "delta": null,
+   "cause": "design difference, not a computational one. A ran only single-surrogate A1 and therefore concluded 'A1 never collapses the aggregate'; B added an ensemble rule that needs no surrogate guess and found that it does.",
+   "correct": "B. The referee independently implemented the ensemble-of-5 rule: touch caught 0.1520 at r=5, 0.0981 at r=10, 0.0673 at r=20 (three-way-disjoint calibration, genuine FRR 0.0442); B-style calibration 0.1620 / 0.1049 / 0.0705. A's conclusion that 'A1 never collapses the 18-cell mean' is refuted by an arm A did not run."
+  },
+  {
+   "quantity": "keystroke A0 uniform caught",
+   "a_value": "0.3243 at FRR 0.0867 over 134 sessions",
+   "b_value": "0.2473 at FRR 0.0568 over 133 sessions",
+   "delta": 0.077,
+   "cause": "mostly the null construction; a smaller part is the session denominator (see the session-inventory disagreement below).",
+   "correct": "Referee, on the 130-session union-clean set at the three-way cut: 0.2693 at FRR 0.0709; at B's cut 0.2497 at FRR 0.0564."
+  },
+  {
+   "quantity": "duration-only session detector after quantile mapping (touch, 5% cut, release bundles)",
+   "a_value": "0.0689 at FRR 0.0446 ('dequantised quantile map', passes but with a residual)",
+   "b_value": "0.0250 at FRR 0.0382 fixed detector / 0.0363 at FRR 0.0446 refit detector (passes, at or below chance)",
+   "delta": 0.0439,
+   "cause": "different transforms, both reproduced by the referee. A adds U(-5,+5) ms jitter to BOTH arms and then maps the fake ECDF onto INTERPOLATED quantiles of the jittered development-genuine distribution; the genuine arm is modified, which an attacker cannot do, and both arms leave the duration grid. B maps only the fake arm, using a RANDOMISED mid-rank PIT onto OBSERVED development-genuine values, so mapped fakes stay on the same grid as genuine.",
+   "correct": "B. Referee: A's transform 0.0691 at FRR 0.0414 (reproduces A), B's transform 0.0226 at FRR 0.0382 fixed / 0.0325 at FRR 0.0446 refit (reproduces B). Only B's is an attack the attacker can actually execute, and it drives the duration channel to at-or-below chance. A's residual excess is an artefact of jittering the genuine arm and interpolating off-grid."
+  },
+  {
+   "quantity": "why the naive quantile map fails (A's variants 1 and 2)",
+   "a_value": "variant 1 interpolating: 0.5838; variant 2 deterministic rank-preserving: 0.4430",
+   "b_value": "reported only the interpolating failure (0.4584 for a refitting defender)",
+   "delta": null,
+   "cause": "referee reproduces both: interpolating map fake-only 0.5949; deterministic mid-rank map 0.4360. A's diagnosis is correct and important: the duration variable is massively tied (development-genuine tap has 601 events on 17 distinct values, largest tie block 110; 99.8% of tap values sit in a tie, 94-97% for scroll/swipe/pinch). A deterministic mid-rank map sends every tied value to one target and cannot reproduce the marginal.",
+   "correct": "A's diagnosis, B's repair. The correct fix is a randomised tie-break inside the rank (B's), not dequantising jitter on both arms (A's)."
+  },
+  {
+   "quantity": "how much of a timing-feature session result is duration",
+   "a_value": "an onset-only detector borrows +0.0042 absolute caught (0.0531 vs its own 0.0489 false-alarm rate); premise of a large silent leak REFUTED",
+   "b_value": "excess over chance +0.1444 (pacing replay) / +0.1508 (pacing permuted), of which 80-100% is duration",
+   "delta": 0.15,
+   "cause": "different detectors, established by reading the code, not by arithmetic. A's statistic reads ONLY the inter-onset interval IOI[i] = duration[i-1] + gap[i], so duration enters only through its contribution to an interval whose variance is dominated by the human gap (gap p50 7.5 s touch, 25 s keystroke, against a 10-70 ms duration shift). B's statistic is sum of a per-event DURATION LLR plus a per-event GAP LLR plus a session-span LLR, i.e. it consumes duration directly as its own term.",
+   "correct": "Both, for different questions, and neither may be stated without its construction. For the question actually asked - can a session feature that touches onsets silently import the carrier-padding artefact - A is right and the answer is essentially no (+0.004). B's number answers 'can a detector that reads duration explicitly import it', which is near-tautological in the same way B labels its own pacing-replay ablation. B's timing statistic is also badly miscalibrated across users (realised session FRR 0.10 touch / 0.28 keystroke against a 0.05 target, as B states), so only its excesses are readable."
+  },
+  {
+   "quantity": "per-event FAR of the selected fake events, touch, A0",
+   "a_value": 0.7622,
+   "b_value": 0.7487,
+   "delta": 0.0135,
+   "cause": "denominator definition. A takes the unweighted mean over the 4 touch actions of each action's pool-wide FAR. B takes the mean over the fake events actually drawn into sessions, so it is weighted by the action composition of real sessions.",
+   "correct": "Both, labelled. Referee: unweighted action mean 0.7622 (exactly A), slot-count-weighted 0.7478 (B measured 0.7487). The action-unweighted figure is the one comparable to the paper's 0.7746 (a mean over cells, one action each); the slot-weighted figure is the deployment-relevant one."
+  },
+  {
+   "quantity": "keystroke session denominator",
+   "a_value": "134 sessions, 1638 scored slots",
+   "b_value": "133 sessions, 1613 scored slots",
+   "delta": null,
+   "cause": "the two genuine session inventories disagree about composition. The frozen session-assembler artefact (sessions_genuine.jsonl) is missing 21 test sessions entirely, so A fell back to the scored-event composition for those and kept 4 sessions the binding inventory shows as keystroke+swipe. The test-split binding inventory is complete in session coverage but its per-session event list is a SUBSET for some sessions, so B kept 3 sessions the artefact shows as keystroke+touch (e.g. hmog_u014_s07: binding 15 keystroke, artefact 35 keystroke + 2 swipe).",
+   "correct": "Neither. Both inventories are incomplete in different ways. The conservative union rule - drop a session if EITHER inventory shows keystroke mixed with touch - gives 30 mixed sessions and leaves 314 touch (identical to both agents) and 130 keystroke sessions with 1577 scored slots. All referee keystroke numbers use that set. The touch regime is unaffected, so every touch headline stands."
+  },
+  {
+   "quantity": "scored-slot fraction (F11 denominator)",
+   "a_value": "touch 16.2% (6994 / 43097)",
+   "b_value": "touch 17.7% (6994 / 39473)",
+   "delta": null,
+   "cause": "same inventory disagreement: A's total-slot denominator comes from the session-assembler artefact, B's from the binding inventory. The numerator, 6994 scored touch slots, is agreed.",
+   "correct": "Report as a range. Referee on the 130/314 union-clean set: touch scored 6994 of 39473 (binding, 17.7%) or of 43383 (per-session maximum of the two inventories, 16.1%); keystroke 1577 of 5174 (30.5%) or of 7396 (21.3%). The honest statement is 'between one slot in six and one in five carries a score'."
+  },
+  {
+   "quantity": "price curve, session FRR needed for caught 50% (touch, A0)",
+   "a_value": 0.048,
+   "b_value": 0.0207,
+   "delta": null,
+   "cause": "two effects: A's operating point runs hotter, and A's alpha grid has only 20 points (0.001 ... 1.00) versus B's 250-point grid, so A reports the FRR at the first grid alpha whose caught-rate exceeds the target and overshoots.",
+   "correct": "B. A's price curve is upward-biased by grid coarseness and should not be quoted."
+  },
+  {
+   "quantity": "lockout cadence for the p90 user",
+   "a_value": "touch 5% cut: p90 user every 0.90 days",
+   "b_value": "touch 5% cut: p90 user every 0.87 days",
+   "delta": null,
+   "cause": "not a disagreement about the data: A assumes 6 sessions/user/day, B assumes 12, and the two are compared at different realised FRRs (0.0740 vs 0.0501). The near-equality is a coincidence of the two errors cancelling.",
+   "correct": "Neither figure is quotable without its sessions-per-day parameter. The load-bearing, parameter-free statement both agents support is that the tenth-percentile-worst user's per-user session false-alarm rate is 0.15 (A) / 0.15 (B) empirically and 0.10-0.16 under a beta-binomial fit, i.e. roughly three times the pooled rate."
+  }
+ ],
+
+ "agreements_worth_recording": [
+  "FAR@frr5 over the 90 released cells = 0.774575, reproduced independently three times; tap__imu_only__paper_xgboost = 0.85425 against its decoy summary.json far of 0.3817.",
+  "Touch regime: 314 sessions and 6994 scored slots, identical set in both agents and in the referee.",
+  "Duration bulk statistics, release bundles, 20 test users, identical to three decimals in A, B and the referee: tap gen 0.040/0.070/0.140/0.180 vs fake 0.040/0.080/0.130/0.180; scroll (v15) gen 0.110/0.440/1.770/3.350 vs fake 0.180/0.460/1.370/1.780; swipe gen 0.119/0.380/1.451/3.080 vs fake 0.090/0.350/1.480/1.560; pinch gen 0.180/0.430/0.930/1.570 vs fake 0.090/0.400/0.980/1.050; keystroke gen 0.600/4.200/20.483/65.800 vs fake 0.580/4.400/21.617/52.970.",
+  "Only scroll/fake differs between replay_dataset_full and replay_dataset_v15 (5944 of 6000 events); tap, swipe, pinch and keystroke durations are byte-identical across all release bundles. The reviewer's scroll cap story (fake max 1.68 s, median 0.370 against genuine 0.440, 5.6% on the cap) is a replay_dataset_full fact; every released scroll cell uses v15, where fake max is 1.78 s, 0.75% sit on the cap and the median shift reverses (fake 0.460 vs genuine 0.440). Verified independently by the referee.",
+  "Duration-only session floor, release bundles, touch, user-disjoint cut: A 0.1748, B 0.1758, referee 0.1758, all at an identical realised session FRR of 0.0382. At the 1% target: A 0.0565, B 0.0562, referee 0.0556, all at FRR 0.0032. The reviewer's 0.389 @5% / 0.163 @1% is not reproduced, and the cause is the scroll bundle.",
+  "The reviewer's prescribed control (clip both arms at the per-action development fake cap plus U(-5,+5) ms jitter, LLR refitted on the transformed development data) is ineffective: A 0.1748 -> 0.1823, B 0.1758 -> 0.1949, referee 0.1758 -> 0.1903. It moves the number by less than 0.02-0.03 in either direction because only 0.1-4.3% of fake events sit exactly on the cap while the whole distribution body is shifted.",
+  "A3, the oracle that filters on the victim's own score, collapses the defence and is not a threat model. Touch: A 0.0102 at r=5, B 0.0073, referee 0.0063; per-event FAR reaches 1.0000 at every r >= 5. Both agents label it as an upper bound and neither uses it as a headline (F5 satisfied).",
+  "Both agents wrote a pre-registration before results (F13), both used user-clustered bootstrap over the 20 test users with a shared resampled user multiset across cells (F9), both reported the trivial baselines (F10), both named their denominators (F11), both reported the price curve (F12) and both reported coverage and pool shortfall (F15).",
+  "Pool shortfall: r <= 5 needs no reuse; r = 10 forces 0.74% of touch slots and 2.36% of keystroke slots to reuse an already-submitted event within a session; r = 20 forces 16.14% and 26.10%. A and B agree on these to the fourth decimal. r = 10 is the largest clean operating point."
+ ],
+
+ "final_numbers": {
+  "basis": "Referee recomputation, three-way-disjoint calibration (fit / null / evaluation users pairwise disjoint), llr_sum, 20 mirrored fake draws, sessions = union-clean set (314 touch, 130 keystroke), score LLR = 41 quantiles per action, alarm iff calibration tail p <= alpha. Agent B's cross-fitted construction gives values within 0.01-0.02 of these and carries the user-clustered confidence intervals; agent A's construction runs 1.5x hot and its caught-rates should be read at its own realised FRR of 0.0740, not at 5%.",
+  "touch": {
+   "n_sessions": 314, "n_scored_slots": 6994, "n_users": 20, "n_cells": 18,
+   "genuine_session_FRR_at_5pct_target": 0.0442,
+   "genuine_session_FRR_agent_B_construction": 0.0501,
+   "A0_uniform": {"caught": 0.6594, "per_event_FAR_slot_weighted": 0.7483, "per_event_FAR_action_unweighted": 0.7622},
+   "A2_knowledge_free_centroid": {"r2": 0.6285, "r5": 0.6372, "r10": 0.6518, "r20": 0.6482, "features": "A 54-d"},
+   "A2_knowledge_free_centroid_modality_matched": {"r2": 0.6465, "r5": 0.6661, "r10": 0.6846, "r20": 0.6847, "features": "B modality-matched"},
+   "A2_knowledge_free_knn": {"r2": 0.6308, "r5": 0.6255, "r10": 0.5956, "r20": 0.5957, "features": "A 54-d"},
+   "A1_single_same_modality_surrogate_90_pairings": {"r2": 0.4204, "r5": 0.3149, "r10": 0.2908, "r20": 0.2757},
+   "A1_ensemble_of_5_same_modality_surrogates": {"r2": 0.3283, "r5": 0.1520, "r10": 0.0981, "r20": 0.0673},
+   "A3_ORACLE_UPPER_BOUND_NOT_A_THREAT_MODEL": {"r2": 0.1103, "r5": 0.0063, "r10": 0.0008, "r20": 0.0003},
+   "duration_only_baseline_B2": {"caught_at_5pct": 0.1758, "realised_FRR": 0.0382, "caught_at_1pct": 0.0556, "realised_FRR_1pct": 0.0032},
+   "duration_only_after_prescribed_control": {"caught_at_5pct": 0.1903, "realised_FRR": 0.0382},
+   "duration_only_after_correct_quantile_map_fixed_detector": {"caught_at_5pct": 0.0226, "realised_FRR": 0.0382},
+   "duration_only_after_correct_quantile_map_refit_detector": {"caught_at_5pct": 0.0325, "realised_FRR": 0.0446}
+  },
+  "keystroke": {
+   "n_sessions": 130, "n_scored_slots": 1577, "n_users": 20, "n_cells": 18,
+   "genuine_session_FRR_at_5pct_target": 0.0709,
+   "A0_uniform": {"caught": 0.2693, "per_event_FAR_slot_weighted": 0.8320},
+   "A2_centroid": {"r10": 0.2805, "r20": 0.2871},
+   "A1_single_same_modality_surrogate": {"r10": 0.1973, "r20": 0.2022},
+   "A1_ensemble_of_5": {"r10": 0.1412, "r20": 0.1479},
+   "A3_ORACLE_UPPER_BOUND": {"r10": 0.0483, "r20": 0.0388},
+   "duration_only_baseline_B2": {"caught_at_5pct": 0.0869, "realised_FRR": 0.0538},
+   "note": "3 of 18 keystroke cells are already at or below chance under A0 with no adaptation. The 1% session operating point is unreachable in this regime: with 65-67 genuine calibration sessions per fold the smallest attainable tail probability is about 0.015, so every 1% keystroke figure in both agents' outputs is 0.0000 by construction."
+  }
+ },
+
+ "collapse_point_final": {
+  "definition": "smallest r at which the 18-cell mean session caught-rate falls at or below the mean realised genuine session false-alarm rate at the same operating point",
+  "A2_knowledge_free_centroid": "NEVER for r <= 20, both regimes, both alphas, both feature specifications, all three calibration constructions. Touch caught stays between 0.63 and 0.69 against a false-alarm rate of 0.044.",
+  "A2_knowledge_free_knn": "NEVER for r <= 20 at the macro level; 0-2 of 18 touch cells and 3-6 of 18 keystroke cells fall below their own false-alarm rate, and 2-3 of the keystroke ones were already below it under A0.",
+  "A1_single_surrogate_blindly_chosen": "NEVER at the macro level for r <= 20 (touch 0.2757 at r=20 against 0.0442, a 6.2x margin), but 29 of 90 same-modality pairings collapse individually (agent B, median smallest r = 5).",
+  "A1_ensemble_of_5_same_modality_surrogates": "Does not strictly collapse the macro mean for r <= 20 (referee r=20: 0.0673 against 0.0442, difference +0.023), but becomes statistically indistinguishable from chance at r=20 (agent B's paired difference +0.0207, 95% CI [-0.004, +0.045]). 13 of 18 touch cells collapse individually by r=20. The honest clean operating point is r=10, where caught is 0.0981-0.1049 against 0.044-0.050, a 2.2x margin.",
+  "A3_ORACLE_NOT_A_THREAT_MODEL": "touch r=5; keystroke r=10 at the three-way cut. Upper bound only, never a headline.",
+  "one_line": "The knowledge-free attacker never collapses it. A single blindly-chosen surrogate never collapses the aggregate but collapses about a third of individual pairings. An ensemble of five surrogates - which requires no guess about which one transfers - takes it to the edge of chance at r=10-20. The oracle collapses it at r=5 and is not a threat model."
+ },
+
+ "what_neither_agent_got_right": [
+  {
+   "item": "keystroke session denominator",
+   "detail": "A used 134 sessions, B used 133; both inventories are incomplete in different ways and the conservative union rule gives 130 sessions / 1577 scored slots. Effect on the keystroke headline is about 0.01-0.02 in caught; the touch headline is untouched."
+  },
+  {
+   "item": "the scored-slot fraction",
+   "detail": "A quotes 16.2%, B quotes 17.7%; the two differ only in which incomplete inventory supplies the denominator. Report the range."
+  },
+  {
+   "item": "A's price curve grid",
+   "detail": "20 alpha points is too coarse to read the FRR required for a given caught-rate; it overshoots. B's 250-point grid should be used."
+  },
+  {
+   "item": "A's A1 surrogate scope",
+   "detail": "excluding same-family-different-modality surrogates removes an attack the attacker can obviously mount and biases the per-surrogate spread."
+  },
+  {
+   "item": "A's absent ensemble arm",
+   "detail": "A concluded 'A1 never collapses the aggregate' from single surrogates only; the ensemble arm A did not run does take it to the edge of chance."
+  },
+  {
+   "item": "B's timing-consequence framing",
+   "detail": "B's timing statistic includes a per-event duration LLR term, so 'the timing detector's power is duration' is close to tautological and should carry the same F14 label B applies to its own pacing-replay ablation. The onset-only question is A's and its answer is different."
+  },
+  {
+   "item": "both agents' bootstrap",
+   "detail": "neither refits the LLR or the null inside a bootstrap replicate, so both sets of intervals are conditional on the fitted detector and understate calibration noise. Both say so."
+  }
+ ],
+
+ "fairness_rule_status": {
+  "F1": "satisfied by both: event cuts are the frozen development-selected frr5 thresholds; session operating points come from user-disjoint test halves; the duration LLR is fitted on the 10 development users. The referee re-checked that the development users are disjoint from all 20 test users.",
+  "F2": "satisfied by both in form; only B's implementation actually realises the nominal rate. A's realised FRR is 1.5x nominal and A reports it, so the reader is not misled, but A's caught-rates must be read against 0.0740 and never described as 5% numbers.",
+  "F5": "satisfied by both. A3 carries an oracle label in its arm name in both output trees; 'best surrogate' rows are labelled post-hoc by both.",
+  "F9": "satisfied by both: 20 users as clusters, 2000 replicates, one shared user multiset per replicate across cells.",
+  "F10": "satisfied by both. Note B's finding, which the referee's numbers support, that under an adaptive attacker the duration-only baseline B2 beats the score LLR - and that this is bad news, because B2's power is the carrier-padding artefact.",
+  "F11": "satisfied in form by both; the total-slot denominator itself is disputed between the two inventories and should be quoted as a range.",
+  "F12": "satisfied by both; use B's curve.",
+  "F13": "satisfied by both; both pre-registrations were written before results.",
+  "F14": "A labels its gaps-copy ablation as near-tautological at the point of statement. B labels its pacing-replay ablation the same way but does not extend the label to the duration term inside its timing statistic, which needs it.",
+  "F15": "satisfied by both; the referee adds the third session-inventory reconciliation neither agent performed."
+ },
+
+ "confidence": {
+  "level": "high on Part A and on the duration floor; medium on the keystroke regime and on the timing-consequence question",
+  "why_high": "The referee reproduced BOTH agents' Part A numbers to within 0.002 from a single independent codebase by switching only the null construction, and reproduced all four disputed quantile-map variants to within 0.011. The A2 verdict is invariant to calibration construction, feature specification, variant and regime, and the margin between A2 caught and the false-alarm rate is 13.5x in touch. The duration floor agrees across three implementations to 0.001 at an identical realised FRR.",
+  "why_medium_on_keystroke": "the session inventory is genuinely ambiguous there (130 / 133 / 134), the 1% operating point does not exist for lack of calibration sessions, and 3 of 18 cells are already at or below chance with no adaptation.",
+  "why_medium_on_timing": "the two agents measured two different detectors and neither ran the other's; the referee arbitrated by reading the code rather than by recomputing, so the attribution of the disagreement is certain but the two numbers were not cross-checked against each other."
+ },
+
+ "not_done": [
+  "No user-clustered confidence intervals were recomputed for the referee's own point estimates; the intervals quoted are the agents' own, which agree that the A2 intervals are separated from the false-alarm-rate intervals by an enormous margin.",
+  "The timing-consequence analysis was arbitrated from the code, not re-run.",
+  "No per-user or Part C quantities were recomputed by the referee; the A-vs-B differences there follow mechanically from the operating-point difference and from A's 6 versus B's 12 sessions/day.",
+  "No model was loaded, no GPU was used, nothing under /mnt/share was written, and no git operation was performed."
+ ]
+}
