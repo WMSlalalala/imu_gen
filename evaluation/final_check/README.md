@@ -70,7 +70,7 @@ scores/                   9 个结果 JSON（见第三节）
 
 | 文件 | 担保主文档的哪一处 | 由谁生成 | 状态 |
 |---|---|---|---|
-| `session_aggregation.json` (82 KB) | **第四节全部三张表**：FRR5/FRR1 被抓率与 CI、检测代价、count 规则 k 曲线、标定乐观量 | `code/session_aggregation/make_reconciled.py`（汇总 `sessagg_a.py` / `sessagg_b.py` / `referee.py` 的输出） | 有效，逐格核对一致。`meta.referee_script` 指向一个 `/tmp` 临时路径，脚本本体现已在 `code/session_aggregation/` |
+| `session_aggregation.json` (82 KB) | **第四节的三张主表**：FRR5/FRR1 被抓率与 CI、检测代价、count 规则 k 曲线、标定乐观量。**第四节那四条限定它一条都不担保**（见第六节第 4 条） | `code/session_aggregation/make_reconciled.py`（汇总 `sessagg_a.py` / `sessagg_b.py` / `referee.py` 的输出） | 有效，逐格核对一致。`meta.referee_script` 指向一个 `/tmp` 临时路径，脚本本体现已在 `code/session_aggregation/` |
 | `session_aggregation_per_cell.json` (23 KB) | 90 格逐格 far5/frr5/farE/frrE。自算均值 = **0.774575**，与主文档第一节 0.775 一致 | 同上 | 有效 |
 | `session_detector_results.json` | 第五节 **RF** 行（真人误报 0.4、paced v1 68.0、v2 5.5，及 CI） | `code/session_detector.py --model rf` | 有效；键名 `occupancy_bin_widths_s`，带 `not_a_sliding_window` 字段 |
 | `session_detector_logreg.json` | 第五节 **LogReg** 两行 | `code/session_detector.py --model logreg` | 有效 |
@@ -145,7 +145,14 @@ AUDIT 那条线在 `/mnt/share/mwang49/real-human/imu_gen/final/evaluation/compa
 | `/mnt/share/mwang49/data7/actreal_agent/actreal/pacing.py` | v2 pacing 的 `empirical_gaps`。**该目录不是 git 仓库**，改动无版本记录 |
 | `/home/mwang49/Human_agent/hmog_dataset.zip` | 原始 HMOG 归档（6.1 GB），任务 2 连续 IMU 的唯一来源 |
 
-完整的库外产物清单（体积、sha256、再生成命令）在 [`EXTERNAL_INPUTS.json`](EXTERNAL_INPUTS.json)（会话链路）与 [`code/EXTERNAL_INPUTS.json`](code/EXTERNAL_INPUTS.json)（pipeline 驱动）。
+机器可读的库外清单有两份，各只覆盖一条链路：[`EXTERNAL_INPUTS.json`](EXTERNAL_INPUTS.json)（会话链路，1 条目）与
+[`code/EXTERNAL_INPUTS.json`](code/EXTERNAL_INPUTS.json)（pipeline 驱动，24 条目、160.7 GB）。
+
+> **两份加起来仍不完整**（2026-08-10 复核，逐字符 grep）：**发布版 90 格树、r1 基线 90 格树、
+> `direct100k_final/`（`datasets/` + `detector_models/` + `provenance.json`）、`hmog_dataset.zip`
+> 都不在任何一份清单里**——而第一节 0.775 与第二、三节每一个数字都是从这几棵树读出来的。
+> 它们目前只出现在上面这张散文表里。谁补第三份清单，就把这四项按同样的 kind/size/sha256/再生成
+> 字段补进 `code/EXTERNAL_INPUTS.json`。
 
 ### 复现命令
 
@@ -195,10 +202,10 @@ $PY $CF/code/imu_background_probe.py <解出来的 session 目录>
 | imu_trajectory_xytime（r1 / 发布） | 0.208 / 0.711 | **0.207592 / 0.711267** |
 | tap/swipe/pinch 的 18 个 imu_only 格两树相同 | 是 | **18/18 完全相同** |
 | `tap__imu_only__paper_xgboost` 的诱饵 far | 0.3817 | **0.38175**（`primary_metrics.far`，取在 dev-EER 阈值上；FAR@frr5 是 0.854） |
-| 接受判据对全部 90 格的复算误差 | 0.000e+00 | **0.000e+00**（far 与 frr 都是） |
+| 接受判据对全部 90 格的复算误差 | 0.000e+00 | **0.000e+00**（far 与 frr 都是，**是对 `summary.json` 的 `primary_metrics`、取在各格自己的 dev-EER 阈值上**；把同一条判据换成 `frr5` 阈值去对 `primary_metrics.far`，最大差 0.528——那不是矛盾，是上一行说的诱饵） |
 | `test_threshold_selection_calls` | 0 | **90 格全部为 0**；`test_opened_before_freeze` 全部为 false |
 
-**需要更正的三处**（本 lane 只报不改，主文档不归本 lane）：
+**需要更正的四处**（只报不改，主文档不归本文件）：
 
 1. **第零节「90 格中有 16 格 `frr5 < eer`」属于错的那棵树。** 发布版是 **0 格**，r1 基线才是 16 格。
    这条本意是佐证「阈值是分数值不是错误率」，却拿了这一节正在警告读者不要用的那棵树的统计量。
@@ -208,14 +215,30 @@ $PY $CF/code/imu_background_probe.py <解出来的 session 目录>
 3. **第三节 A9/A10/A11 的「CI 排除 0 = 是」在库内没有担保物。** `../BOOTSTRAP_COMPARE.md` 只有
    A7 与 A8 两行配对 bootstrap；A9/A10/A11 没有。同节「EER 8.4×」所需的 12 格 A3′ EER 也不在
    `../RESULTS_EER.md` 里（FAR 侧的 7.4× 可从 `../RESULTS.md` 复算出来，成立）。
+   **但这三条不是丢了、是没写下来**：点估计在 `../RESULTS.md` 表 2 里，三条臂的打分树也还在
+   （`$B/final/abl_a9_no_set`、`abl_a10_no_waveform`、`abl_a11_no_feature_match`，2026-08-10 复核存在），
+   所以补法是拿 `../comparison/code/bootstrap_far5.py --method <arm>` 重跑三次再把行补进
+   `../BOOTSTRAP_COMPARE.md`，不是重训。在补上之前，主文档那三个「是」应当先改成「—」。
+
+4. **第四节的三张主表有担保物，四条限定一条都没有。** `scores/session_aggregation.json` 覆盖
+   `at_frr5` / `at_frr1` / `price_of_detection` / `count_rule` / `calibration_gap`，逐格对得上；
+   但对这份 82 KB 的 JSON 全文 grep，`icc`、`copula`、`keystroke`、`ppv`、`session_type`、`by_length`
+   **命中数全部是 0**（2026-08-10 复核）。也就是说残差 ICC 0.0621 vs −0.0043、copula 调整后的
+   S1–S4、145/140/104 三类会话与 keystroke-only 那张表、按类型/按长度的误报（0.049 vs 0.008、
+   0.140 vs 0.012）、以及用户视角的 23.7 段 / 1.19 次 / P(≥1) 0.69 / PPV 0.087，**在本仓库里都没有产物**。
+   `SESSION_AGGREGATION_EN.md` 自己那节限定列的还是另一组（S5 对 SVM 格病态、镜像会话结构、两个
+   régime、尺度混用、20 用户）。这些数字来自一次对抗审查过程而不是一个文件；引进论文前必须先落一份
+   `scores/session_aggregation_adversarial.json`（或给现有文件加键），**不要凭这段文字反推重算**。
 
 **尚未写进主文档、但会限定第一节头条的一条**：`scores/competence_gate_classical.json` 的
 `plain_statement` 写着——60 个经典格子里 38 个对**任何**一种简单攻击都到不了 AUC 0.80，
 而这 38 个格子的 FAR@frr5 均值 0.7982、通过的 22 个是 0.7056，配对差 0.0925 [0.0793, 0.1066]。
 主文档第十三节只把 competence gate 记成一条待办，没有报这个已经量出来的结果。
 
-**路径与链接**：本目录 10 份 `.md` 里的 markdown 链接与绝对路径**逐条测过存在性，全部可解析**
-（唯一一处扫描告警是 `SESSION_AGGREGATION_EN.md:137` 行文里把路径写成了省略形式——`/mnt/share` 后接省略号再接 `detectors_90cell/cells`——那不是一条真路径）。
+**路径与链接**：本目录 10 份 `.md` 加 `code/pipeline/` 下 8 份，共 18 份，里面的 markdown 链接与绝对路径
+**逐条测过存在性**（第二轮独立复核 2026-08-10：55 条绝对路径全部存在）。四处扫描告警都不是断链：
+`SESSION_AGGREGATION_EN.md:137` 与 `code/pipeline/README.md:21`、`:113` 是行文里的省略写法（`/mnt/share/…`、`/tmp/claude-…`），
+`AUDIT_CN.md:69` 的 `/tmp/refcheck.json` 是复现命令的**输出**路径，本来就不该预先存在。
 唯一真正断掉的引用是 `SESSION_AGGREGATION_EN.md:246` 的「Files:」行——它列的
 `reconciled.json`、`C/referee_repo.json`、`C/referee_mnt.json`、`C/referee_repo.log`、`C/referee_mnt.log`
 在本仓库里都不存在；`referee.py` 本体已在 `code/session_aggregation/`，对账结果已在 `scores/session_aggregation.json`。
