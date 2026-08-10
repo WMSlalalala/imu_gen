@@ -1,0 +1,60 @@
+{
+  "schema_version": "competence_gate_rules_v1",
+  "frozen_at": "2026-08-10",
+  "frozen_before": "any re-generated FAR number exists; no ActReal result was consulted when these thresholds were chosen",
+  "purpose": "A high FAR is only evidence about an attack if the detector it was measured against can detect anything at all. This gate asks that question separately, on attacks nobody would call subtle, and it is written down before the numbers so it cannot be tuned to them.",
+
+  "simple_attacks": {
+    "fixed_injection": {
+      "what": "every fake window is one constant inertial vector held for the window's length, with the carrier's timing untouched",
+      "why": "the crudest automation there is; a detector that cannot separate this from a human has not learned the channel"
+    },
+    "linear_trajectory": {
+      "what": "touch coordinates interpolated linearly from the carrier's first to last point at constant speed, no curvature and no velocity profile",
+      "why": "the trajectory equivalent: no human draws a straight line at constant speed"
+    },
+    "replay_jitter": {
+      "what": "a genuine window of the same action from a different user, plus zero-mean Gaussian jitter at 5% of that channel's per-user standard deviation",
+      "why": "a near-copy of real data; passing this means the detector keys on identity rather than realism, which is the failure mode the other two miss"
+    }
+  },
+
+  "protocol": {
+    "split": "development",
+    "why_development": "the gate must not consume the evaluation split; it decides which cells are allowed to carry a claim, and a gate scored on test would be selection on test",
+    "per": "action x modality x detector, all 90 configurations",
+    "metric": "AUC over the development split",
+    "two_checks": {
+      "b_current_boundary": "score the already-trained detector on the simple attacks, no retraining -- asks whether the decision boundary as it stands recognises obvious automation",
+      "a_learning_capacity": "train the same architecture on a simple attack and test it -- asks whether the architecture and code can learn this channel at all. Run only on configurations that fail check (b), because it is the expensive one and it is only diagnostic where (b) has already failed."
+    }
+  },
+
+  "thresholds": {
+    "pass": 0.80,
+    "strict": 0.90,
+    "interpretation": "AUC >= 0.80 on check (b) means the cell may carry a FAR claim. Below it the cell is marked training_failure."
+  },
+
+  "failure_handling": {
+    "label": "training_failure",
+    "reporting": "listed separately, with its AUC, in every table where the cell would otherwise appear",
+    "must_not": "a failing cell must not be used to support any claim about attack strength, and must not be dropped from the tables -- it is reported as failing, not hidden",
+    "no_post_hoc_selection": "cells are never removed after seeing their ActReal FAR. Membership is decided by this file alone."
+  },
+
+  "motivation_measured_before_freezing": {
+    "note": "the release's existing 90 cells were already inspected for this, which is why the gate exists; the numbers below are the reason for the gate, not an output of it",
+    "auc_below_0_55": 10,
+    "auc_below_0_60": 31,
+    "worst_cells": {
+      "keystroke__trajectory_xytime__hmog_style_svm": 0.504,
+      "keystroke__imu_trajectory_xytime__behaveformer_stdat": 0.504,
+      "keystroke__imu_only__behaveformer_stdat": 0.512,
+      "pinch__imu_only__behaveformer_stdat": 0.517,
+      "pinch__imu_only__authconformer": 0.519
+    },
+    "auc_source": "derived as 1 - descriptive_test_eer per cell; an approximation, but at EER ~ 0.5 the conclusion does not depend on it",
+    "reading": "these cells cannot presently distinguish attack success from detector training failure. The gate does not assert the detectors failed -- it establishes the evidence needed to rule that out."
+  }
+}
