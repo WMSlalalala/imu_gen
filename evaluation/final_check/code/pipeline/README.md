@@ -129,6 +129,10 @@ folder as its `README`.
 
 ## `vendor/` — third-party source with no recoverable upstream
 
+> **发布前必读：[`vendor/PROVENANCE.md`](vendor/PROVENANCE.md)。** 这里的文件没有随附许可证文本，
+> 而这是一个公开仓库。`ImagenTime_additions/` 是我们自己的代码、可以公开；
+> `pyppeteer_ghost_cursor/` 是一份作者从未发布过的第三方移植，**许可状态未知，未决**。
+
 | path | why it is here |
 |---|---|
 | `pyppeteer_ghost_cursor/` (5 files) | The ghost-cursor Python port used by `build_ghostcursor_baseline.py` (via `ghost_cursor_path.py`). It has **no `.git`** in the source tree and no pinned upstream — this was the only copy on disk. Losing it makes the ghost-cursor baseline unreproducible. |
