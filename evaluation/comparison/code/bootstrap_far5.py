@@ -54,7 +54,7 @@ sys.path.insert(0, str(BASE))
 # reads exactly the cells reference_scores() reads and the point estimates here
 # cannot drift from the published table.
 from final_release import (MODALITIES, WORKING_RESULTS,  # noqa: E402
-                           cell_sources)
+                           cell_dir, cell_sources)
 
 
 def load_cell(cell: Path):
@@ -84,10 +84,14 @@ def load_release() -> dict:
     cells = {}
     for key, directory in sorted(cell_sources().items()):
         action, modality, detector = key
-        loaded = load_cell(WORKING_RESULTS / directory / "cells"
-                           / f"{action}__{modality}__{detector}")
-        if loaded is not None:
-            cells[key] = loaded
+        cell = cell_dir(action, modality, detector, directory)
+        loaded = load_cell(cell)
+        if loaded is None:
+            raise SystemExit(
+                f"released cell {action}__{modality}__{detector} at {cell} has "
+                f"no readable scores. Refusing to continue: skipping it would "
+                f"shrink every interval below without saying so.")
+        cells[key] = loaded
     return cells
 
 
@@ -106,10 +110,16 @@ def load_method(method: str) -> dict:
     cells = {}
     for key in scores:
         action, modality, detector = key
-        loaded = load_cell(ROOT / method / f"cells_{owner[action]}_{modality}"
-                           / "cells" / f"{action}__{modality}__{detector}")
-        if loaded is not None:
-            cells[key] = loaded
+        cell = (ROOT / method / f"cells_{owner[action]}_{modality}"
+                / "cells" / f"{action}__{modality}__{detector}")
+        loaded = load_cell(cell)
+        if loaded is None:
+            raise SystemExit(
+                f"{method} declares {action}__{modality}__{detector} in its "
+                f"bundle manifest but {cell} has no readable scores. Refusing "
+                f"to continue: a paired comparison that quietly drops cells "
+                f"reports a different quantity from the one it names.")
+        cells[key] = loaded
     return cells
 
 

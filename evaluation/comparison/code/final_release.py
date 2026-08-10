@@ -46,6 +46,53 @@ BUNDLE_MAP = DATASETS / "ACTION_BUNDLE_MAP.json"
 # provenance.json; the release itself ships only the fitted models.
 WORKING_RESULTS = Path("/mnt/share/mwang49/data7/results/direct100k")
 
+# The same 90 cells, all in one directory, as shipped in the repository.  On
+# 2026-08-10 a disk cleanup removed the per-version working directories that
+# provenance.json names -- detectors_v3, v8, v10, v10_fast, v15, v15_fast -- on
+# the mistaken ground that detector_models/ already held everything.  It holds
+# the fitted models; it does not hold the per-cell test scores, which is what
+# every table here actually reads.  72 of the 90 cells stopped resolving.
+#
+# The scores themselves were never lost: this tree carries all 90, and where a
+# working directory still exists the two agree event for event (checked over
+# eight cells, max |difference| 0.0).  So the resolver below falls back here.
+#
+# The reason this went unnoticed for a while is the more important half of the
+# story: every loader wrote `if loaded is not None`, so a missing cell silently
+# shrank the comparison instead of failing it.  A paired bootstrap quietly
+# dropped from 12 shared cells to 6 and still printed a confident interval.
+# cell_dir() therefore raises rather than returning something absent, and the
+# loaders below no longer skip.
+RELEASE_CELLS = Path(
+    "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25"
+    "/code/dataset_test/results/cells"
+)
+
+
+def cell_dir(action: str, modality: str, detector: str, directory: str) -> Path:
+    """The directory holding one released cell's scores, wherever it survives.
+
+    `directory` is the working-tree name provenance.json records.  Prefer it, so
+    a machine that still has the originals reads exactly what produced the
+    published table; fall back to the shipped tree otherwise.  Raise if neither
+    has it -- a cell that cannot be found is a broken environment, not a cell to
+    leave out of the average.
+    """
+    name = f"{action}__{modality}__{detector}"
+    primary = WORKING_RESULTS / directory / "cells" / name
+    if (primary / "thresholds.json").is_file():
+        return primary
+    fallback = RELEASE_CELLS / name
+    if (fallback / "thresholds.json").is_file():
+        return fallback
+    raise FileNotFoundError(
+        f"released cell {name} is in neither {primary} nor {fallback}. "
+        f"provenance.json names {directory!r}; if that working directory was "
+        f"deleted, the shipped copy under RELEASE_CELLS should still have it. "
+        f"Do not let this cell be skipped -- the table would silently cover "
+        f"less ground than it claims."
+    )
+
 ACTIONS = ("tap", "scroll", "swipe", "pinch", "keystroke")
 MODALITIES = ("trajectory_xytime", "imu_only", "imu_trajectory_xytime")
 DETECTORS = (
@@ -114,7 +161,7 @@ def reference_scores_eer() -> dict:
     scores = {}
     for key, directory in sorted(cell_sources().items()):
         action, modality, detector = key
-        cell = WORKING_RESULTS / directory / "cells" / f"{action}__{modality}__{detector}"
+        cell = cell_dir(action, modality, detector, directory)
         result = read_cell(cell, "test_eer")
         if result is None:
             continue
@@ -136,7 +183,7 @@ def reference_scores() -> dict:
     scores = {}
     for key, directory in sorted(cell_sources().items()):
         action, modality, detector = key
-        cell = WORKING_RESULTS / directory / "cells" / f"{action}__{modality}__{detector}"
+        cell = cell_dir(action, modality, detector, directory)
         thresholds_path = cell / "thresholds.json"
         scores_path = cell / "test_scores.jsonl"
         if not thresholds_path.is_file() or not scores_path.is_file():
