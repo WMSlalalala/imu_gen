@@ -1,0 +1,85 @@
+{
+  "_comment": "Artefacts that the final_check reproduction reads or writes but that are deliberately NOT committed to this repository, because they are too large for git. Each entry records where the file lives, its size, its sha256 at the time of recording, and the exact command that regenerates it. Recorded 2026-08-10 by the lane that merged data7/session_rhythm_detector into final_check/scores/.",
+  "recorded_at": "2026-08-10",
+  "artefacts": [
+    {
+      "id": "session_rhythm_arms",
+      "what": "The five session-rhythm arms: one JSON object per session per arm. Every arm reuses the SAME genuine skeleton (same user, same session, same action order, same durations); only gaps_s differs. Consumed by final_check/code/session_detector.py via SESSION_DIR.",
+      "location": "/mnt/share/mwang49/data7/session_rhythm_detector/results/",
+      "in_repo": false,
+      "reason_excluded": "5 files, 53,951,555 B (51.5 MiB) total, 9.8-10.5 MiB each. Regenerable in one command from inputs that are themselves recorded here. Committing them would put 51.5 MiB of derived data in git for zero information gain.",
+      "line_schema": "user, session, actions[], durations_s[], gaps_s[], source, event_ids[]. gaps_s[0] is a placeholder 0.0 so gaps_s aligns with actions; the detector uses gaps_s[1:] only, so the gap count is 251,333 not 253,661.",
+      "sessions_per_file": 2328,
+      "files": [
+        {
+          "name": "sessions_genuine.jsonl",
+          "bytes": 10807762,
+          "lines": 2328,
+          "sha256": "8b7022a3556de7610c2e25f1ec244ab381f3c3fbde6725bfdc0dd42e3e7a182a"
+        },
+        {
+          "name": "sessions_naive.jsonl",
+          "bytes": 10316665,
+          "lines": 2328,
+          "sha256": "2dfde5989c5e77bd4f76efd1269efa00df584530df3366113fca9728f0daeb42"
+        },
+        {
+          "name": "sessions_naive_jitter.jsonl",
+          "bytes": 11058971,
+          "lines": 2328,
+          "sha256": "74ed2b4e71ebe27e1ca2ae15c8afd2d367a24e956e3246fe5774f853be1941dc"
+        },
+        {
+          "name": "sessions_paced.jsonl",
+          "bytes": 10955679,
+          "lines": 2328,
+          "sha256": "63867e3025074da99bc04952aa25e4c525565abd68655cd68327f3d7006cba1b"
+        },
+        {
+          "name": "sessions_paced_emp.jsonl",
+          "bytes": 10812478,
+          "lines": 2328,
+          "sha256": "03665227b6165b2402d3485e9de86277fd808e0a2c512fa7f9fda418d0355e51"
+        }
+      ],
+      "regenerate": {
+        "command": "/home/mwang49/miniconda3/envs/cuhkx/bin/python /mnt/share/mwang49/real-human/imu_gen/final/evaluation/final_check/code/assemble_sessions.py --out /mnt/share/mwang49/data7/session_rhythm_detector/results",
+        "defaults_relied_on": {
+          "--out": "/mnt/share/mwang49/data7/session_rhythm_detector/results",
+          "--naive-interval-s": 4.0,
+          "--seed": 42,
+          "--max-sessions": 0
+        },
+        "also_writes": [
+          "assemble_summary.json  (315 B, committed at final_check/scores/assemble_summary.json)",
+          "session_rejects.json   (4080 B, committed at final_check/scores/session_rejects.json)"
+        ],
+        "runtime_note": "CPU only. No GPU, no detector inference."
+      },
+      "inputs_required": [
+        {
+          "path": "/mnt/share/mwang49/real-human/imu_gen/final/trajectory_humanization_full_20260713/results/trajectories_full_v2/hmog_trajectory_{keystroke,scroll,swipe,pinch}.npz",
+          "role": "Real session timelines, rebuilt from flat_system_time_ms / session_id / event_id. In this repository but not committed (26-49 MB each).",
+          "in_repo_tree": true,
+          "committed": false
+        },
+        {
+          "path": "/mnt/share/mwang49/real-human/imu_gen/final/data/splits/users_seed42.json",
+          "role": "The one user split, 70/10/20, shared by all five actions.",
+          "bytes": 10080,
+          "committed": true
+        },
+        {
+          "path": "/mnt/share/mwang49/data7/actreal_agent/actreal/pacing.py",
+          "role": "DelayPolicy, used by the paced arm only.",
+          "bytes": 8465,
+          "sha256_prefix": "cfc0f850a36a2a23",
+          "mtime": "2026-08-09 22:00:05",
+          "committed": false,
+          "hazard": "VERIFIED 2026-08-10: /mnt/share/mwang49/data7/actreal_agent is NOT a git repository (git rev-parse fails at the mount point). Changes to pacing.py leave no version record, so the sha256 of sessions_paced.jsonl above is only reproducible against this exact pacing.py. The genuine / naive / naive_jitter / paced_emp arms do not depend on it."
+        }
+      ],
+      "determinism": "The genuine, naive, naive_jitter and paced_emp arms are deterministic given the npz inputs and --seed 42. The paced arm additionally depends on the unversioned pacing.py above."
+    }
+  ]
+}

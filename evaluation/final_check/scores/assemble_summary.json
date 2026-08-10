@@ -1,11 +1,11 @@
 {
-  "genuine_sessions": 2394,
+  "genuine_sessions": 2328,
   "median_gap_s": {
-    "genuine": 1.099,
+    "genuine": 1.084,
     "naive": 4.0,
     "naive_jitter": 4.001,
-    "paced": 0.998,
-    "paced_emp": 1.101
+    "paced": 0.995,
+    "paced_emp": 1.087
   },
   "naive_interval_s": 4.0,
   "split_users": {

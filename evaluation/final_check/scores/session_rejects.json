@@ -1,0 +1,190 @@
+{
+  "kept": 2328,
+  "rejected_impossible_timeline": 66,
+  "rejected_too_few_usable_gaps": 0,
+  "negative_gaps_total": 6,
+  "gaps_over_max_total": 74,
+  "worst_gap_s": 1396389999999541.2,
+  "detail": [
+    {
+      "user": "5",
+      "session": "6",
+      "events": 32,
+      "negative_gaps": 0,
+      "gaps_over_max": 2,
+      "worst_gap_s": 208.862,
+      "most_negative_gap_s": 0.246
+    },
+    {
+      "user": "9",
+      "session": "15",
+      "events": 58,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 129999999712.143,
+      "most_negative_gap_s": 0.773
+    },
+    {
+      "user": "17",
+      "session": "10",
+      "events": 52,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 126.854,
+      "most_negative_gap_s": 0.453
+    },
+    {
+      "user": "17",
+      "session": "11",
+      "events": 32,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 154.262,
+      "most_negative_gap_s": 0.639
+    },
+    {
+      "user": "17",
+      "session": "13",
+      "events": 21,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 135.418,
+      "most_negative_gap_s": 1.359
+    },
+    {
+      "user": "24",
+      "session": "16",
+      "events": 16,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 126.236,
+      "most_negative_gap_s": 0.366
+    },
+    {
+      "user": "24",
+      "session": "24",
+      "events": 19,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 134.0,
+      "most_negative_gap_s": 6.044
+    },
+    {
+      "user": "44",
+      "session": "9",
+      "events": 64,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 173.433,
+      "most_negative_gap_s": 0.044
+    },
+    {
+      "user": "46",
+      "session": "4",
+      "events": 74,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 13969999999524.28,
+      "most_negative_gap_s": 0.337
+    },
+    {
+      "user": "47",
+      "session": "20",
+      "events": 29,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 133.142,
+      "most_negative_gap_s": 0.301
+    },
+    {
+      "user": "54",
+      "session": "2",
+      "events": 77,
+      "negative_gaps": 1,
+      "gaps_over_max": 0,
+      "worst_gap_s": 18.437,
+      "most_negative_gap_s": -49.045
+    },
+    {
+      "user": "70",
+      "session": "15",
+      "events": 83,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 122.984,
+      "most_negative_gap_s": 0.369
+    },
+    {
+      "user": "70",
+      "session": "7",
+      "events": 160,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 139699999998977.75,
+      "most_negative_gap_s": 0.251
+    },
+    {
+      "user": "77",
+      "session": "18",
+      "events": 79,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 137.159,
+      "most_negative_gap_s": 0.052
+    },
+    {
+      "user": "0",
+      "session": "14",
+      "events": 75,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 129.106,
+      "most_negative_gap_s": 0.316
+    },
+    {
+      "user": "1",
+      "session": "18",
+      "events": 22,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 133.887,
+      "most_negative_gap_s": 0.296
+    },
+    {
+      "user": "2",
+      "session": "4",
+      "events": 91,
+      "negative_gaps": 0,
+      "gaps_over_max": 1,
+      "worst_gap_s": 146.417,
+      "most_negative_gap_s": 0.229
+    },
+    {
+      "user": "5",
+      "session": "11",
+      "events": 11,
+      "negative_gaps": 0,
+      "gaps_over_max": 2,
+      "worst_gap_s": 202.137,
+      "most_negative_gap_s": 0.731
+    },
+    {
+      "user": "5",
+      "session": "12",
+      "events": 33,
+      "negative_gaps": 0,
+      "gaps_over_max": 2,
+      "worst_gap_s": 182.971,
+      "most_negative_gap_s": 0.291
+    },
+    {
+      "user": "5",
+      "session": "4",
+      "events": 37,
+      "negative_gaps": 0,
+      "gaps_over_max": 2,
+      "worst_gap_s": 166.955,
+      "most_negative_gap_s": 0.335
+    }
+  ]
+}
