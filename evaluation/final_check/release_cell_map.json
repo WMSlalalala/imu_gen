@@ -1,0 +1,1181 @@
+{
+ "_README": "Canonical map of the PUBLISHED 90-cell release. Written 2026-08-10 after a workflow was found pointing at detectors_90cell, which is the r1 pre-fix baseline (FAR@frr5 mean 0.4447) and NOT the release (0.7746). Always resolve a cell through this file.",
+ "release_scores_root": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells",
+ "release_models_root": "/mnt/share/mwang49/data7/direct100k_final/detector_models",
+ "r1_baseline_do_not_use": "/mnt/share/mwang49/data7/results/direct100k/detectors_90cell/cells",
+ "far5_mean_release": 0.774575,
+ "far5_mean_r1_baseline": 0.444733,
+ "why_it_fools_you": "tap/swipe/pinch imu_only (18 cells) use replay_dataset_full in BOTH trees and are identical; only scroll+keystroke imu_only and every trajectory-touching cell differ.",
+ "cells": {
+  "keystroke__imu_only__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__authconformer/thresholds.json",
+   "frr5": 0.8349258899688721,
+   "eer": 0.6568390130996704,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_only__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "keystroke__imu_only__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__behaveformer_stdat/thresholds.json",
+   "frr5": 0.5352557301521301,
+   "eer": 0.5050538182258606,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_only__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "keystroke__imu_only__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__hmog_style_rf/thresholds.json",
+   "frr5": 0.6839964674703624,
+   "eer": 0.41792614913556186,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_only__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_only__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__hmog_style_svm/thresholds.json",
+   "frr5": 0.4318700572254676,
+   "eer": 0.007577499779654426,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_only__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_only__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__paper_svm/thresholds.json",
+   "frr5": 0.4297561258562813,
+   "eer": 0.03817373227681731,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_only__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_only__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_only__paper_xgboost/thresholds.json",
+   "frr5": 0.8151863813400269,
+   "eer": 0.45368683338165283,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_only__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.7601473927497864,
+   "eer": 0.3416482210159302,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "keystroke__imu_trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.5422673225402832,
+   "eer": 0.5086060166358948,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.6926227924162547,
+   "eer": 0.4530541264803355,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.48262799997688316,
+   "eer": 0.03635972375411217,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.5684425316649094,
+   "eer": 0.03960493601045127,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__imu_trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__imu_trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.8247122168540955,
+   "eer": 0.5155804753303528,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__imu_trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.5797834396362305,
+   "eer": 0.5319311618804932,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "keystroke__trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.5101322531700134,
+   "eer": 0.5059753060340881,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "keystroke__trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.7590108698628051,
+   "eer": 0.6035350502406268,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.16343624672209334,
+   "eer": 0.0074424331197508325,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.29636591272080187,
+   "eer": -0.048442447004119926,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "keystroke__trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/keystroke__trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.8631918430328369,
+   "eer": 0.6185905933380127,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v10",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v10/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/keystroke__trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_only__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__authconformer/thresholds.json",
+   "frr5": 0.6563828587532043,
+   "eer": 0.48962339758872986,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_only__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "pinch__imu_only__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__behaveformer_stdat/thresholds.json",
+   "frr5": 0.621711015701294,
+   "eer": 0.498256653547287,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_only__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "pinch__imu_only__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__hmog_style_rf/thresholds.json",
+   "frr5": 0.7576340685760868,
+   "eer": 0.6445215964854669,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_only__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_only__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__hmog_style_svm/thresholds.json",
+   "frr5": 0.27079070179146236,
+   "eer": 0.004441688417282572,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_only__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_only__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__paper_svm/thresholds.json",
+   "frr5": 0.28595860786291466,
+   "eer": 0.013458583869015014,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_only__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_only__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_only__paper_xgboost/thresholds.json",
+   "frr5": 0.8237996697425842,
+   "eer": 0.6696533560752869,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_only__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.8736689686775208,
+   "eer": 0.6463081240653992,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "pinch__imu_trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.7139691114425659,
+   "eer": 0.5364475846290588,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "pinch__imu_trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.7237348982514366,
+   "eer": 0.6202717034139543,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.3156723298646055,
+   "eer": -0.01100222362668797,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.3408228124730942,
+   "eer": 0.030926138850167532,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__imu_trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__imu_trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.7972422242164612,
+   "eer": 0.6347491145133972,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__imu_trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.733738124370575,
+   "eer": 0.5161363482475281,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "pinch__trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.6868079900741577,
+   "eer": 0.5367372035980225,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "pinch__trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.7189804699302486,
+   "eer": 0.5924630442721587,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.290311779513052,
+   "eer": -0.024933247582090243,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.22437477510584297,
+   "eer": 0.012499292584451083,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "pinch__trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/pinch__trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.7912166118621826,
+   "eer": 0.6168837547302246,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/pinch__trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_only__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__authconformer/thresholds.json",
+   "frr5": 0.8401365280151367,
+   "eer": 0.5317633748054504,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_only__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "scroll__imu_only__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__behaveformer_stdat/thresholds.json",
+   "frr5": 0.871391236782074,
+   "eer": 0.5308300256729126,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_only__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "scroll__imu_only__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__hmog_style_rf/thresholds.json",
+   "frr5": 0.7746658730158725,
+   "eer": 0.6305620379620376,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_only__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_only__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__hmog_style_svm/thresholds.json",
+   "frr5": 0.3844740601841719,
+   "eer": -0.04202421192840051,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_only__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_only__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__paper_svm/thresholds.json",
+   "frr5": 0.35097903012131215,
+   "eer": 0.008672955488724626,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_only__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_only__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_only__paper_xgboost/thresholds.json",
+   "frr5": 0.8436194658279419,
+   "eer": 0.6803820133209229,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_only__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.9923269152641296,
+   "eer": 0.8081849217414856,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "scroll__imu_trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.8153945803642273,
+   "eer": 0.46691012382507324,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "scroll__imu_trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.6953935286935286,
+   "eer": 0.6081222222222225,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.3897405773813395,
+   "eer": 0.026431036248495507,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.4024686547410442,
+   "eer": 0.03226728596375611,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__imu_trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__imu_trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.7534279227256775,
+   "eer": 0.6135925650596619,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__imu_trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.9271993637084961,
+   "eer": 0.5090332627296448,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "scroll__trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.6111462712287903,
+   "eer": 0.43297088146209717,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "scroll__trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.7128604617604615,
+   "eer": 0.5957200577200574,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.3571717027856819,
+   "eer": 0.08198381372294439,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.3922076479298735,
+   "eer": 0.056139656986826256,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "scroll__trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/scroll__trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.7857620120048523,
+   "eer": 0.6046449542045593,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v15",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v15/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/scroll__trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_only__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__authconformer/thresholds.json",
+   "frr5": 0.6651148796081543,
+   "eer": 0.49647262692451477,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_only__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "swipe__imu_only__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__behaveformer_stdat/thresholds.json",
+   "frr5": 0.6846945285797119,
+   "eer": 0.4904928505420685,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_only__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "swipe__imu_only__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__hmog_style_rf/thresholds.json",
+   "frr5": 0.7745977902900771,
+   "eer": 0.6681402348851968,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_only__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_only__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__hmog_style_svm/thresholds.json",
+   "frr5": 0.30483574401658287,
+   "eer": -0.002290054522911207,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_only__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_only__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__paper_svm/thresholds.json",
+   "frr5": 0.35383138612450804,
+   "eer": 0.02554118274226975,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_only__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_only__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_only__paper_xgboost/thresholds.json",
+   "frr5": 0.8291236758232117,
+   "eer": 0.6961777210235596,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_only__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.9608525633811951,
+   "eer": 0.6141940951347351,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "swipe__imu_trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.868583083152771,
+   "eer": 0.5397387146949768,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "swipe__imu_trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.753670732569555,
+   "eer": 0.6217535944192277,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.3820763522221499,
+   "eer": -0.07806346689568612,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.3678906496109886,
+   "eer": -0.062316450227932335,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__imu_trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__imu_trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.8281400203704834,
+   "eer": 0.6377285718917847,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__imu_trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.8908795118331909,
+   "eer": 0.5495589971542358,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "swipe__trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.7565039396286011,
+   "eer": 0.47866806387901306,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "swipe__trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.785205742891812,
+   "eer": 0.5960555538136845,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.3037665875063705,
+   "eer": -0.08571630500580912,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.3572293948750615,
+   "eer": -0.06338147006695267,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "swipe__trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/swipe__trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.8490198254585266,
+   "eer": 0.6206493377685547,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v8",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v8/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/swipe__trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_only__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__authconformer/thresholds.json",
+   "frr5": 0.7804486751556396,
+   "eer": 0.658306896686554,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_only__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "tap__imu_only__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__behaveformer_stdat/thresholds.json",
+   "frr5": 0.8456559777259827,
+   "eer": 0.608239471912384,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_only__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "tap__imu_only__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__hmog_style_rf/thresholds.json",
+   "frr5": 0.8548549478801978,
+   "eer": 0.7548514336150164,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_only__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_only__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__hmog_style_svm/thresholds.json",
+   "frr5": 0.3357731303960103,
+   "eer": 0.01538646755120162,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_only__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_only__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__paper_svm/thresholds.json",
+   "frr5": 0.30713003196261374,
+   "eer": 0.040712731943679664,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_only__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_only__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_only__paper_xgboost/thresholds.json",
+   "frr5": 0.9023129940032959,
+   "eer": 0.7933505773544312,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_full",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_full/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_only__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.986500084400177,
+   "eer": 0.8024958372116089,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "tap__imu_trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.9717734456062317,
+   "eer": 0.7796282768249512,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "tap__imu_trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.8361243906790622,
+   "eer": 0.7348210515744158,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.41130172784580726,
+   "eer": 0.01863502977018809,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.37705433607438976,
+   "eer": 0.046982583885465085,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__imu_trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__imu_trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.8815332055091858,
+   "eer": 0.7635765671730042,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__imu_trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__trajectory_xytime__authconformer": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__authconformer/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__authconformer/thresholds.json",
+   "frr5": 0.7563283443450928,
+   "eer": 0.6566989421844482,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__trajectory_xytime__authconformer",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "tap__trajectory_xytime__behaveformer_stdat": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__behaveformer_stdat/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__behaveformer_stdat/thresholds.json",
+   "frr5": 0.6582555174827576,
+   "eer": 0.597374677658081,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__trajectory_xytime__behaveformer_stdat",
+   "model_artifacts": [
+    "checkpoint.pt"
+   ]
+  },
+  "tap__trajectory_xytime__hmog_style_rf": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__hmog_style_rf/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__hmog_style_rf/thresholds.json",
+   "frr5": 0.8445339700695178,
+   "eer": 0.5976153466430071,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__trajectory_xytime__hmog_style_rf",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__trajectory_xytime__hmog_style_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__hmog_style_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__hmog_style_svm/thresholds.json",
+   "frr5": 0.20414616470302535,
+   "eer": 0.030895321628708193,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__trajectory_xytime__hmog_style_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__trajectory_xytime__paper_svm": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__paper_svm/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__paper_svm/thresholds.json",
+   "frr5": 0.19410358186715207,
+   "eer": 0.019648085393806223,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__trajectory_xytime__paper_svm",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  },
+  "tap__trajectory_xytime__paper_xgboost": {
+   "scores": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__paper_xgboost/test_scores.jsonl.gz",
+   "thresholds": "/home/mwang49/new/data7/data7_final_monitor_metrics_v1/USENIX8.25/code/dataset_test/results/cells/tap__trajectory_xytime__paper_xgboost/thresholds.json",
+   "frr5": 0.8361629247665405,
+   "eer": 0.7622158527374268,
+   "score_direction": "larger_is_more_fake",
+   "bundle": "replay_dataset_v3",
+   "manifest": "/mnt/share/mwang49/data7/results/direct100k/replay_dataset_v3/event_manifest.jsonl",
+   "model_dir": "/mnt/share/mwang49/data7/direct100k_final/detector_models/tap__trajectory_xytime__paper_xgboost",
+   "model_artifacts": [
+    "model.joblib"
+   ]
+  }
+ }
+}
