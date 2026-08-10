@@ -1,0 +1,3538 @@
+{
+ "schema_version": "half_attack_joint_v1",
+ "status": "BUILD PHASE COMPLETE -- NO GRID RESULTS YET",
+ "written_before_any_arm_was_scored_on_the_grid": true,
+ "experiment": "partial-attack joint ablation (fake-one-channel + real-other, with mismatch control)",
+ "modality": "imu_trajectory_xytime",
+ "scope": {
+  "cells": [
+   "tap__imu_trajectory_xytime__hmog_style_svm",
+   "tap__imu_trajectory_xytime__hmog_style_rf",
+   "tap__imu_trajectory_xytime__paper_svm",
+   "tap__imu_trajectory_xytime__paper_xgboost",
+   "scroll__imu_trajectory_xytime__hmog_style_svm",
+   "scroll__imu_trajectory_xytime__hmog_style_rf",
+   "scroll__imu_trajectory_xytime__paper_svm",
+   "scroll__imu_trajectory_xytime__paper_xgboost",
+   "swipe__imu_trajectory_xytime__hmog_style_svm",
+   "swipe__imu_trajectory_xytime__hmog_style_rf",
+   "swipe__imu_trajectory_xytime__paper_svm",
+   "swipe__imu_trajectory_xytime__paper_xgboost",
+   "pinch__imu_trajectory_xytime__hmog_style_svm",
+   "pinch__imu_trajectory_xytime__hmog_style_rf",
+   "pinch__imu_trajectory_xytime__paper_svm",
+   "pinch__imu_trajectory_xytime__paper_xgboost",
+   "keystroke__imu_trajectory_xytime__hmog_style_svm",
+   "keystroke__imu_trajectory_xytime__hmog_style_rf",
+   "keystroke__imu_trajectory_xytime__paper_svm",
+   "keystroke__imu_trajectory_xytime__paper_xgboost"
+  ],
+  "cell_count": 20,
+  "resolved_through": "/mnt/share/mwang49/data7/code/baselines/release_cell_map.json",
+  "deep_cells_gpu_deferred": {
+   "cells_deferred": [
+    "tap__imu_trajectory_xytime__behaveformer_stdat",
+    "tap__imu_trajectory_xytime__authconformer",
+    "scroll__imu_trajectory_xytime__behaveformer_stdat",
+    "scroll__imu_trajectory_xytime__authconformer",
+    "swipe__imu_trajectory_xytime__behaveformer_stdat",
+    "swipe__imu_trajectory_xytime__authconformer",
+    "pinch__imu_trajectory_xytime__behaveformer_stdat",
+    "pinch__imu_trajectory_xytime__authconformer",
+    "keystroke__imu_trajectory_xytime__behaveformer_stdat",
+    "keystroke__imu_trajectory_xytime__authconformer"
+   ],
+   "events_built_per_action": 120000,
+   "events_total": 600000,
+   "forward_passes": 1200000,
+   "padded_input_elements_float32": 3643200000,
+   "padded_input_bytes_float32": 14572800000,
+   "per_action_window_samples": {
+    "tap": 16,
+    "scroll": 208,
+    "swipe": 176,
+    "pinch": 100,
+    "keystroke": 512
+   },
+   "wall_clock": "NOT PROJECTED -- a GPU throughput benchmark is required and this session is under a no-GPU constraint. The counts above are computed; any hours figure would be invented."
+  }
+ },
+ "arms": {
+  "row1": "genuine release event (read, never rebuilt)",
+  "row2": "the release fake event (read, never rebuilt)",
+  "row3": "fake touch + REAL inertial window from one of the victim five held recordings",
+  "row4": "REAL touch from one of the victim five held recordings + fake inertial window",
+  "row5": "MISMATCH CONTROL -- real touch A + real inertial window B, same victim, A != B, different sessions",
+  "row5_unmatched": "diagnostic only -- row 5 with the template drawn uniformly instead of length-matched; reported so the effect of the length match is visible"
+ },
+ "preregistered_outcomes": {
+  "written": "before any arm was scored on the grid",
+  "primary_comparison": "row3 - row5 (the only duration/T-matched attack-vs-control pair) and row4 - row2 (the only duration/T-matched pair for row 4)",
+  "claim_holds": "rows 3 and 4 markedly BELOW row 5 (accepted less often, i.e. caught more), paired user-clustered intervals on the difference excluding 0 -> the joint detector reads cross-channel CONTENT consistency, half attacks are caught on their merits, and synthesising both channels is necessary.",
+  "claim_fails": "rows 3 and 4 indistinguishable from row 5 -> what is detected is the pairing mechanics, not the content; the joint deficit remains undiagnosed. Report as such.",
+  "cross_pairing_undetectable": "row 5 itself close to row 2 -> cross-pairing is not detectable at all and rows 3/4 measure content against row 2; state which comparison is then being relied on.",
+  "otherwise": "inconclusive, and must be labelled inconclusive.",
+  "known_degeneracies_that_must_be_labelled_at_the_point_of_the_number": [
+   "For tap and scroll the release fake touch IS the victim own held recording transported to the carrier endpoints: rebuilding it from the five reproduces the released fake trajectory to float32 ulp (see release_touch_channel_is_a_replayed_five_shot_template). row4 - row2 is therefore near-tautological for those two actions and any null result there is guaranteed by construction, not measured.",
+   "For the same reason row 3 differs from row 5 in touch CONTENT only through the extra resample and re-clock the fake template already went through; a null row3 - row5 for tap/scroll is weak evidence about content."
+  ]
+ },
+ "compliance": {
+  "F1": "no threshold, arm or rule chosen on test data or test scores; thresholds are the released cells frr5 scalars with selection_split=development.",
+  "F3": "parity table below lists event count, action composition, duration and T distributions and the mechanical steps per arm; row3/row5 are matched event for event on T and duration, row4/row2 are matched as multisets.",
+  "F4": "rows 3 and 4 consume exactly 5 distinct real recordings per (victim, action) (measured: max 5). Row 5 is a control on pairing mechanics, not an attack, and is declared OUT of the five-shot budget: it drew from up to 84 distinct genuine recordings per (victim, action, repetition).",
+  "F5": "shot choice is a balanced random assignment over the published shot ordinals; row 5 template choice is by nearest event length to row 3 paired fake template. Inputs are event identities and lengths only -- no detector output, label or test quantity enters any selection.",
+  "F6": "detectors read-only; sha256 of all 20 model.joblib and thresholds.json recorded before and after: unchanged = True",
+  "F7": "coverage declaration below.",
+  "F8": "rows 3, 4 and 5 undergo step-for-step identical mechanics (S0..S4 below); row 5 is the same-mechanics genuine-only control.",
+  "F9": "the resampling unit for every interval will be the user (20 test users as clusters, 2000 replicates, one shared user multiset per replicate across cells). No interval is reported in this build-phase file.",
+  "F13": "preregistered_outcomes above, committed before any arm was scored.",
+  "F15": "coverage/shortfall blocks below; build rejects counted (0)."
+ },
+ "coverage_declaration_F7": {
+  "entitled_cells": "the 20 classical imu_trajectory_xytime cells only (10 deep joint cells GPU-deferred).",
+  "why_not_imu_only": "the arms do not alter the inertial channel at all -- row 3 carries a genuine held recording IMU bit for bit and row 4 carries the release fake IMU bit for bit. An imu_only number would restate the genuine arm or the released fake arm and would say nothing about pairing.",
+  "why_not_trajectory_only": "the declared variable is the CROSS-CHANNEL pairing, which does not exist in a single-modality cell. On trajectory_xytime the arms would differ from the release only by which carrier supplied the row count and clock, which is a re-timing measurement, not a half-attack measurement.",
+  "runner_must_refuse": "cells outside the 20 named above."
+ },
+ "mechanics": {
+  "S0": "CARRIER = the event supplying the inertial window; it fixes T = len(carrier imu) and D = carrier_trajectory[-1, 7] * 1000 ms (channel 7, never a row count, never an IMU length).",
+  "S1": "TEMPLATE = the event supplying the touch trajectory, resampled to T by the release own _resample_touch_template.",
+  "S2": "SECOND STAGE: endpoint replacement onto the CARRIER own first/last touch sample, run through the release own _observe_exact_touch_template (tap/scroll/swipe) with the release own _fiveshot_tap_drift_request endpoint policy for tap. Identity for pinch and keystroke -- see correction_2.",
+  "S3": "elapsed rewritten by detector_grid_clock(T, D); dx/dy recomputed from the resampled contact mask and coordinates.",
+  "S4": "modality_values(imu, trajectory, 'imu_trajectory_xytime').",
+  "identical_across_rows_3_4_5": true
+ },
+ "correction_1_resample_rule": {
+  "problem": "_resample_touch_template returns early when source and target lengths match (replay_dataset_builder.py:1404), so the earlier max|delta| = 0 over 5,584 events only exercised the early-return path and proved nothing.",
+  "what_was_done": "the rule was characterised on genuinely DIFFERENT lengths only; every call in the probe has target != len(source).",
+  "findings": {
+   "n_templates": 100,
+   "source_len_range": [
+    14,
+    313
+   ],
+   "held_index_rule_is_round_half_up_nearest_neighbour": true,
+   "elapsed_col7_is_linear_interp_of_source_col7": true,
+   "first_and_last_rows_preserved": true,
+   "elapsed_monotone_nondecreasing": true,
+   "resampled_xy_values_are_a_subset_of_source_values": true,
+   "max_gap_vs_true_linear_interp_of_x_rel": 0.05933745549275332,
+   "mean_gap_vs_true_linear_interp_of_x_rel": 0.007398267307397821,
+   "upsample_duplicated_row_fraction_mean": 0.2646274284239905,
+   "roundtrip_N_to_M_to_N_max_abs_x_err_max": 0.15427738428115845,
+   "roundtrip_N_to_M_to_N_max_abs_x_err_mean": 0.004981435090303421,
+   "roundtrip_exact_fraction": 0.718,
+   "dxdy_recomputed_from_resampled_contact_and_xy": true,
+   "dxdy_equals_a_hold_resample_of_source_dxdy_count": "1/40",
+   "equal_length_call_is_early_return_identity": true
+  },
+  "plain_statement": "On differing lengths the rule is NOT interpolation of the path. Channels 0,1,2,3,4,8 (contact, x, y, pressure, pointer count, availability) are NEAREST-NEIGHBOUR HELD with index round(t*(n-1)) (verified exactly); only channel 7 (elapsed) is linearly interpolated; channels 5,6 (dx, dy) are RECOMPUTED from the resampled contact mask and coordinates, not resampled (1/40 events agree with a hold-resample of the source deltas). First and last rows are preserved. Upsampling duplicates 26.5% of consecutive rows on average. The map is lossy and only 71.8% of N->M->N round trips return the original x column (max round-trip error 0.154 in screen-relative units). It departs from a true linear interpolation of x by up to 0.059 relative."
+ },
+ "correction_2_second_stage": {
+  "problem": "repair_joint() omitted the release second stage (endpoint replacement at replay_dataset_builder.py:2164 for tap/scroll/swipe and pinch area similarity at :1592), which would leave rows 3/4/5 with an uncontrolled screen-position shift relative to rows 1/2.",
+  "what_the_release_actually_does": "the requested endpoints come from the attacker bound Android CARRIER target (_single_pointer_target_control_points_px, replay_dataset_builder.py:4615), NOT from the donor template. Measured over 120 released fake events per action for 3 test victims, the requested start sits a median 351-405 px away from the donor own start, so the second stage is a real spatial move.",
+  "decision": "RESTORED for tap, scroll and swipe, by calling the release own _observe_exact_touch_template with the carrier own first/last touch sample as the requested control points -- the same semantics the release uses (carrier owns the endpoints).",
+  "not_restorable_for": {
+   "pinch": "the release pinch placement (_observe_pinch_area_similarity) needs frozen live two-pointer endpoint geometry (pinch_start_points_px / pinch_end_points_px / pinch_scale_direction) that only a genuine material row carries; a released FAKE pinch, which is row 3 touch donor, stores only the centroid and carries no such geometry.",
+   "keystroke": "the release keystroke touch is not a transported template at all -- fiveshot_keystroke_rhythm_v1 composes it from key DOWN anchors taken from a replacement carrier plus the victim hold/flight rhythm, so there is no template-to-endpoint transport to reapply."
+  },
+  "treatment_for_those_two": "S2 is the IDENTITY, applied identically to rows 3, 4 and 5. Consequently, for pinch and keystroke rows 3/4 are compared ONLY against row 5 and never against rows 1/2.",
+  "treatment_identical_across_rows_3_4_5": true,
+  "second_stage_modes_observed": {
+   "tap|row3|tap_translation": 120,
+   "tap|row4|tap_translation": 120,
+   "tap|row5|tap_translation": 120,
+   "tap|row5_unmatched|tap_translation": 120,
+   "scroll|row3|scroll_chord_frame": 120,
+   "scroll|row4|scroll_chord_frame": 120,
+   "scroll|row5|scroll_chord_frame": 120,
+   "scroll|row5_unmatched|scroll_chord_frame": 120,
+   "swipe|row3|swipe_chord_frame": 120,
+   "swipe|row4|swipe_chord_frame": 120,
+   "swipe|row5|swipe_chord_frame": 120,
+   "swipe|row5_unmatched|swipe_chord_frame": 120,
+   "pinch|row3|identity_no_release_placement_available": 120,
+   "pinch|row4|identity_no_release_placement_available": 120,
+   "pinch|row5|identity_no_release_placement_available": 120,
+   "pinch|row5_unmatched|identity_no_release_placement_available": 120,
+   "keystroke|row3|identity_no_release_placement_available": 120,
+   "keystroke|row4|identity_no_release_placement_available": 120,
+   "keystroke|row5|identity_no_release_placement_available": 120,
+   "keystroke|row5_unmatched|identity_no_release_placement_available": 120
+  },
+  "probe": {
+   "tap": {
+    "bundle": "replay_dataset_v3",
+    "n": 120,
+    "len_change_frac": 0.7,
+    "stage1_only_vs_release_max_abs_xy_rel": {
+     "max": 0.6640625,
+     "median": 0.2010895162820816,
+     "frac_below_1e-5": 0.0,
+     "frac_below_1e-3": 0.0
+    },
+    "pressure_max_abs_diff": 0.0,
+    "contact_pointer_avail_max_abs_diff": 0.0,
+    "requested_start_minus_donor_own_start_px": {
+     "max": 1341.4596527663439,
+     "median": 351.45089725354273
+    }
+   },
+   "scroll": {
+    "bundle": "replay_dataset_v15",
+    "n": 120,
+    "len_change_frac": 0.8,
+    "stage1_only_vs_release_max_abs_xy_rel": {
+     "max": 0.760185182094574,
+     "median": 0.33623206615448,
+     "frac_below_1e-5": 0.0,
+     "frac_below_1e-3": 0.0
+    },
+    "pressure_max_abs_diff": 0.0,
+    "contact_pointer_avail_max_abs_diff": 0.0,
+    "requested_start_minus_donor_own_start_px": {
+     "max": 1072.4462690503426,
+     "median": 404.4591461708988
+    }
+   },
+   "swipe": {
+    "bundle": "replay_dataset_v8",
+    "n": 120,
+    "len_change_frac": 0.9833333333333333,
+    "stage1_only_vs_release_max_abs_xy_rel": {
+     "max": 0.7806886434555054,
+     "median": 0.4167245328426361,
+     "frac_below_1e-5": 0.0,
+     "frac_below_1e-3": 0.0
+    },
+    "pressure_max_abs_diff": 0.0,
+    "contact_pointer_avail_max_abs_diff": 0.0,
+    "requested_start_minus_donor_own_start_px": {
+     "max": 1244.3949883996981,
+     "median": 405.84571004379507
+    }
+   },
+   "pinch": {
+    "bundle": "replay_dataset_v3",
+    "n": 120,
+    "len_change_frac": 1.0,
+    "stage1_only_vs_release_max_abs_xy_rel": {
+     "max": 0.5523567199707031,
+     "median": 0.17385561764240265,
+     "frac_below_1e-5": 0.0,
+     "frac_below_1e-3": 0.0
+    },
+    "pressure_max_abs_diff": 0.0,
+    "contact_pointer_avail_max_abs_diff": 0.0,
+    "requested_start_minus_donor_own_start_px": "n/a (pinch: area request, no start/end)"
+   }
+  }
+ },
+ "release_touch_channel_is_a_replayed_five_shot_template": {
+  "why_this_matters": "it decides what row 3 and row 4 can mean. If the released fake touch is itself a real held recording of the victim, then \"fake touch\" and \"real touch from the five\" are not two different contents and the contrast the experiment intends is not present in the release.",
+  "evidence": {
+   "provenance": "every released fake tap/scroll/swipe carries donor.role = exact_touch_template_generator and donor.source_material_cluster_id pointing at one of the victim own five published shots, with template_resampled_to_carrier = true; every released fake pinch carries role = fiveshot_pinch_area_similarity with the same kind of pointer; keystroke carries no material template.",
+   "bitwise": "the lifecycle columns of the resampled material template (contact, pointer count, availability) and its pressure column are bitwise identical to the released fake for all four template-based actions (max abs diff 0.0 over 120 events per action).",
+   "full_reconstruction": {
+    "tap": {
+     "n": 200,
+     "no_material_or_rejected": 0,
+     "max_abs_xy_rel_diff_vs_released_fake": {
+      "mean": 6.705658393002523e-09,
+      "median": 0.0,
+      "p95": 5.960464477539063e-08,
+      "max": 5.960464477539063e-08,
+      "frac_below_1e-3": 1.0,
+      "frac_below_1e-2": 1.0
+     }
+    },
+    "scroll": {
+     "n": 200,
+     "no_material_or_rejected": 0,
+     "max_abs_xy_rel_diff_vs_released_fake": {
+      "mean": 6.064772605895997e-08,
+      "median": 5.960464477539063e-08,
+      "p95": 5.960464477539063e-08,
+      "max": 2.980232238769531e-07,
+      "frac_below_1e-3": 1.0,
+      "frac_below_1e-2": 1.0
+     }
+    },
+    "swipe": {
+     "n": 200,
+     "no_material_or_rejected": 0,
+     "max_abs_xy_rel_diff_vs_released_fake": {
+      "mean": 0.038472447022795675,
+      "median": 0.020148038864135742,
+      "p95": 0.1358554452657698,
+      "max": 0.650335967540741,
+      "frac_below_1e-3": 0.0,
+      "frac_below_1e-2": 0.165
+     }
+    },
+    "pinch": {
+     "n": 200,
+     "no_material_or_rejected": 0,
+     "max_abs_xy_rel_diff_vs_released_fake": {
+      "mean": 0.18544883027672768,
+      "median": 0.1724022626876831,
+      "p95": 0.389373160898685,
+      "max": 0.571632981300354,
+      "frac_below_1e-3": 0.0,
+      "frac_below_1e-2": 0.0
+     }
+    },
+    "keystroke": {
+     "n": 0,
+     "no_material_or_rejected": 200,
+     "max_abs_xy_rel_diff_vs_released_fake": {
+      "mean": NaN,
+      "median": NaN,
+      "p95": NaN,
+      "max": NaN,
+      "frac_below_1e-3": 0.0,
+      "frac_below_1e-2": 0.0
+     }
+    }
+   }
+  },
+  "plain_statement": "Rebuilding the released fake touch from the victim five held recordings through S1+S2+S3 reproduces the released fake trajectory to float32 ulp for tap (max 6.0e-8 screen-relative) and scroll (max 3.0e-7), to a median 0.020 screen-relative for swipe, and not at all for pinch (identity S2 here vs a similarity in the release) or keystroke (different mechanism). So (a) the builder IS the release touch pipeline, byte for byte where the release path is reconstructable, and (b) for tap and scroll the release touch channel contains no synthetic geometry.",
+  "consequence_for_row4": "row 4 for tap and scroll is the release arm re-derived with a re-drawn shot; row4 - row2 there is near-tautological (F14) and must be labelled where the number is stated.",
+  "representation_note": "the attacker material is read out of the RELEASE bundle so that rows 3/4/5 share the observer and rebuild method of rows 1/2. The release generator consumed the detector_dataset_100k representation of the same five recordings; the two representations of one recording have identical row counts but differ in x/y by a median 0.0-0.036 screen-relative: {\"tap\": {\"pairs\": 30, \"identical_length_frac\": 1.0, \"max_abs_xy_after_common_resample\": {\"median\": 0.0, \"p95\": 0.005859979987144463, \"max\": 0.009245574474334717, \"frac_below_1e-6\": 0.8333333333333334}}, \"scroll\": {\"pairs\": 30, \"identical_length_frac\": 1.0, \"max_abs_xy_after_common_resample\": {\"median\": 0.01583009958267212, \"p95\": 0.03428562432527542, \"max\": 0.036974310874938965, \"frac_below_1e-6\": 0.0}}, \"swipe\": {\"pairs\": 30, \"identical_length_frac\": 1.0, \"max_abs_xy_after_common_resample\": {\"median\": 0.014430403709411621, \"p95\": 0.04152556955814361, \"max\": 0.056677818298339844, \"frac_below_1e-6\": 0.0}}, \"pinch\": {\"pairs\": 30, \"identical_length_frac\": 1.0, \"max_abs_xy_after_common_resample\": {\"median\": 0.0356530100107193, \"p95\": 0.061979387700557706, \"max\": 0.06343293190002441, \"frac_below_1e-6\": 0.0}}, \"keystroke\": {\"pairs\": 30, \"identical_length_frac\": 1.0, \"max_abs_xy_after_common_resample\": {\"median\": 0.0, \"p95\": 0.0, \"max\": 0.0, \"frac_below_1e-6\": 1.0}}}"
+ },
+ "fiveshot_resolution": {
+  "chain": "material_manifest.jsonl source_cluster_id -> genuine_bindings.jsonl source_event_id (verified present for all 500 clusters) -> event id \"genuine-<cluster>\" -> row of the release bundle for that action.",
+  "user_action_pairs": 100,
+  "pairs_resolving_all_five_with_both_channels_present": 100,
+  "shortfalls": [],
+  "note": "shortfalls is empty: all 20 test victims x 5 actions resolve all five held recordings, every one present in the release bundle with T >= 2 and both channels sharing one offsets array so len(imu) == len(trajectory)."
+ },
+ "row5_feasibility": {
+  "requirement": "two genuine events of the same action of the same victim in DIFFERENT sessions",
+  "victims_meeting_it": "100 of 100 (victim, action) pairs; the five held recordings themselves already span 2 or more sessions in 100 of 100 pairs",
+  "victims_not_meeting_it": [],
+  "what_row5_drew_from": "carrier B is one of the victim FIVE held recordings, chosen by the same balanced random shot rule and with the SAME shot as row 3 at the same index, so row 3 and row 5 have identical T and duration event for event. Template A is a genuine event of the same victim and action in a session different from B, drawn from the victim FULL genuine pool in the release bundle -- explicitly NOT restricted to the five, because row 5 is a control on pairing mechanics and not an attack. Fraction of A draws that happened to land on one of the five: {\"tap\": 0.10265, \"scroll\": 0.1912, \"swipe\": 0.04235, \"pinch\": 0.048875, \"keystroke\": 0.035975}",
+  "distinct_real_recordings_consumed": {
+   "row3": 5,
+   "row4": 5,
+   "row5": 84,
+   "row5_unmatched": 100
+  }
+ },
+ "builder_validation": {
+  "events_built": "6 per (victim, action, arm) at repetition 0 = 120 per (action, arm), 2400 in total across 5 actions x 4 arms",
+  "build_rejects": {},
+  "wellformedness_problems": [],
+  "checks_applied_per_event": [
+   "shape == (T, 15)",
+   "all finite",
+   "trajectory x,y within [0,1]",
+   "elapsed[0] == 0",
+   "elapsed non-decreasing",
+   "T >= 2",
+   "elapsed column bitwise equal to the carrier own clock"
+  ],
+  "clock_matches_carrier_bitwise": "true for every built example inspected -- the duration recovered from channel 7 and re-expanded by detector_grid_clock lands on the carrier own float32 column exactly, so no new clock fingerprint is created",
+  "example_audits": {
+   "tap|row3": {
+    "T": 8.0,
+    "duration_ms": 59.99999865889549,
+    "template_T": 9.0,
+    "orientation_id": 0.0,
+    "second_stage": "tap_translation",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "tap_donor_drift_px": 0.0,
+    "tap_requested_drift_px": 0.0,
+    "tap_donor_drift_scale": 1.0,
+    "tap_drift_limit_px": 24.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s12",
+    "template_session": "generated-hmog_u006",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     8,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.05999999865889549
+    ]
+   },
+   "tap|row4": {
+    "T": 9.0,
+    "duration_ms": 79.99999821186066,
+    "template_T": 11.0,
+    "orientation_id": 0.0,
+    "second_stage": "tap_translation",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "tap_donor_drift_px": 0.0,
+    "tap_requested_drift_px": 0.0,
+    "tap_donor_drift_scale": 1.0,
+    "tap_drift_limit_px": 24.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "generated-hmog_u006",
+    "template_session": "hmog_u006_s07",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     9,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.07999999821186066
+    ]
+   },
+   "tap|row5": {
+    "T": 8.0,
+    "duration_ms": 59.99999865889549,
+    "template_T": 9.0,
+    "orientation_id": 0.0,
+    "second_stage": "tap_translation",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "tap_donor_drift_px": 0.0,
+    "tap_requested_drift_px": 0.0,
+    "tap_donor_drift_scale": 1.0,
+    "tap_drift_limit_px": 24.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s12",
+    "template_session": "hmog_u006_s18",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     8,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.05999999865889549
+    ]
+   },
+   "tap|row5_unmatched": {
+    "T": 8.0,
+    "duration_ms": 59.99999865889549,
+    "template_T": 8.0,
+    "orientation_id": 0.0,
+    "second_stage": "tap_translation",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "tap_donor_drift_px": 0.0,
+    "tap_requested_drift_px": 0.0,
+    "tap_donor_drift_scale": 1.0,
+    "tap_drift_limit_px": 24.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s12",
+    "template_session": "hmog_u006_s19",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     8,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.05999999865889549
+    ]
+   },
+   "scroll|row3": {
+    "T": 65.0,
+    "duration_ms": 639.9999856948853,
+    "template_T": 56.0,
+    "orientation_id": 0.0,
+    "second_stage": "scroll_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s17",
+    "template_session": "generated-hmog_u006",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     65,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.6399999856948853
+    ]
+   },
+   "scroll|row4": {
+    "T": 56.0,
+    "duration_ms": 550.000011920929,
+    "template_T": 46.0,
+    "orientation_id": 0.0,
+    "second_stage": "scroll_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "generated-hmog_u006",
+    "template_session": "hmog_u006_s16",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     56,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.550000011920929
+    ]
+   },
+   "scroll|row5": {
+    "T": 65.0,
+    "duration_ms": 639.9999856948853,
+    "template_T": 57.0,
+    "orientation_id": 0.0,
+    "second_stage": "scroll_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s17",
+    "template_session": "hmog_u006_s02",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     65,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.6399999856948853
+    ]
+   },
+   "scroll|row5_unmatched": {
+    "T": 65.0,
+    "duration_ms": 639.9999856948853,
+    "template_T": 36.0,
+    "orientation_id": 0.0,
+    "second_stage": "scroll_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s17",
+    "template_session": "hmog_u006_s19",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     65,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.6399999856948853
+    ]
+   },
+   "swipe|row3": {
+    "T": 132.0,
+    "duration_ms": 1309.999942779541,
+    "template_T": 8.0,
+    "orientation_id": 0.0,
+    "second_stage": "swipe_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s19",
+    "template_session": "generated-hmog_u006",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     132,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     1.309999942779541
+    ]
+   },
+   "swipe|row4": {
+    "T": 8.0,
+    "duration_ms": 70.00000029802322,
+    "template_T": 175.0,
+    "orientation_id": 0.0,
+    "second_stage": "swipe_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "generated-hmog_u006",
+    "template_session": "hmog_u006_s19",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     8,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.07000000029802322
+    ]
+   },
+   "swipe|row5": {
+    "T": 132.0,
+    "duration_ms": 1309.999942779541,
+    "template_T": 19.0,
+    "orientation_id": 0.0,
+    "second_stage": "swipe_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s19",
+    "template_session": "hmog_u006_s07",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     132,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     1.309999942779541
+    ]
+   },
+   "swipe|row5_unmatched": {
+    "T": 132.0,
+    "duration_ms": 1309.999942779541,
+    "template_T": 25.0,
+    "orientation_id": 0.0,
+    "second_stage": "swipe_chord_frame",
+    "identity_transform": 0.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s19",
+    "template_session": "hmog_u006_s17",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     132,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     1.309999942779541
+    ]
+   },
+   "pinch|row3": {
+    "T": 59.0,
+    "duration_ms": 579.9999833106995,
+    "template_T": 21.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s12",
+    "template_session": "generated-hmog_u006",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     59,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.5799999833106995
+    ]
+   },
+   "pinch|row4": {
+    "T": 21.0,
+    "duration_ms": 200.00000298023224,
+    "template_T": 48.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "generated-hmog_u006",
+    "template_session": "hmog_u006_s12",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     21,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.20000000298023224
+    ]
+   },
+   "pinch|row5": {
+    "T": 59.0,
+    "duration_ms": 579.9999833106995,
+    "template_T": 37.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s12",
+    "template_session": "hmog_u006_s23",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     59,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.5799999833106995
+    ]
+   },
+   "pinch|row5_unmatched": {
+    "T": 59.0,
+    "duration_ms": 579.9999833106995,
+    "template_T": 39.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s12",
+    "template_session": "hmog_u006_s20",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     59,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     0.5799999833106995
+    ]
+   },
+   "keystroke|row3": {
+    "T": 512.0,
+    "duration_ms": 13390.000343322754,
+    "template_T": 512.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s03",
+    "template_session": "generated-hmog_u006",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     512,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     13.390000343322754
+    ]
+   },
+   "keystroke|row4": {
+    "T": 512.0,
+    "duration_ms": 25379.9991607666,
+    "template_T": 45.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "generated-hmog_u006",
+    "template_session": "hmog_u006_s09",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     512,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     25.3799991607666
+    ]
+   },
+   "keystroke|row5": {
+    "T": 512.0,
+    "duration_ms": 13390.000343322754,
+    "template_T": 512.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s03",
+    "template_session": "hmog_u006_s04",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     512,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     13.390000343322754
+    ]
+   },
+   "keystroke|row5_unmatched": {
+    "T": 512.0,
+    "duration_ms": 13390.000343322754,
+    "template_T": 260.0,
+    "orientation_id": 0.0,
+    "second_stage": "identity_no_release_placement_available",
+    "identity_transform": 1.0,
+    "residual_scale": 1.0,
+    "template_orientation_id": 0.0,
+    "orientation_mismatch": 0.0,
+    "carrier_session": "hmog_u006_s03",
+    "template_session": "hmog_u006_s13",
+    "clock_matches_carrier_bitwise": 1.0,
+    "shape": [
+     512,
+     15
+    ],
+    "elapsed_first_last": [
+     0.0,
+     13.390000343322754
+    ]
+   }
+  },
+  "orientation_mismatch_rate": {
+   "keystroke|row3": {
+    "n": 120,
+    "mismatch": 27
+   },
+   "keystroke|row4": {
+    "n": 120,
+    "mismatch": 27
+   },
+   "keystroke|row5": {
+    "n": 120,
+    "mismatch": 5
+   },
+   "keystroke|row5_unmatched": {
+    "n": 120,
+    "mismatch": 6
+   },
+   "pinch|row3": {
+    "n": 120,
+    "mismatch": 6
+   },
+   "pinch|row4": {
+    "n": 120,
+    "mismatch": 6
+   },
+   "pinch|row5": {
+    "n": 120,
+    "mismatch": 1
+   },
+   "pinch|row5_unmatched": {
+    "n": 120,
+    "mismatch": 3
+   },
+   "scroll|row3": {
+    "n": 120,
+    "mismatch": 3
+   },
+   "scroll|row4": {
+    "n": 120,
+    "mismatch": 3
+   },
+   "scroll|row5": {
+    "n": 120,
+    "mismatch": 1
+   },
+   "scroll|row5_unmatched": {
+    "n": 120,
+    "mismatch": 5
+   },
+   "swipe|row3": {
+    "n": 120,
+    "mismatch": 16
+   },
+   "swipe|row4": {
+    "n": 120,
+    "mismatch": 17
+   },
+   "swipe|row5": {
+    "n": 120,
+    "mismatch": 1
+   },
+   "swipe|row5_unmatched": {
+    "n": 120,
+    "mismatch": 1
+   },
+   "tap|row3": {
+    "n": 120,
+    "mismatch": 3
+   },
+   "tap|row4": {
+    "n": 120,
+    "mismatch": 3
+   },
+   "tap|row5": {
+    "n": 120,
+    "mismatch": 1
+   },
+   "tap|row5_unmatched": {
+    "n": 120,
+    "mismatch": 1
+   }
+  },
+  "pipeline_reproduces_published_cell_scores": [
+   {
+    "cell": "scroll__imu_trajectory_xytime__hmog_style_rf",
+    "published_events": 6000,
+    "rescored_events": 6000,
+    "published_not_found_in_shards": 0,
+    "shard_events_not_in_published": 0,
+    "max_abs_diff": 0.0,
+    "mean_abs_diff": 0.0,
+    "exact_bitwise_fraction": 1.0
+   },
+   {
+    "cell": "tap__imu_trajectory_xytime__paper_xgboost",
+    "published_events": 5042,
+    "rescored_events": 5042,
+    "published_not_found_in_shards": 0,
+    "shard_events_not_in_published": 0,
+    "max_abs_diff": 0.0,
+    "mean_abs_diff": 0.0,
+    "exact_bitwise_fraction": 1.0
+   },
+   {
+    "cell": "keystroke__imu_trajectory_xytime__hmog_style_svm",
+    "published_events": 5950,
+    "rescored_events": 5950,
+    "published_not_found_in_shards": 0,
+    "shard_events_not_in_published": 0,
+    "max_abs_diff": 5.329070518200751e-15,
+    "mean_abs_diff": 3.12541775839855e-18,
+    "exact_bitwise_fraction": 0.9983193277310924
+   },
+   {
+    "cell": "pinch__imu_trajectory_xytime__paper_svm",
+    "published_events": 5999,
+    "rescored_events": 5999,
+    "published_not_found_in_shards": 0,
+    "shard_events_not_in_published": 0,
+    "max_abs_diff": 3.9968028886505635e-15,
+    "mean_abs_diff": 1.5545713296968354e-18,
+    "exact_bitwise_fraction": 0.998999833305551
+   },
+   {
+    "cell": "swipe__imu_trajectory_xytime__hmog_style_rf",
+    "published_events": 6000,
+    "rescored_events": 6000,
+    "published_not_found_in_shards": 0,
+    "shard_events_not_in_published": 0,
+    "max_abs_diff": 0.0,
+    "mean_abs_diff": 0.0,
+    "exact_bitwise_fraction": 1.0
+   }
+  ],
+  "smoke_scoring_on_frozen_cells": [
+   {
+    "cell": "scroll__imu_trajectory_xytime__hmog_style_rf",
+    "threshold_frr5": 0.6953935286935286,
+    "threshold_provenance": "cell thresholds.json, selection_split=development",
+    "row3": {
+     "events": 120,
+     "score_mean": 0.5239885146634411,
+     "score_min": 0.03256666666666666,
+     "score_max": 0.9699999999999999,
+     "accepted_fraction_at_frr5": 0.8416666666666667
+    },
+    "row4": {
+     "events": 120,
+     "score_mean": 0.7205698457234484,
+     "score_min": 0.23816594516594508,
+     "score_max": 1.0,
+     "accepted_fraction_at_frr5": 0.43333333333333335
+    },
+    "row5": {
+     "events": 120,
+     "score_mean": 0.5405914821725115,
+     "score_min": 0.04373333333333333,
+     "score_max": 0.9709999999999999,
+     "accepted_fraction_at_frr5": 0.8083333333333333
+    }
+   },
+   {
+    "cell": "tap__imu_trajectory_xytime__paper_xgboost",
+    "threshold_frr5": 0.8815332055091858,
+    "threshold_provenance": "cell thresholds.json, selection_split=development",
+    "row3": {
+     "events": 120,
+     "score_mean": 0.6714661944968005,
+     "score_min": 0.05342702940106392,
+     "score_max": 0.9309288263320923,
+     "accepted_fraction_at_frr5": 0.8916666666666667
+    },
+    "row4": {
+     "events": 120,
+     "score_mean": 0.7671916221578916,
+     "score_min": 0.2185443937778473,
+     "score_max": 0.9490011930465698,
+     "accepted_fraction_at_frr5": 0.8333333333333334
+    },
+    "row5": {
+     "events": 120,
+     "score_mean": 0.6768834937674304,
+     "score_min": 0.027036745101213455,
+     "score_max": 0.9587274193763733,
+     "accepted_fraction_at_frr5": 0.8916666666666667
+    }
+   }
+  ],
+  "smoke_scoring_caveat": "these are 6 events per victim from a single repetition and are reported ONLY as proof that a frozen classical joint cell consumes the built arrays without error. They are not an estimate of anything and carry no interval."
+ },
+ "parity_table_F3": {
+  "per_arm": {
+   "row1": {
+    "tap": {
+     "events": 1042,
+     "T": {
+      "n": 1042,
+      "mean": 9.58253358925144,
+      "sd": 2.3631419907646793,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 8.0,
+      "p75": 10.0,
+      "p95": 15.0,
+      "max": 19.0
+     },
+     "duration_ms": {
+      "n": 1042,
+      "mean": 78.48368507171776,
+      "sd": 30.383464014038204,
+      "min": 19.999999552965164,
+      "p5": 39.99999910593033,
+      "p25": 59.99999865889549,
+      "median": 70.00000029802322,
+      "p75": 90.00000357627869,
+      "p95": 140.00000059604645,
+      "max": 180.00000715255737
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "scroll": {
+     "events": 2000,
+     "T": {
+      "n": 2000,
+      "mean": 62.3185,
+      "sd": 52.71286731852547,
+      "min": 8.0,
+      "p5": 12.0,
+      "p25": 33.0,
+      "median": 45.0,
+      "p75": 71.0,
+      "p95": 178.04999999999995,
+      "max": 336.0
+     },
+     "duration_ms": {
+      "n": 2000,
+      "mean": 613.1299987882376,
+      "sd": 527.1859841770117,
+      "min": 50.00000074505806,
+      "p5": 109.99999940395355,
+      "p25": 319.9999928474426,
+      "median": 439.9999976158142,
+      "p75": 699.999988079071,
+      "p95": 1770.499980449676,
+      "max": 3349.9999046325684
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "swipe": {
+     "events": 2000,
+     "T": {
+      "n": 2000,
+      "mean": 51.851,
+      "sd": 44.25684278240522,
+      "min": 8.0,
+      "p5": 12.950000000000003,
+      "p25": 26.0,
+      "median": 39.0,
+      "p75": 60.0,
+      "p95": 146.04999999999995,
+      "max": 309.0
+     },
+     "duration_ms": {
+      "n": 2000,
+      "mean": 508.43499934114516,
+      "sd": 442.64361093649836,
+      "min": 59.99999865889549,
+      "p5": 119.49999742209914,
+      "p25": 250.0,
+      "median": 379.9999952316284,
+      "p75": 589.9999737739563,
+      "p95": 1450.5000472068782,
+      "max": 3079.9999237060547
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "pinch": {
+     "events": 1999,
+     "T": {
+      "n": 1999,
+      "mean": 48.0280140070035,
+      "sd": 23.483242499409872,
+      "min": 8.0,
+      "p5": 19.0,
+      "p25": 33.0,
+      "median": 44.0,
+      "p75": 57.0,
+      "p95": 94.0,
+      "max": 158.0
+     },
+     "duration_ms": {
+      "n": 1999,
+      "mean": 470.4622306589367,
+      "sd": 235.09262604941398,
+      "min": 19.999999552965164,
+      "p5": 180.00000715255737,
+      "p25": 319.9999928474426,
+      "median": 430.0000071525574,
+      "p75": 560.0000023841858,
+      "p95": 930.0000071525574,
+      "max": 1570.0000524520874
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "keystroke": {
+     "events": 1950,
+     "T": {
+      "n": 1950,
+      "mean": 354.9041025641026,
+      "sd": 172.01507425439118,
+      "min": 24.0,
+      "p5": 61.0,
+      "p25": 187.0,
+      "median": 421.0,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 1950,
+      "mean": 6718.328199837452,
+      "sd": 7271.839434438004,
+      "min": 230.00000417232513,
+      "p5": 600.0000238418579,
+      "p25": 1860.0000143051147,
+      "median": 4199.999809265137,
+      "p75": 9224.99966621399,
+      "p95": 20483.00046920776,
+      "max": 65800.00305175781
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "ALL": {
+     "events": 8991,
+     "T": {
+      "n": 8991,
+      "mean": 114.15804693582471,
+      "sd": 154.4816581137781,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 28.0,
+      "median": 46.0,
+      "p75": 106.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 8991,
+      "mean": 1820.2762745938985,
+      "sd": 4271.943829159867,
+      "min": 19.999999552965164,
+      "p5": 70.00000029802322,
+      "p25": 270.00001072883606,
+      "median": 449.99998807907104,
+      "p75": 1049.9999523162842,
+      "p95": 9829.999923706055,
+      "max": 65800.00305175781
+     }
+    }
+   },
+   "row2": {
+    "tap": {
+     "events": 4000,
+     "T": {
+      "n": 4000,
+      "mean": 9.4445,
+      "sd": 1.9987292161820982,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 10.0,
+      "p95": 14.0,
+      "max": 19.0
+     },
+     "duration_ms": {
+      "n": 4000,
+      "mean": 78.32750020734966,
+      "sd": 26.318262077086057,
+      "min": 19.999999552965164,
+      "p5": 39.99999910593033,
+      "p25": 59.99999865889549,
+      "median": 79.99999821186066,
+      "p75": 90.00000357627869,
+      "p95": 129.99999523162842,
+      "max": 180.00000715255737
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "scroll": {
+     "events": 4000,
+     "T": {
+      "n": 4000,
+      "mean": 56.95825,
+      "sd": 37.150915931860204,
+      "min": 9.0,
+      "p5": 19.0,
+      "p25": 34.0,
+      "median": 47.0,
+      "p75": 63.0,
+      "p95": 138.0,
+      "max": 179.0
+     },
+     "duration_ms": {
+      "n": 4000,
+      "mean": 559.5825010351837,
+      "sd": 371.50916028889276,
+      "min": 79.99999821186066,
+      "p5": 180.00000715255737,
+      "p25": 330.00001311302185,
+      "median": 460.00000834465027,
+      "p75": 620.0000047683716,
+      "p95": 1370.0000047683716,
+      "max": 1779.9999713897705
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "swipe": {
+     "events": 4000,
+     "T": {
+      "n": 4000,
+      "mean": 47.96,
+      "sd": 38.0247862728086,
+      "min": 8.0,
+      "p5": 10.0,
+      "p25": 21.0,
+      "median": 36.0,
+      "p75": 60.0,
+      "p95": 149.0,
+      "max": 157.0
+     },
+     "duration_ms": {
+      "n": 4000,
+      "mean": 469.50499710440636,
+      "sd": 380.3489389129046,
+      "min": 59.99999865889549,
+      "p5": 90.00000357627869,
+      "p25": 200.00000298023224,
+      "median": 349.9999940395355,
+      "p75": 589.9999737739563,
+      "p95": 1480.0000190734863,
+      "max": 1559.999942779541
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "pinch": {
+     "events": 4000,
+     "T": {
+      "n": 4000,
+      "mean": 45.023,
+      "sd": 23.37411085505855,
+      "min": 8.0,
+      "p5": 10.0,
+      "p25": 30.0,
+      "median": 41.0,
+      "p75": 56.0,
+      "p95": 99.0,
+      "max": 106.0
+     },
+     "duration_ms": {
+      "n": 4000,
+      "mean": 438.3799975835718,
+      "sd": 236.85132011684226,
+      "min": 9.999999776482582,
+      "p5": 90.00000357627869,
+      "p25": 289.99999165534973,
+      "median": 400.0000059604645,
+      "p75": 550.000011920929,
+      "p95": 980.0000190734863,
+      "max": 1049.9999523162842
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "keystroke": {
+     "events": 4000,
+     "T": {
+      "n": 4000,
+      "mean": 359.20975,
+      "sd": 171.7853975477548,
+      "min": 20.0,
+      "p5": 59.0,
+      "p25": 198.0,
+      "median": 441.0,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 4000,
+      "mean": 6963.702499579638,
+      "sd": 7385.500463567899,
+      "min": 189.9999976158142,
+      "p5": 579.9999833106995,
+      "p25": 1970.0000286102295,
+      "median": 4400.000095367432,
+      "p75": 9420.000076293945,
+      "p95": 21617.000389099027,
+      "max": 52970.001220703125
+     },
+     "mechanical_steps": [
+      "released bundle event, read as-is"
+     ]
+    },
+    "ALL": {
+     "events": 20000,
+     "T": {
+      "n": 20000,
+      "mean": 103.7191,
+      "sd": 152.17639001459423,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 16.0,
+      "median": 42.0,
+      "p75": 90.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 20000,
+      "mean": 1701.89949910203,
+      "sd": 4233.640868991869,
+      "min": 9.999999776482582,
+      "p5": 59.99999865889549,
+      "p25": 150.00000596046448,
+      "median": 409.9999964237213,
+      "p75": 889.9999856948853,
+      "p95": 9420.000076293945,
+      "max": 52970.001220703125
+     }
+    }
+   },
+   "row3": {
+    "tap": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 9.84,
+      "sd": 2.33549488618774,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 11.0,
+      "p95": 14.049999999995634,
+      "max": 17.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 81.79999981075525,
+      "sd": 30.54150124111464,
+      "min": 19.999999552965164,
+      "p5": 39.499999117106654,
+      "p25": 59.99999865889549,
+      "median": 79.99999821186066,
+      "p75": 100.00000149011612,
+      "p95": 130.49999549980566,
+      "max": 159.9999964237213
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 9.4445,
+      "sd": 1.9985043408734475,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 10.0,
+      "p95": 14.0,
+      "max": 19.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.0791028493315036,
+      "sd": 0.3165723726101754,
+      "min": 0.42105263157894735,
+      "p5": 0.6666666666666666,
+      "p25": 0.8888888888888888,
+      "median": 1.0,
+      "p75": 1.25,
+      "p95": 1.75,
+      "max": 2.125
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.05096781737989213,
+      "sd": 0.41071656515850796,
+      "min": -1.2479275134435857,
+      "p5": -0.5849625007211563,
+      "p25": -0.16992500144231246,
+      "median": 0.0,
+      "p75": 0.32192809488736235,
+      "p95": 0.8073549220576041,
+      "max": 1.0874628412503393
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "scroll": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 63.43,
+      "sd": 44.730248377110506,
+      "min": 9.0,
+      "p5": 24.90000000000009,
+      "p25": 37.75,
+      "median": 47.0,
+      "p75": 65.25,
+      "p95": 172.54999999995198,
+      "max": 214.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 624.300000667572,
+      "sd": 447.3024868703729,
+      "min": 79.99999821186066,
+      "p5": 238.99999484419914,
+      "p25": 367.5000071525574,
+      "median": 460.00000834465027,
+      "p75": 642.4999833106995,
+      "p95": 1715.5000388617482,
+      "max": 2130.000114440918
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 56.95825,
+      "sd": 37.14673611419446,
+      "min": 9.0,
+      "p5": 19.0,
+      "p25": 34.0,
+      "median": 47.0,
+      "p75": 63.0,
+      "p95": 138.0,
+      "max": 179.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.5108298374239864,
+      "sd": 1.9255060279542577,
+      "min": 0.05027932960893855,
+      "p5": 0.34057971014492755,
+      "p25": 0.8,
+      "median": 1.0,
+      "p75": 1.525,
+      "p95": 3.8125,
+      "max": 23.77777777777778
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.13961429871796374,
+      "sd": 1.040703769003529,
+      "min": -4.313890775821944,
+      "p5": -1.5539356051005315,
+      "p25": -0.3219280948873623,
+      "median": 0.0,
+      "p75": 0.6088092426755238,
+      "p95": 1.9307373375628862,
+      "max": 4.571541984958834
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.9937732993273352,
+      "sd": 0.050334386615379735,
+      "min": 0.5102339512994778,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "swipe": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 48.49,
+      "sd": 37.24063065543185,
+      "min": 8.0,
+      "p5": 14.950000000000045,
+      "p25": 25.75,
+      "median": 38.5,
+      "p75": 56.25,
+      "p95": 111.39999999996508,
+      "max": 253.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 474.79999754577875,
+      "sd": 372.5163436269,
+      "min": 59.99999865889549,
+      "p5": 139.500000327826,
+      "p25": 247.4999986588955,
+      "median": 375.0,
+      "p75": 552.5000095367432,
+      "p95": 1104.0000200268114,
+      "max": 2519.9999809265137
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 47.96,
+      "sd": 38.020508136740816,
+      "min": 8.0,
+      "p5": 10.0,
+      "p25": 21.0,
+      "median": 36.0,
+      "p75": 60.0,
+      "p95": 149.0,
+      "max": 157.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.7658042239244323,
+      "sd": 2.19506315825936,
+      "min": 0.050955414012738856,
+      "p5": 0.20588235294117646,
+      "p25": 0.5344237128011337,
+      "median": 1.0555555555555556,
+      "p75": 2.1604938271604937,
+      "p95": 5.625,
+      "max": 31.625
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.09908285031260926,
+      "sd": 1.4485035567460849,
+      "min": -4.294620748891627,
+      "p5": -2.2801079191927354,
+      "p25": -0.9039440985599649,
+      "median": 0.07800251200127316,
+      "p75": 1.111361108947704,
+      "p95": 2.4918530963296748,
+      "max": 4.98299357469431
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.9991025253958661,
+      "sd": 0.009831341709443126,
+      "min": 0.892303047503932,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "pinch": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 50.66,
+      "sd": 28.66260523091831,
+      "min": 8.0,
+      "p5": 16.950000000000045,
+      "p25": 32.0,
+      "median": 43.5,
+      "p75": 59.25,
+      "p95": 103.99999999991269,
+      "max": 152.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 496.59999921917915,
+      "sd": 286.6260548502119,
+      "min": 70.00000029802322,
+      "p5": 159.49999690055893,
+      "p25": 310.0000023841858,
+      "median": 424.99999701976776,
+      "p75": 582.4999809265137,
+      "p95": 1029.9999833098263,
+      "max": 1509.9999904632568
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 45.023,
+      "sd": 23.371481053907697,
+      "min": 8.0,
+      "p5": 10.0,
+      "p25": 30.0,
+      "median": 41.0,
+      "p75": 56.0,
+      "p95": 99.0,
+      "max": 106.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.6104299747790805,
+      "sd": 1.7436687649362557,
+      "min": 0.07547169811320754,
+      "p5": 0.3188076416337286,
+      "p25": 0.6666666666666666,
+      "median": 1.0889894419306183,
+      "p75": 1.8478260869565217,
+      "p95": 4.75,
+      "max": 19.0
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.17790707099419775,
+      "sd": 1.1686433335226503,
+      "min": -3.727920454563199,
+      "p5": -1.6492420310628126,
+      "p25": -0.5849625007211563,
+      "median": 0.12298962082703177,
+      "p75": 0.8858289800806889,
+      "p95": 2.2479275134435857,
+      "max": 4.247927513443585
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "keystroke": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 344.19,
+      "sd": 166.45626029730695,
+      "min": 30.0,
+      "p5": 53.950000000000045,
+      "p25": 204.0,
+      "median": 382.5,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 5215.699973702431,
+      "sd": 4699.205031782295,
+      "min": 289.99999165534973,
+      "p5": 529.4999718666081,
+      "p25": 2029.9999713897705,
+      "median": 3814.9999380111694,
+      "p75": 6642.499923706055,
+      "p95": 14949.999856941868,
+      "max": 22129.9991607666
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 359.20975,
+      "sd": 171.766070120116,
+      "min": 20.0,
+      "p5": 59.0,
+      "p25": 198.0,
+      "median": 441.0,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.695621251571192,
+      "sd": 2.413348328593853,
+      "min": 0.05859375,
+      "p5": 0.15835494061300512,
+      "p25": 0.54296875,
+      "median": 1.0,
+      "p75": 1.650184331797235,
+      "p95": 5.987012987012987,
+      "max": 25.6
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.05600191817281916,
+      "sd": 1.5111949599110643,
+      "min": -4.093109404391481,
+      "p5": -2.6587662196710924,
+      "p25": -0.8810589272764926,
+      "median": 0.0,
+      "p75": 0.7226270512819204,
+      "p95": 2.5818363997344367,
+      "max": 4.678071905112637
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "ALL": {
+     "events": 200000,
+     "T": {
+      "n": 200000,
+      "mean": 103.322,
+      "sd": 145.63623301075125,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 19.75,
+      "median": 43.5,
+      "p75": 96.5,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 200000,
+      "mean": 1378.6399941891432,
+      "sd": 2866.1081374811793,
+      "min": 19.999999552965164,
+      "p5": 59.99999865889549,
+      "p25": 187.5,
+      "median": 424.99999701976776,
+      "p75": 954.9999982118607,
+      "p95": 6640.499877929571,
+      "max": 22129.9991607666
+     }
+    }
+   },
+   "row4": {
+    "tap": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 9.4445,
+      "sd": 1.9985043408734475,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 10.0,
+      "p95": 14.0,
+      "max": 19.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 78.32750020734966,
+      "sd": 26.3153010320081,
+      "min": 19.999999552965164,
+      "p5": 39.99999910593033,
+      "p25": 59.99999865889549,
+      "median": 79.99999821186066,
+      "p75": 90.00000357627869,
+      "p95": 129.99999523162842,
+      "max": 180.00000715255737
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 9.84,
+      "sd": 2.3354948861877403,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 11.0,
+      "p95": 14.049999999995634,
+      "max": 17.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.0049292471743942,
+      "sd": 0.2902456953011419,
+      "min": 0.47058823529411764,
+      "p5": 0.5714285714285714,
+      "p25": 0.8,
+      "median": 1.0,
+      "p75": 1.125,
+      "p95": 1.5,
+      "max": 2.375
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.05096781737989212,
+      "sd": 0.410255788228644,
+      "min": -1.0874628412503393,
+      "p5": -0.8073549220576042,
+      "p25": -0.3219280948873623,
+      "median": 0.0,
+      "p75": 0.16992500144231237,
+      "p95": 0.5849625007211562,
+      "max": 1.2479275134435854
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "scroll": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 56.95825,
+      "sd": 37.14673611419446,
+      "min": 9.0,
+      "p5": 19.0,
+      "p25": 34.0,
+      "median": 47.0,
+      "p75": 63.0,
+      "p95": 138.0,
+      "max": 179.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 559.5825010351837,
+      "sd": 371.46736211212607,
+      "min": 79.99999821186066,
+      "p5": 180.00000715255737,
+      "p25": 330.00001311302185,
+      "median": 460.00000834465027,
+      "p75": 620.0000047683716,
+      "p95": 1370.0000047683716,
+      "max": 1779.9999713897705
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 63.43,
+      "sd": 44.730248377110506,
+      "min": 9.0,
+      "p5": 24.90000000000009,
+      "p25": 37.75,
+      "median": 47.0,
+      "p75": 65.25,
+      "p95": 172.54999999995198,
+      "max": 214.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.1674443633397178,
+      "sd": 1.060669664222328,
+      "min": 0.04205607476635514,
+      "p5": 0.2616279069767442,
+      "p25": 0.6541157440690151,
+      "median": 1.0,
+      "p75": 1.25,
+      "p95": 2.9361702127659575,
+      "max": 19.88888888888889
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.13961429871796374,
+      "sd": 1.043924678221797,
+      "min": -4.571541984958834,
+      "p5": -1.9344116583724231,
+      "p25": -0.6123821963148236,
+      "median": 0.0,
+      "p75": 0.32192809488736235,
+      "p95": 1.5539356051005317,
+      "max": 4.313890775821944
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.9748025170011173,
+      "sd": 0.12553442812085056,
+      "min": 0.1330554600840014,
+      "p5": 0.9925756795449506,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "swipe": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 47.96,
+      "sd": 38.020508136740816,
+      "min": 8.0,
+      "p5": 10.0,
+      "p25": 21.0,
+      "median": 36.0,
+      "p75": 60.0,
+      "p95": 149.0,
+      "max": 157.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 469.50499710440636,
+      "sd": 380.30614618023196,
+      "min": 59.99999865889549,
+      "p5": 90.00000357627869,
+      "p25": 200.00000298023224,
+      "median": 349.9999940395355,
+      "p75": 589.9999737739563,
+      "p95": 1480.0000190734863,
+      "max": 1559.999942779541
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 48.49,
+      "sd": 37.24063065543185,
+      "min": 8.0,
+      "p5": 14.950000000000045,
+      "p25": 25.75,
+      "median": 38.5,
+      "p75": 56.25,
+      "p95": 111.39999999996508,
+      "max": 253.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.5203417890854005,
+      "sd": 1.780542973789201,
+      "min": 0.03162055335968379,
+      "p5": 0.17777777777777778,
+      "p25": 0.46835443037974683,
+      "median": 0.9428571428571428,
+      "p75": 1.8666666666666667,
+      "p95": 4.777777777777778,
+      "max": 19.625
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.09908285031260926,
+      "sd": 1.446078989202174,
+      "min": -4.98299357469431,
+      "p5": -2.4918530963296748,
+      "p25": -1.0943273825481532,
+      "median": -0.08488889758651305,
+      "p75": 0.9004643264490856,
+      "p95": 2.2563397532597858,
+      "max": 4.294620748891627
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.9955804197774113,
+      "sd": 0.04841407565231104,
+      "min": 0.46965037328935205,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "pinch": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 45.023,
+      "sd": 23.371481053907697,
+      "min": 8.0,
+      "p5": 10.0,
+      "p25": 30.0,
+      "median": 41.0,
+      "p75": 56.0,
+      "p95": 99.0,
+      "max": 106.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 438.3799975835718,
+      "sd": 236.8246721780998,
+      "min": 9.999999776482582,
+      "p5": 90.00000357627869,
+      "p25": 289.99999165534973,
+      "median": 400.0000059604645,
+      "p75": 550.000011920929,
+      "p95": 980.0000190734863,
+      "max": 1049.9999523162842
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 50.66,
+      "sd": 28.66260523091831,
+      "min": 8.0,
+      "p5": 16.950000000000045,
+      "p25": 32.0,
+      "median": 43.5,
+      "p75": 59.25,
+      "p95": 103.99999999991269,
+      "max": 152.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.203421418230601,
+      "sd": 1.0840799808785566,
+      "min": 0.05263157894736842,
+      "p5": 0.21052631578947367,
+      "p25": 0.5416666666666666,
+      "median": 0.92,
+      "p75": 1.5,
+      "p95": 3.1153846153846154,
+      "max": 13.25
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.17790707099419778,
+      "sd": 1.1631208036128784,
+      "min": -4.247927513443585,
+      "p5": -2.2479275134435857,
+      "p25": -0.8845227825800641,
+      "median": -0.12029423371771177,
+      "p75": 0.5849625007211562,
+      "p95": 1.6394102847435326,
+      "max": 3.727920454563199
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "keystroke": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 359.20975,
+      "sd": 171.766070120116,
+      "min": 20.0,
+      "p5": 59.0,
+      "p25": 198.0,
+      "median": 441.0,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 6963.702499579638,
+      "sd": 7384.669527249542,
+      "min": 189.9999976158142,
+      "p5": 579.9999833106995,
+      "p25": 1970.0000286102295,
+      "median": 4400.000095367432,
+      "p75": 9420.000076293945,
+      "p95": 21617.000389097637,
+      "max": 52970.001220703125
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 344.19,
+      "sd": 166.45626029730695,
+      "min": 30.0,
+      "p5": 53.950000000000045,
+      "p25": 204.0,
+      "median": 382.5,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.808127053319188,
+      "sd": 2.440547774757531,
+      "min": 0.0390625,
+      "p5": 0.16748768472906403,
+      "p25": 0.6062238128491619,
+      "median": 1.0,
+      "p75": 1.841726618705036,
+      "p95": 6.333333333333333,
+      "max": 17.066666666666666
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.05600191817281916,
+      "sd": 1.5100234032536677,
+      "min": -4.678071905112637,
+      "p5": -2.577873075934837,
+      "p25": -0.7220775757301203,
+      "median": 0.0,
+      "p75": 0.8810589272764926,
+      "p95": 2.662965012722429,
+      "max": 4.093109404391481
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "ALL": {
+     "events": 200000,
+     "T": {
+      "n": 200000,
+      "mean": 103.7191,
+      "sd": 152.17296599017806,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 16.0,
+      "median": 42.0,
+      "p75": 90.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 200000,
+      "mean": 1701.8994991020297,
+      "sd": 4233.545610524354,
+      "min": 9.999999776482582,
+      "p5": 59.99999865889549,
+      "p25": 150.00000596046448,
+      "median": 409.9999964237213,
+      "p75": 889.9999856948853,
+      "p95": 9420.000076293945,
+      "max": 52970.001220703125
+     }
+    }
+   },
+   "row5": {
+    "tap": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 9.84,
+      "sd": 2.33549488618774,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 11.0,
+      "p95": 14.049999999995634,
+      "max": 17.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 81.79999981075525,
+      "sd": 30.54150124111464,
+      "min": 19.999999552965164,
+      "p5": 39.499999117106654,
+      "p25": 59.99999865889549,
+      "median": 79.99999821186066,
+      "p75": 100.00000149011612,
+      "p95": 130.49999549980566,
+      "max": 159.9999964237213
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 9.33845,
+      "sd": 1.784133172097698,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 10.0,
+      "p95": 13.0,
+      "max": 19.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.083527397627957,
+      "sd": 0.3058201661352755,
+      "min": 0.42105263157894735,
+      "p5": 0.6923076923076923,
+      "p25": 0.8888888888888888,
+      "median": 1.0,
+      "p75": 1.25,
+      "p95": 1.75,
+      "max": 2.125
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.06278810946268389,
+      "sd": 0.38623109296593705,
+      "min": -1.2479275134435857,
+      "p5": -0.5305147166987798,
+      "p25": -0.16992500144231246,
+      "median": 0.0,
+      "p75": 0.32192809488736235,
+      "p95": 0.8073549220576041,
+      "max": 1.0874628412503393
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "scroll": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 63.43,
+      "sd": 44.730248377110506,
+      "min": 9.0,
+      "p5": 24.90000000000009,
+      "p25": 37.75,
+      "median": 47.0,
+      "p75": 65.25,
+      "p95": 172.54999999995198,
+      "max": 214.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 624.300000667572,
+      "sd": 447.3024868703729,
+      "min": 79.99999821186066,
+      "p5": 238.99999484419914,
+      "p25": 367.5000071525574,
+      "median": 460.00000834465027,
+      "p75": 642.4999833106995,
+      "p95": 1715.5000388617482,
+      "max": 2130.000114440918
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 57.01975,
+      "sd": 37.14432463323047,
+      "min": 9.0,
+      "p5": 20.0,
+      "p25": 34.0,
+      "median": 47.0,
+      "p75": 63.0,
+      "p95": 152.0,
+      "max": 231.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.5038849024302212,
+      "sd": 1.9119246930645388,
+      "min": 0.05,
+      "p5": 0.3372093023255814,
+      "p25": 0.8,
+      "median": 1.0,
+      "p75": 1.5128205128205128,
+      "p95": 3.7857142857142856,
+      "max": 23.77777777777778
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.1356527472660175,
+      "sd": 1.0379269155466255,
+      "min": -4.321928094887363,
+      "p5": -1.5682837595745258,
+      "p25": -0.3219280948873623,
+      "median": 0.0,
+      "p75": 0.5972408304995929,
+      "p95": 1.920565532505595,
+      "max": 4.571541984958834
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.9929612884644893,
+      "sd": 0.058348528270414084,
+      "min": 0.41279273909449926,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "swipe": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 48.49,
+      "sd": 37.24063065543185,
+      "min": 8.0,
+      "p5": 14.950000000000045,
+      "p25": 25.75,
+      "median": 38.5,
+      "p75": 56.25,
+      "p95": 111.39999999996508,
+      "max": 253.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 474.79999754577875,
+      "sd": 372.5163436269,
+      "min": 59.99999865889549,
+      "p5": 139.500000327826,
+      "p25": 247.4999986588955,
+      "median": 375.0,
+      "p75": 552.5000095367432,
+      "p95": 1104.0000200268114,
+      "max": 2519.9999809265137
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 48.045075,
+      "sd": 36.75646771919678,
+      "min": 8.0,
+      "p5": 12.0,
+      "p25": 22.0,
+      "median": 37.0,
+      "p75": 59.0,
+      "p95": 135.0,
+      "max": 246.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.6184887033063722,
+      "sd": 1.8202124905716548,
+      "min": 0.06611570247933884,
+      "p5": 0.21052631578947367,
+      "p25": 0.5370370370370371,
+      "median": 1.0454545454545454,
+      "p75": 2.0256410256410255,
+      "p95": 4.944444444444445,
+      "max": 31.625
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.05198181439283975,
+      "sd": 1.3806771913966447,
+      "min": -3.9188632372745946,
+      "p5": -2.2479275134435857,
+      "p25": -0.8969065070358962,
+      "median": 0.06413033741971556,
+      "p75": 1.0183785293148546,
+      "p95": 2.3058084295240855,
+      "max": 4.98299357469431
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.9928320346035814,
+      "sd": 0.07852112678069953,
+      "min": 0.13984415242975717,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "pinch": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 50.66,
+      "sd": 28.66260523091831,
+      "min": 8.0,
+      "p5": 16.950000000000045,
+      "p25": 32.0,
+      "median": 43.5,
+      "p75": 59.25,
+      "p95": 103.99999999991269,
+      "max": 152.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 496.59999921917915,
+      "sd": 286.6260548502119,
+      "min": 70.00000029802322,
+      "p5": 159.49999690055893,
+      "p25": 310.0000023841858,
+      "median": 424.99999701976776,
+      "p75": 582.4999809265137,
+      "p95": 1029.9999833098263,
+      "max": 1509.9999904632568
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 45.121375,
+      "sd": 21.25774777358564,
+      "min": 8.0,
+      "p5": 16.0,
+      "p25": 30.0,
+      "median": 42.0,
+      "p75": 56.0,
+      "p95": 88.0,
+      "max": 126.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.4484675466931802,
+      "sd": 1.3626133320791691,
+      "min": 0.07272727272727272,
+      "p5": 0.3269230769230769,
+      "p25": 0.6730769230769231,
+      "median": 1.0784313725490196,
+      "p75": 1.755062126092959,
+      "p95": 3.727272727272727,
+      "max": 19.0
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.12359034377687704,
+      "sd": 1.066289608944172,
+      "min": -3.7813597135246595,
+      "p5": -1.6129768768907526,
+      "p25": -0.5711567011961256,
+      "median": 0.10893437155316393,
+      "p75": 0.8115220166146814,
+      "p95": 1.8981203859807863,
+      "max": 4.247927513443585
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "keystroke": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 344.19,
+      "sd": 166.45626029730695,
+      "min": 30.0,
+      "p5": 53.950000000000045,
+      "p25": 204.0,
+      "median": 382.5,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 5215.699973702431,
+      "sd": 4699.205031782295,
+      "min": 289.99999165534973,
+      "p5": 529.4999718666081,
+      "p25": 2029.9999713897705,
+      "median": 3814.9999380111694,
+      "p75": 6642.499923706055,
+      "p95": 14949.999856941868,
+      "max": 22129.9991607666
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 360.293225,
+      "sd": 171.06052419150595,
+      "min": 24.0,
+      "p5": 61.0,
+      "p25": 201.0,
+      "median": 451.0,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.6114937047133797,
+      "sd": 2.0534629228657324,
+      "min": 0.05859375,
+      "p5": 0.1564245810055866,
+      "p25": 0.54296875,
+      "median": 1.0,
+      "p75": 1.628158844765343,
+      "p95": 5.868852459016393,
+      "max": 21.333333333333332
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.07310280407559835,
+      "sd": 1.485833105851429,
+      "min": -4.093109404391481,
+      "p5": -2.6764608552066522,
+      "p25": -0.8810589272764926,
+      "median": 0.0,
+      "p75": 0.7032414572061927,
+      "p95": 2.55307843970137,
+      "max": 4.415037499278844
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "ALL": {
+     "events": 200000,
+     "T": {
+      "n": 200000,
+      "mean": 103.322,
+      "sd": 145.63623301075125,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 19.75,
+      "median": 43.5,
+      "p75": 96.5,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 200000,
+      "mean": 1378.6399941891432,
+      "sd": 2866.1081374811793,
+      "min": 19.999999552965164,
+      "p5": 59.99999865889549,
+      "p25": 187.5,
+      "median": 424.99999701976776,
+      "p75": 954.9999982118607,
+      "p95": 6640.499877929571,
+      "max": 22129.9991607666
+     }
+    }
+   },
+   "row5_unmatched": {
+    "tap": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 9.84,
+      "sd": 2.33549488618774,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 11.0,
+      "p95": 14.049999999995634,
+      "max": 17.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 81.79999981075525,
+      "sd": 30.54150124111464,
+      "min": 19.999999552965164,
+      "p5": 39.499999117106654,
+      "p25": 59.99999865889549,
+      "median": 79.99999821186066,
+      "p75": 100.00000149011612,
+      "p95": 130.49999549980566,
+      "max": 159.9999964237213
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 9.66465,
+      "sd": 2.36483195772019,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 8.0,
+      "median": 9.0,
+      "p75": 11.0,
+      "p95": 15.0,
+      "max": 19.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.0592440878789253,
+      "sd": 0.30303946180606095,
+      "min": 0.42105263157894735,
+      "p5": 0.6153846153846154,
+      "p25": 0.8888888888888888,
+      "median": 1.0,
+      "p75": 1.1818181818181819,
+      "p95": 1.75,
+      "max": 2.125
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.02639569293647441,
+      "sd": 0.4044958917241894,
+      "min": -1.2479275134435857,
+      "p5": -0.7004397181410921,
+      "p25": -0.16992500144231246,
+      "median": 0.0,
+      "p75": 0.24100809950379498,
+      "p95": 0.8073549220576041,
+      "max": 1.0874628412503393
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "scroll": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 63.43,
+      "sd": 44.730248377110506,
+      "min": 9.0,
+      "p5": 24.90000000000009,
+      "p25": 37.75,
+      "median": 47.0,
+      "p75": 65.25,
+      "p95": 172.54999999995198,
+      "max": 214.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 624.300000667572,
+      "sd": 447.3024868703729,
+      "min": 79.99999821186066,
+      "p5": 238.99999484419914,
+      "p25": 367.5000071525574,
+      "median": 460.00000834465027,
+      "p75": 642.4999833106995,
+      "p95": 1715.5000388617482,
+      "max": 2130.000114440918
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 62.70355,
+      "sd": 53.106255038889785,
+      "min": 8.0,
+      "p5": 12.0,
+      "p25": 33.0,
+      "median": 45.0,
+      "p75": 72.0,
+      "p95": 179.0,
+      "max": 336.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.72126458277878,
+      "sd": 2.2547813898033313,
+      "min": 0.026785714285714284,
+      "p5": 0.23728813559322035,
+      "p25": 0.6614764267990074,
+      "median": 1.0714285714285714,
+      "p75": 1.8571428571428572,
+      "p95": 5.25,
+      "max": 26.75
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.14571874707865154,
+      "sd": 1.3187009438224584,
+      "min": -5.222392421336448,
+      "p5": -2.075288127304237,
+      "p25": -0.5962383701869653,
+      "median": 0.09953567355091437,
+      "p75": 0.8930847960834881,
+      "p95": 2.3923174227787602,
+      "max": 4.741466986401147
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 0.995174279627462,
+      "sd": 0.052863118085025314,
+      "min": 0.42091355529544666,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "swipe": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 48.49,
+      "sd": 37.24063065543185,
+      "min": 8.0,
+      "p5": 14.950000000000045,
+      "p25": 25.75,
+      "median": 38.5,
+      "p75": 56.25,
+      "p95": 111.39999999996508,
+      "max": 253.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 474.79999754577875,
+      "sd": 372.5163436269,
+      "min": 59.99999865889549,
+      "p5": 139.500000327826,
+      "p25": 247.4999986588955,
+      "median": 375.0,
+      "p75": 552.5000095367432,
+      "p95": 1104.0000200268114,
+      "max": 2519.9999809265137
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 51.99315,
+      "sd": 44.007127476798786,
+      "min": 8.0,
+      "p5": 12.0,
+      "p25": 26.0,
+      "median": 39.0,
+      "p75": 60.0,
+      "p95": 146.0,
+      "max": 309.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.4735666322388785,
+      "sd": 1.635939401930741,
+      "min": 0.042105263157894736,
+      "p5": 0.195111616370401,
+      "p25": 0.5531914893617021,
+      "median": 0.9736842105263158,
+      "p75": 1.7714285714285714,
+      "p95": 4.4878205128204565,
+      "max": 31.625
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.04268250761371794,
+      "sd": 1.3292641873370337,
+      "min": -4.569855608330948,
+      "p5": -2.357628459052421,
+      "p25": -0.8541491335365452,
+      "median": -0.03847414781463567,
+      "p75": 0.8249132934419087,
+      "p95": 2.166014698393674,
+      "max": 4.98299357469431
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 _observe_exact_touch_template onto the carrier's own endpoints",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "pinch": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 50.66,
+      "sd": 28.66260523091831,
+      "min": 8.0,
+      "p5": 16.950000000000045,
+      "p25": 32.0,
+      "median": 43.5,
+      "p75": 59.25,
+      "p95": 103.99999999991269,
+      "max": 152.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 496.59999921917915,
+      "sd": 286.6260548502119,
+      "min": 70.00000029802322,
+      "p5": 159.49999690055893,
+      "p25": 310.0000023841858,
+      "median": 424.99999701976776,
+      "p75": 582.4999809265137,
+      "p95": 1029.9999833098263,
+      "max": 1509.9999904632568
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 48.067325,
+      "sd": 23.558879809210403,
+      "min": 8.0,
+      "p5": 19.0,
+      "p25": 33.0,
+      "median": 44.0,
+      "p75": 57.0,
+      "p95": 94.0,
+      "max": 158.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.2785984297426691,
+      "sd": 1.0652412941981888,
+      "min": 0.07272727272727272,
+      "p5": 0.32608695652173914,
+      "p25": 0.6818181818181818,
+      "median": 1.0178571428571428,
+      "p75": 1.5,
+      "p95": 3.1481481481481484,
+      "max": 19.0
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": 0.025347255092750657,
+      "sd": 0.9579526253554872,
+      "min": -3.7813597135246595,
+      "p5": -1.6166713604484944,
+      "p25": -0.5525410230287788,
+      "median": 0.025535092107137478,
+      "p75": 0.5849625007211562,
+      "p95": 1.6545034339742333,
+      "max": 4.247927513443585
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "keystroke": {
+     "events": 40000,
+     "T": {
+      "n": 40000,
+      "mean": 344.19,
+      "sd": 166.45626029730695,
+      "min": 30.0,
+      "p5": 53.950000000000045,
+      "p25": 204.0,
+      "median": 382.5,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 40000,
+      "mean": 5215.699973702431,
+      "sd": 4699.205031782295,
+      "min": 289.99999165534973,
+      "p5": 529.4999718666081,
+      "p25": 2029.9999713897705,
+      "median": 3814.9999380111694,
+      "p75": 6642.499923706055,
+      "p95": 14949.999856941868,
+      "max": 22129.9991607666
+     },
+     "template_T": {
+      "n": 40000,
+      "mean": 355.459825,
+      "sd": 172.09567094778518,
+      "min": 24.0,
+      "p5": 60.0,
+      "p25": 186.0,
+      "median": 421.0,
+      "p75": 512.0,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "resample_ratio_carrierT_over_templateT": {
+      "n": 40000,
+      "mean": 1.6914716853427745,
+      "sd": 2.2971273147858833,
+      "min": 0.05859375,
+      "p5": 0.14285714285714285,
+      "p25": 0.5558195793157876,
+      "median": 1.0,
+      "p75": 1.6906474820143884,
+      "p95": 6.095238095238095,
+      "max": 21.333333333333332
+     },
+     "log2_resample_ratio": {
+      "n": 40000,
+      "mean": -0.04310208512888221,
+      "sd": 1.5159200731679543,
+      "min": -4.093109404391481,
+      "p5": -2.807354922057604,
+      "p25": -0.8473130001264725,
+      "median": 0.0,
+      "p75": 0.7575758738414923,
+      "p95": 2.6076825772212398,
+      "max": 4.415037499278844
+     },
+     "second_stage_residual_scale_sample": {
+      "n": 120,
+      "mean": 1.0,
+      "sd": 0.0,
+      "min": 1.0,
+      "p5": 1.0,
+      "p25": 1.0,
+      "median": 1.0,
+      "p75": 1.0,
+      "p95": 1.0,
+      "max": 1.0
+     },
+     "mechanical_steps": [
+      "S0 carrier fixes T and duration",
+      "S1 _resample_touch_template(template -> T)",
+      "S2 identity (release placement not reconstructable)",
+      "S3 detector_grid_clock(T, duration) + dx/dy recomputed",
+      "S4 modality_values(imu, trajectory, 'imu_trajectory_xytime')"
+     ]
+    },
+    "ALL": {
+     "events": 200000,
+     "T": {
+      "n": 200000,
+      "mean": 103.322,
+      "sd": 145.63623301075125,
+      "min": 8.0,
+      "p5": 8.0,
+      "p25": 19.75,
+      "median": 43.5,
+      "p75": 96.5,
+      "p95": 512.0,
+      "max": 512.0
+     },
+     "duration_ms": {
+      "n": 200000,
+      "mean": 1378.6399941891432,
+      "sd": 2866.1081374811793,
+      "min": 19.999999552965164,
+      "p5": 59.99999865889549,
+      "p25": 187.5,
+      "median": 424.99999701976776,
+      "p75": 954.9999982118607,
+      "p95": 6640.499877929571,
+      "max": 22129.9991607666
+     }
+    }
+   }
+  },
+  "action_composition": "identical for rows 2, 3, 4 and 5: exactly 200 events per (victim, action) per repetition, 20 victims, 5 actions. Row 1 is the genuine pool and is not an arm under test (its per-action counts are 1042 tap / 2000 scroll / 2000 swipe / 1999 pinch / 1950 keystroke over the 20 test victims).",
+  "event_count_per_arm_per_repetition": 20000,
+  "repetitions": 10,
+  "declared_variable": "which channel is synthesised (and, for row 5, that neither is)",
+  "attributes_that_still_differ_and_why": [
+   "resample ratio (carrier T / template T): after length-matching row 5, the mean log2 ratio is row3 0.140 vs row5 0.136 for scroll, 0.051 vs 0.063 for tap, -0.056 vs -0.073 for keystroke -- matched; but 0.099 vs 0.052 for swipe and 0.178 vs 0.124 for pinch. The residual gap of up to 0.054 in mean log2 (about 4 percent in length) is a DECLARED remaining parity defect: the victim genuine pool does not contain events short enough to match every fake template. Before-and-after is visible in the row5 vs row5_unmatched entries.",
+   "second stage residual scale: the release on-screen guard shrinks the transported residual on a minority of events. Sample medians are 1.000 in every arm; the minima differ (scroll row3 0.510, row4 0.133, row5 0.412), so the tail of this mechanic is not perfectly matched and should be carried into the scoring phase as a covariate.",
+   "orientation: the template and carrier orientation disagree on a small fraction of events in every arm (rates recorded above); the release itself mismatches donor and target orientation on 3.5-7.6 percent of its own fake events, so this is the release own behaviour rather than something introduced here."
+  ]
+ },
+ "confound_check_duration_and_T": {
+  "question": "do the arms differ in duration or T before anything is scored",
+  "result": {
+   "tap": {
+    "row3_vs_row5_T_identical_event_for_event": true,
+    "row3_vs_row5_duration_identical_event_for_event": true,
+    "row4_vs_row2_T_multiset_identical": true,
+    "row4_vs_row2_duration_multiset_identical": true
+   },
+   "scroll": {
+    "row3_vs_row5_T_identical_event_for_event": true,
+    "row3_vs_row5_duration_identical_event_for_event": true,
+    "row4_vs_row2_T_multiset_identical": true,
+    "row4_vs_row2_duration_multiset_identical": true
+   },
+   "swipe": {
+    "row3_vs_row5_T_identical_event_for_event": true,
+    "row3_vs_row5_duration_identical_event_for_event": true,
+    "row4_vs_row2_T_multiset_identical": true,
+    "row4_vs_row2_duration_multiset_identical": true
+   },
+   "pinch": {
+    "row3_vs_row5_T_identical_event_for_event": true,
+    "row3_vs_row5_duration_identical_event_for_event": true,
+    "row4_vs_row2_T_multiset_identical": true,
+    "row4_vs_row2_duration_multiset_identical": true
+   },
+   "keystroke": {
+    "row3_vs_row5_T_identical_event_for_event": true,
+    "row3_vs_row5_duration_identical_event_for_event": true,
+    "row4_vs_row2_T_multiset_identical": true,
+    "row4_vs_row2_duration_multiset_identical": true
+   }
+  },
+  "plain_statement": "row 3 and row 5 have IDENTICAL T and IDENTICAL duration event for event in all five actions (they share the carrier), and row 4 and row 2 have identical T and duration multisets (row 4 carriers are the whole release fake pool). Row 3 vs row 2, row 4 vs row 5 and row 5 vs row 2 are NOT matched -- e.g. scroll T p5 is 24.9 in row 3 against 19.0 in row 2, and keystroke median duration is 3815 ms in row 3/5 against 4400 ms in row 2/4. Any FAR difference on those three comparisons is duration-confounded.",
+  "which_comparisons_are_safe": [
+   "row3 - row5 (matched)",
+   "row4 - row2 (matched)"
+  ],
+  "which_comparisons_are_confounded": [
+   "row3 - row2",
+   "row4 - row5",
+   "row5 - row2"
+  ],
+  "recommendation_for_the_scoring_phase": "report all five paired differences as asked, but lead on row3 - row5 and row4 - row2, and carry a duration-stratified version of the three confounded ones."
+ },
+ "frozen_detector_checksums": {
+  "before": {
+   "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "6cdf89e773951829cfa16b3fcef858534dd08506976fb333995a8b5f1b0890f8",
+    "model.joblib_size": 134075385,
+    "thresholds.json": "8966b3d96c0efff7a0a8d60bee6a6b9672d591df057d38b95d3bdd3798c5e1cf",
+    "frr5_map": 0.6926227924162547,
+    "frr5_file": 0.6926227924162547,
+    "bundle": "replay_dataset_v10"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "6905d4a398f685e1e41227d18da78e35b67eb289101a588e0817f5a3110170e6",
+    "model.joblib_size": 7453,
+    "thresholds.json": "1e0ab2eca077ae31526b581b06ea2d70189fa9b70f4038b0d2d161e7199fdfd3",
+    "frr5_map": 0.48262799997688316,
+    "frr5_file": 0.48262799997688316,
+    "bundle": "replay_dataset_v10"
+   },
+   "keystroke__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "6cfc2931696ff639f922e796e3deedfe0387e7d43fd2b5549d88f731b869e9af",
+    "model.joblib_size": 5661,
+    "thresholds.json": "b7807f7bbf8cf2affc3785b59767ed7047989f6aefcf76f8da2d90ccc22d1f8e",
+    "frr5_map": 0.5684425316649094,
+    "frr5_file": 0.5684425316649094,
+    "bundle": "replay_dataset_v10"
+   },
+   "keystroke__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "fa17b0c35aceb9dc9931e90270987f8786ee616173aabe4fc7f974f0d0439185",
+    "model.joblib_size": 708215,
+    "thresholds.json": "3493464d8b82eaa61b50d19ea2589b4487bf15bafa8aed5b4bb8dcfbbeedc9d6",
+    "frr5_map": 0.8247122168540955,
+    "frr5_file": 0.8247122168540955,
+    "bundle": "replay_dataset_v10"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "4413e69dad22ae26241a941610ed4cd14c975f40862c8960f30bfbda1d334332",
+    "model.joblib_size": 171111065,
+    "thresholds.json": "fa4ec1089eb8b2a8081e23718d4b7a679d55ace593e949ede20c8da3fbec80bf",
+    "frr5_map": 0.7237348982514366,
+    "frr5_file": 0.7237348982514366,
+    "bundle": "replay_dataset_v3"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "bec9181cfb44b4f317f4a6988a7b7093d37bddb8de396c3bb0db1c87f228bb2d",
+    "model.joblib_size": 7453,
+    "thresholds.json": "e7bdf32b6f756cbbaca20481c2579523de3ab59f4bb29a46cf42c1d61313633f",
+    "frr5_map": 0.3156723298646055,
+    "frr5_file": 0.3156723298646055,
+    "bundle": "replay_dataset_v3"
+   },
+   "pinch__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "437db76c6d8d29e2e4548607c784affa00fabc6b0cee965243106aa71fc5348d",
+    "model.joblib_size": 5661,
+    "thresholds.json": "550fb3916c01abfe88227aee293b8edcd271d7ab30131d67a0adca54e7fed628",
+    "frr5_map": 0.3408228124730942,
+    "frr5_file": 0.3408228124730942,
+    "bundle": "replay_dataset_v3"
+   },
+   "pinch__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "c158ebdbf2b3170efd4c853f54d85bc1e1aafd688045f64e8df9c817ed4235da",
+    "model.joblib_size": 715421,
+    "thresholds.json": "89c059a298d5d0bb0c29d1f57d177d81a9622cac0036ecc437b676ee12c23f87",
+    "frr5_map": 0.7972422242164612,
+    "frr5_file": 0.7972422242164612,
+    "bundle": "replay_dataset_v3"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "793fc8ac9b229db0efa04d76e05aa4ea3245100e260e1e94f64ba9aa7054da8d",
+    "model.joblib_size": 135787225,
+    "thresholds.json": "432508008dc7f53f470013078128c2db642a9de373ac75af5f68c9a84827e0b0",
+    "frr5_map": 0.6953935286935286,
+    "frr5_file": 0.6953935286935286,
+    "bundle": "replay_dataset_v15"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "e98ef3d0dc0a446e92cdaf55e90b52047fbf102e452506a5981330eb1eb90c4f",
+    "model.joblib_size": 7453,
+    "thresholds.json": "a55e5869878087d07b4c15ba157c76985388a99a4a09b363b42ed4a32c95c588",
+    "frr5_map": 0.3897405773813395,
+    "frr5_file": 0.3897405773813395,
+    "bundle": "replay_dataset_v15"
+   },
+   "scroll__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "77c615081ae448f4d62fec5b4c475cd10319b503a4fb8de3f616ab0890ff3d96",
+    "model.joblib_size": 5661,
+    "thresholds.json": "7db91880e95f991d6240d3e4fdb487701434e75a760c29876ff139c448344e16",
+    "frr5_map": 0.4024686547410442,
+    "frr5_file": 0.4024686547410442,
+    "bundle": "replay_dataset_v15"
+   },
+   "scroll__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "bc77c98fb7a1d461fc10def143905112ec7898c69d9aa1b58248b994ce4e44a0",
+    "model.joblib_size": 729021,
+    "thresholds.json": "01f40f84561e592d42caa904268a23ace0133aa268a4045e9e3f317be66c9ed7",
+    "frr5_map": 0.7534279227256775,
+    "frr5_file": 0.7534279227256775,
+    "bundle": "replay_dataset_v15"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "ff2cab3d0739de2e786e1a0e648dab6ccc100d43c52dfa08afb0f1757d3f5182",
+    "model.joblib_size": 166924185,
+    "thresholds.json": "eb0be34d2ab02d091e646812649601877eed1f89534b74f2a2d09dc394320515",
+    "frr5_map": 0.753670732569555,
+    "frr5_file": 0.753670732569555,
+    "bundle": "replay_dataset_v8"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "efcab8b5b80e377ae151f97091f375f735f63f6ee5a5cb05cf1a4da97e4c19c6",
+    "model.joblib_size": 7453,
+    "thresholds.json": "d455269a8b87300f80cf9ec5a1c9493b5bbf8aaec19ba75cb9a8a3837552da0f",
+    "frr5_map": 0.3820763522221499,
+    "frr5_file": 0.3820763522221499,
+    "bundle": "replay_dataset_v8"
+   },
+   "swipe__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "0e803e0c4ed588b39666627215e77dfdf9d2b51ad74e9d0febd4685527dccd31",
+    "model.joblib_size": 5661,
+    "thresholds.json": "b9f2477d0745de073be34bc369f09f08aae973c1221dccaeedb247e7b7f88d89",
+    "frr5_map": 0.3678906496109886,
+    "frr5_file": 0.3678906496109886,
+    "bundle": "replay_dataset_v8"
+   },
+   "swipe__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "d070ecd9d0f6433df0947838e580c310e64cf76f9da53337aaa84b4b07628554",
+    "model.joblib_size": 722765,
+    "thresholds.json": "97ba5b770bcf7f13a01011db6028ee1189889264f161464709b4deec0b11fa01",
+    "frr5_map": 0.8281400203704834,
+    "frr5_file": 0.8281400203704834,
+    "bundle": "replay_dataset_v8"
+   },
+   "tap__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "87370d51188f5f0f084d1255d3a270ffccf4ad74cc6b44812949e24d0ea8d967",
+    "model.joblib_size": 149343545,
+    "thresholds.json": "522663f59b0b597e1032e778fc523e8d3444b0eb5a0e7145e486b9ed544a8eaf",
+    "frr5_map": 0.8361243906790622,
+    "frr5_file": 0.8361243906790622,
+    "bundle": "replay_dataset_v3"
+   },
+   "tap__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "d369e9677402ec59af867d07ed5474ceb1e68b9524af427a12fcd94d6df23a01",
+    "model.joblib_size": 7453,
+    "thresholds.json": "1a8090e3ad30e05a440949a0a99beb87799ced3f84e27deaa2ad2103129d02e0",
+    "frr5_map": 0.41130172784580726,
+    "frr5_file": 0.41130172784580726,
+    "bundle": "replay_dataset_v3"
+   },
+   "tap__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "219ab7bd005f85c7e505087629c3f62b3cd3f3aa7cf5b12d2af28dec66d41c94",
+    "model.joblib_size": 5661,
+    "thresholds.json": "58b4a6c0b4821ba97fef5deacb0d2bc71d061b9c1f3a9b209dbc689cbf701953",
+    "frr5_map": 0.37705433607438976,
+    "frr5_file": 0.37705433607438976,
+    "bundle": "replay_dataset_v3"
+   },
+   "tap__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "062895b1bd12ae2344fd672f191714650137685daa8641213c3c82975fa4ac59",
+    "model.joblib_size": 712157,
+    "thresholds.json": "38f24471fdef771364cf99472b9fada39c3c525092ad38fdfead06dc64a472b3",
+    "frr5_map": 0.8815332055091858,
+    "frr5_file": 0.8815332055091858,
+    "bundle": "replay_dataset_v3"
+   }
+  },
+  "after": {
+   "tap__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "d369e9677402ec59af867d07ed5474ceb1e68b9524af427a12fcd94d6df23a01",
+    "thresholds.json": "1a8090e3ad30e05a440949a0a99beb87799ced3f84e27deaa2ad2103129d02e0"
+   },
+   "tap__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "87370d51188f5f0f084d1255d3a270ffccf4ad74cc6b44812949e24d0ea8d967",
+    "thresholds.json": "522663f59b0b597e1032e778fc523e8d3444b0eb5a0e7145e486b9ed544a8eaf"
+   },
+   "tap__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "219ab7bd005f85c7e505087629c3f62b3cd3f3aa7cf5b12d2af28dec66d41c94",
+    "thresholds.json": "58b4a6c0b4821ba97fef5deacb0d2bc71d061b9c1f3a9b209dbc689cbf701953"
+   },
+   "tap__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "062895b1bd12ae2344fd672f191714650137685daa8641213c3c82975fa4ac59",
+    "thresholds.json": "38f24471fdef771364cf99472b9fada39c3c525092ad38fdfead06dc64a472b3"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "e98ef3d0dc0a446e92cdaf55e90b52047fbf102e452506a5981330eb1eb90c4f",
+    "thresholds.json": "a55e5869878087d07b4c15ba157c76985388a99a4a09b363b42ed4a32c95c588"
+   },
+   "scroll__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "793fc8ac9b229db0efa04d76e05aa4ea3245100e260e1e94f64ba9aa7054da8d",
+    "thresholds.json": "432508008dc7f53f470013078128c2db642a9de373ac75af5f68c9a84827e0b0"
+   },
+   "scroll__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "77c615081ae448f4d62fec5b4c475cd10319b503a4fb8de3f616ab0890ff3d96",
+    "thresholds.json": "7db91880e95f991d6240d3e4fdb487701434e75a760c29876ff139c448344e16"
+   },
+   "scroll__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "bc77c98fb7a1d461fc10def143905112ec7898c69d9aa1b58248b994ce4e44a0",
+    "thresholds.json": "01f40f84561e592d42caa904268a23ace0133aa268a4045e9e3f317be66c9ed7"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "efcab8b5b80e377ae151f97091f375f735f63f6ee5a5cb05cf1a4da97e4c19c6",
+    "thresholds.json": "d455269a8b87300f80cf9ec5a1c9493b5bbf8aaec19ba75cb9a8a3837552da0f"
+   },
+   "swipe__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "ff2cab3d0739de2e786e1a0e648dab6ccc100d43c52dfa08afb0f1757d3f5182",
+    "thresholds.json": "eb0be34d2ab02d091e646812649601877eed1f89534b74f2a2d09dc394320515"
+   },
+   "swipe__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "0e803e0c4ed588b39666627215e77dfdf9d2b51ad74e9d0febd4685527dccd31",
+    "thresholds.json": "b9f2477d0745de073be34bc369f09f08aae973c1221dccaeedb247e7b7f88d89"
+   },
+   "swipe__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "d070ecd9d0f6433df0947838e580c310e64cf76f9da53337aaa84b4b07628554",
+    "thresholds.json": "97ba5b770bcf7f13a01011db6028ee1189889264f161464709b4deec0b11fa01"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "bec9181cfb44b4f317f4a6988a7b7093d37bddb8de396c3bb0db1c87f228bb2d",
+    "thresholds.json": "e7bdf32b6f756cbbaca20481c2579523de3ab59f4bb29a46cf42c1d61313633f"
+   },
+   "pinch__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "4413e69dad22ae26241a941610ed4cd14c975f40862c8960f30bfbda1d334332",
+    "thresholds.json": "fa4ec1089eb8b2a8081e23718d4b7a679d55ace593e949ede20c8da3fbec80bf"
+   },
+   "pinch__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "437db76c6d8d29e2e4548607c784affa00fabc6b0cee965243106aa71fc5348d",
+    "thresholds.json": "550fb3916c01abfe88227aee293b8edcd271d7ab30131d67a0adca54e7fed628"
+   },
+   "pinch__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "c158ebdbf2b3170efd4c853f54d85bc1e1aafd688045f64e8df9c817ed4235da",
+    "thresholds.json": "89c059a298d5d0bb0c29d1f57d177d81a9622cac0036ecc437b676ee12c23f87"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+    "model.joblib": "6905d4a398f685e1e41227d18da78e35b67eb289101a588e0817f5a3110170e6",
+    "thresholds.json": "1e0ab2eca077ae31526b581b06ea2d70189fa9b70f4038b0d2d161e7199fdfd3"
+   },
+   "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+    "model.joblib": "6cdf89e773951829cfa16b3fcef858534dd08506976fb333995a8b5f1b0890f8",
+    "thresholds.json": "8966b3d96c0efff7a0a8d60bee6a6b9672d591df057d38b95d3bdd3798c5e1cf"
+   },
+   "keystroke__imu_trajectory_xytime__paper_svm": {
+    "model.joblib": "6cfc2931696ff639f922e796e3deedfe0387e7d43fd2b5549d88f731b869e9af",
+    "thresholds.json": "b7807f7bbf8cf2affc3785b59767ed7047989f6aefcf76f8da2d90ccc22d1f8e"
+   },
+   "keystroke__imu_trajectory_xytime__paper_xgboost": {
+    "model.joblib": "fa17b0c35aceb9dc9931e90270987f8786ee616173aabe4fc7f974f0d0439185",
+    "thresholds.json": "3493464d8b82eaa61b50d19ea2589b4487bf15bafa8aed5b4bb8dcfbbeedc9d6"
+   }
+  },
+  "unchanged": true
+ },
+ "threshold_provenance": {
+  "tap__imu_trajectory_xytime__hmog_style_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.41130172784580726
+  },
+  "tap__imu_trajectory_xytime__hmog_style_rf": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.8361243906790622
+  },
+  "tap__imu_trajectory_xytime__paper_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.37705433607438976
+  },
+  "tap__imu_trajectory_xytime__paper_xgboost": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.8815332055091858
+  },
+  "scroll__imu_trajectory_xytime__hmog_style_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.3897405773813395
+  },
+  "scroll__imu_trajectory_xytime__hmog_style_rf": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.6953935286935286
+  },
+  "scroll__imu_trajectory_xytime__paper_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.4024686547410442
+  },
+  "scroll__imu_trajectory_xytime__paper_xgboost": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.7534279227256775
+  },
+  "swipe__imu_trajectory_xytime__hmog_style_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.3820763522221499
+  },
+  "swipe__imu_trajectory_xytime__hmog_style_rf": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.753670732569555
+  },
+  "swipe__imu_trajectory_xytime__paper_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.3678906496109886
+  },
+  "swipe__imu_trajectory_xytime__paper_xgboost": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.8281400203704834
+  },
+  "pinch__imu_trajectory_xytime__hmog_style_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.3156723298646055
+  },
+  "pinch__imu_trajectory_xytime__hmog_style_rf": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.7237348982514366
+  },
+  "pinch__imu_trajectory_xytime__paper_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.3408228124730942
+  },
+  "pinch__imu_trajectory_xytime__paper_xgboost": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.7972422242164612
+  },
+  "keystroke__imu_trajectory_xytime__hmog_style_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.48262799997688316
+  },
+  "keystroke__imu_trajectory_xytime__hmog_style_rf": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.6926227924162547
+  },
+  "keystroke__imu_trajectory_xytime__paper_svm": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.5684425316649094
+  },
+  "keystroke__imu_trajectory_xytime__paper_xgboost": {
+   "split": "development",
+   "criterion": "FRR = 5 percent",
+   "frozen_at": "release, thresholds.json selection_split=development",
+   "frr5": 0.8247122168540955
+  }
+ },
+ "results": null,
+ "results_note": "BUILD PHASE ONLY. No arm has been scored on the 20-cell grid. FAR, user-clustered bootstrap intervals, paired differences and per-action / per-detector breakdowns are not in this file and must not be inferred from the smoke scoring above.",
+ "seed": {
+  "base": 20260810,
+  "repetitions": 10,
+  "per_pair": "SeedSequence([20260810, crc32(\"<user>|<action>\"), repetition])"
+ },
+ "scratch_and_code": {
+  "builder": "/mnt/share/mwang49/real-human/imu_gen/final/evaluation/final_check/code/half_attack/build_arms.py",
+  "scratch": "/tmp/claude-473016/-home-mwang49-new-data7-data7-final-monitor-metrics-v1/e1b42475-b309-42ae-b7f3-314c50fb68d8/scratchpad/halfattack"
+ }
+}
