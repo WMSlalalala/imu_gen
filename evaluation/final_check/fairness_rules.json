@@ -1,0 +1,131 @@
+{
+  "spec_version": "1.0",
+  "frozen_before_results": true,
+  "purpose": "Fairness rules for the session-level and partial-attack experiments. Written and committed BEFORE any of those experiments produced a number, so that a result cannot be rescued by loosening a rule after the fact. Every new experiment must emit a compliance block naming each rule and how it satisfies it, or declare a documented, reasoned exemption.",
+  "applies_to": [
+    "session sliding-window detector",
+    "2x2 session arms (content x timing)",
+    "score-space session aggregation baseline",
+    "partial-attack joint ablation (fake-one-channel + real-other, with mismatch control)",
+    "any table that compares an attack arm against another arm"
+  ],
+  "rules": [
+    {
+      "id": "F1",
+      "name": "test is never used to select anything",
+      "statement": "No threshold, hyperparameter, feature set, window size, aggregation rule, or arm may be chosen using test-split data or test-split scores. The existing discipline record test_threshold_selection_calls must remain 0.",
+      "why": "Selecting on test converts a measurement into a search over the test set. The published main table already holds this line; the new experiments must not break it.",
+      "how_checked": "Each experiment writes the provenance of every threshold: which split it came from and at what point it was frozen. A threshold with no recorded provenance fails."
+    },
+    {
+      "id": "F2",
+      "name": "no development scores means a user-disjoint calibration split, and the optimism must be shown",
+      "statement": "Where per-event development scores do not exist (they do not: cells contain only test_scores.jsonl), the operating point is calibrated on a user-disjoint half of the test users and evaluated on the other half, then swapped and pooled. The oracle variant (threshold chosen on all users) must be reported alongside, with the gap stated.",
+      "why": "With 20 users and no dev scores, the only honest options are a user-disjoint split or re-scoring the dev users. Reporting only the oracle hides an inflation whose size is unknown to the reader.",
+      "how_checked": "Both the split-calibrated and oracle numbers appear in the output. The user split is fixed and recorded."
+    },
+    {
+      "id": "F3",
+      "name": "arm parity",
+      "statement": "Arms compared in the same table must be identical in every respect except the single variable under test. Concretely: same users, same session length distribution, same action composition per session, same event count, same length and alignment handling, same preprocessing, same detector, same threshold.",
+      "why": "Any asymmetry between arms becomes an alternative explanation for the difference, and a reviewer will find it.",
+      "how_checked": "Each experiment emits a parity table listing these attributes per arm; any attribute that differs must be the declared variable under test."
+    },
+    {
+      "id": "F4",
+      "name": "the attacker never exceeds five recordings",
+      "statement": "No arm may consume more than five real recordings per (victim, action). The five are the published ones in fiveshot_material/material_manifest.jsonl. An arm that deliberately studies a better-resourced attacker must be labelled as outside the five-shot claim and must not appear in a five-shot table.",
+      "why": "The paper's claim is five-shot. An arm that quietly uses a sixth recording, or that draws touch and inertial channels from independent sets of five, is measuring a stronger attacker than the one claimed. This exact defect was found and is being resampled.",
+      "how_checked": "Each arm reports the count of distinct source recordings consumed per (victim, action) and the count must be <= 5, or the arm carries an explicit out-of-scope label."
+    },
+    {
+      "id": "F5",
+      "name": "no oracle selection by the attacker",
+      "statement": "The attacker may not choose which fake event, which reference shot, or which pacing to submit by consulting the detector's score, the label, or any test-split quantity. Selection must be by a rule fixed in advance and computable from what the attacker holds.",
+      "why": "Score-aware selection is a different and much stronger threat model than the one claimed, and it makes the attack trivially better in a way that would not transfer.",
+      "how_checked": "The selection rule is stated and its inputs enumerated. No input may derive from a detector output."
+    },
+    {
+      "id": "F6",
+      "name": "detectors are frozen and read-only",
+      "statement": "The six detector families in the published grid are used as-is. No retraining, no refitting of scalers, no threshold retuning, no architecture change. Any new detector introduced for a session-level experiment is a separate object and must be named as such, never conflated with the frozen six.",
+      "why": "Retuning a detector against the attack under test turns a measurement into an arms race with an unreported number of rounds.",
+      "how_checked": "Checksums of model.joblib and thresholds.json before and after any experiment must match."
+    },
+    {
+      "id": "F7",
+      "name": "never score a modality a method did not change",
+      "statement": "A method or arm is scored only on the modality cells whose input it actually altered. An arm that changes only the inertial channel is not reported on trajectory-only cells.",
+      "why": "Standing project rule. Scoring an unchanged modality reports a number that is about someone else's pipeline and wastes compute on a foregone conclusion.",
+      "how_checked": "Each arm declares its covered modalities and the runner refuses cells outside that declaration."
+    },
+    {
+      "id": "F8",
+      "name": "construction artefacts require a same-mechanics control",
+      "statement": "Whenever an arm is built by splicing, re-pairing, resampling, padding, truncating, or otherwise mechanically combining material from different recordings, there must be a control arm that undergoes the IDENTICAL mechanical treatment using only genuine material. The claimed effect is the difference against that control, not against the untouched genuine arm.",
+      "why": "Without it, 'the spliced arm was caught' is indistinguishable from 'splicing is detectable', which says nothing about the content under test. This is the dominant confound in the partial-attack ablation.",
+      "how_checked": "The control arm's mechanical treatment is described side by side with the test arm's and must match step for step."
+    },
+    {
+      "id": "F9",
+      "name": "the resampling unit is the user",
+      "statement": "All uncertainty is estimated by resampling the 20 test users as clusters, not by resampling events or sessions. When an aggregate spans multiple cells, the same resampled user multiset is shared across all cells within a replicate. Comparisons between two arms are reported as paired differences with an interval on the difference.",
+      "why": "Events within a user share habits, device, grip and a handful of sessions. Resampling events shrinks intervals by roughly the square root of the cluster size and claims precision the data does not support. Independent per-cell resampling makes an aggregate behave as if the cells were independent, which they are not.",
+      "how_checked": "The resampling unit and replicate count are recorded in every output that carries an interval."
+    },
+    {
+      "id": "F10",
+      "name": "a trivial baseline must be beaten, or the failure stated",
+      "statement": "Any non-trivial session-level detector must be reported alongside the simplest rule that addresses the same question. For session aggregation that rule is: alarm when the count of individually-caught events in the session reaches k. If the elaborate detector does not beat the trivial rule, the report says so.",
+      "why": "Credit for a result a one-line rule already achieves is credit that will not survive review.",
+      "how_checked": "The baseline appears in the same table at the same operating point."
+    },
+    {
+      "id": "F11",
+      "name": "the operating point denominator is stated and is the deployed one",
+      "statement": "A false-alarm rate must name its denominator: per event, per session, or per window. For a causal per-window detector, the operating point is chosen on the SESSION-level false-alarm rate, with the alarm aggregation rule fixed on the calibration split as part of the operating point. Reporting a per-window false-alarm rate as though it were the user-facing rate is prohibited.",
+      "why": "A 5% per-window rate over hundreds of windows is a near-certain false alarm for every genuine session. Confusing these two denominators overstates deployability by orders of magnitude.",
+      "how_checked": "Every reported rate carries its denominator. The aggregation rule and its calibration split are recorded."
+    },
+    {
+      "id": "F12",
+      "name": "the price of detection is reported, not only the catch rate",
+      "statement": "Session-level results report the full operating curve of false-alarm rate against caught rate, and explicitly the false-alarm rate required to reach caught rates of 50, 80 and 95 percent. A single operating point is not a sufficient report.",
+      "why": "A defence that catches the attack only by rejecting a large fraction of genuine sessions is not a deployable defence, and a single point hides that.",
+      "how_checked": "The curve and the three inverse readings appear in the output."
+    },
+    {
+      "id": "F13",
+      "name": "pre-register the interpretation",
+      "statement": "Before an experiment's numbers land, its output file must already state which result pattern supports the claim, which refutes it, and which means inconclusive.",
+      "why": "Deciding after the fact what a result means is how an inconclusive experiment becomes a positive one.",
+      "how_checked": "The preregistered_outcomes field is present and its git timestamp precedes the results file's."
+    },
+    {
+      "id": "F14",
+      "name": "negative and tautological results are reported where they occur",
+      "statement": "An arm that fails is reported. A result that is guaranteed or near-guaranteed by construction is labelled as such at the point where the number is stated, not in a distant caveats section.",
+      "why": "The paced_emp v2 result is near-tautological: it samples gaps from the human interval distribution while the detector reads only interval statistics. Stating it without the label invites the reader to over-read it.",
+      "how_checked": "Review of each results document against this rule."
+    },
+    {
+      "id": "F15",
+      "name": "no silent truncation",
+      "statement": "If coverage is bounded anywhere (top-N, sampling, a shortfall of available events, a dropped session, a skipped cell), the output records what was dropped and why. Silence reads as full coverage.",
+      "why": "The session assembler already rejects 66 sessions with impossible timelines; that rejection is only defensible because it is counted and reported.",
+      "how_checked": "Each output carries a coverage or reject block."
+    }
+  ],
+  "compliance_block_schema": {
+    "experiment": "string",
+    "rules_satisfied": "list of rule ids with one line each on how",
+    "exemptions": "list of {rule_id, reason} -- an exemption must be reasoned, not asserted",
+    "threshold_provenance": "for each threshold: split, selection criterion, freeze point",
+    "parity_table": "per-arm attributes required by F3",
+    "preregistered_outcomes": "required by F13"
+  },
+  "notes": [
+    "This file is frozen. Amending it after a result exists requires recording the amendment, the date, and the result that motivated it, so a reader can see that the rule moved.",
+    "Companion file gate_rules.json covers detector competence gating and was frozen on 2026-08-10 at 00:15:17 for the same reason."
+  ]
+}
