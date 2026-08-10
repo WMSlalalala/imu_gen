@@ -92,7 +92,7 @@ FRR 全 90 格   0.052  [0.046, 0.059]     ← 盖住 5% 目标
 
 配对比较（同一组人同时给两边打分，区间落在差值上）里**唯一不排除 0 的是 A5**（k_refs=3）：`+0.004 [−0.003, +0.011]`。这是 k_refs 曲线在 3 处饱和的统计确认；其区间半宽约 0.007，与用 A1/A5/A6 离散度估出的噪声量级 0.005 相符，两条独立路径互为佐证。
 
-**一处更正**：核查中发现冻结发布树里**本来就有**能在 frr5 切点做 bootstrap 的实现（`code/dataset_test/security_exp/hmog_direct100k_test.py` 的 `_user_bootstrap` 同时接收 `eer_threshold` 与 `target_threshold`）。准确的说法是「能力早就有，只是发表的那份数字没用它」，不是「这条链路上没有 bootstrap」。
+**一处更正**：核查中发现冻结发布树里**本来就有**能在 frr5 切点做 bootstrap 的实现（`/mnt/share/mwang49/data7/direct100k_final/code/dataset_test/security_exp/hmog_direct100k_test.py` 的 `_user_bootstrap` 同时接收 `eer_threshold` 与 `target_threshold`；这条相对路径是相对发布树根，不是相对本目录）。准确的说法是「能力早就有，只是发表的那份数字没用它」，不是「这条链路上没有 bootstrap」。
 
 ---
 
@@ -113,6 +113,36 @@ FRR 全 90 格   0.052  [0.046, 0.059]     ← 盖住 5% 目标
 误判来源是把 `input_imu_sha256 == output_imu_sha256` 读成了「没有 IMU 攻击」。正确含义是「惯性通道由上游扩散生成，触摸重建这一阶段原样透传」。
 
 记在这里是因为这个误读很容易再犯：**这个字段只说明某个阶段没改动，不说明通道内容是什么。**
+
+### 2026-08-10：同一误读第二次出现，补做了全局搜索
+
+一次对抗审查再次判定「四个动作的伪造 IMU 其实是真人惯性、根本没有可消融的合成」，理由是 `input_imu_sha256 == output_imu_sha256` 加上 `replay_dataset_builder.py:4500` 的 `"source": "one_coupled_selected_train_genuine_event"`。**这条同样不成立**，这次用四条独立证据钉死：
+
+**一、缓存元数据自己写着是生成的。** `user_cache_eval_200/user_000/scroll/train/sample_0000.npz` 的 `metadata_json`：
+
+```
+method  = diffusion
+另有 generator / checkpoint / sample_steps / noise_seed / k_refs / ref_bank_seed / used_ref_indices
+prior_audit.prior_source           = train_users_real_enroll
+prior_audit.prior_source_user_id   = 46          ← 不是目标用户 0
+prior_audit.source_processed_index = 42156
+prior_audit.source_event_id        = 47002210000043
+```
+
+**二、伪造 IMU 不等于它的先验真人事件。** 按 `source_processed_index=42156` 取 `data/processed/hmog_scroll.npz` 第 42156 条，其 `user_id=46`、`event_id=47002210000043`，与 `prior_audit` 完全对上。与发布的 `active_imu`（66 帧）逐帧比：**最大绝对差 2.55**，逐通道相关 −0.371 / 0.800 / 0.470 / 0.627 / −0.163 / 0.462。**条件于它，不是它。**
+
+**三、全局搜索。** 把这条伪造窗口拿去和**全部 88,912 条真人 scroll** 比：
+
+```
+逐位相同的真人事件数   0 / 88912
+最接近的一条最大差     1.056
+```
+
+这一步是对上面那条旧记录的加强——当初只搜了同一分片前 400 条，样本太小，不足以堵住这个指控。
+
+**四、`one_coupled_selected_train_genuine_event` 被张冠李戴了。** 它在 `replay_dataset_builder.py:4500`，位于一个 **keystroke 专属的 `replacement_carrier` 分支**内——同一段代码里紧挨着 `keystroke_plan.template` 和 `template.keycodes`。它描述的是 **keystroke 的触摸载体**，与四个手势动作的惯性通道无关。
+
+**给下一个人的提醒**：这个指控每次都长得很像真的，因为它引用的两个事实（sha256 相等、builder 里确有 genuine carrier 字样）本身都为真。判据只有一个——**拿发布的伪造窗口去真人池里搜逐位相同项**。搜不到就是生成的，别的都不算证据。
 
 ---
 
