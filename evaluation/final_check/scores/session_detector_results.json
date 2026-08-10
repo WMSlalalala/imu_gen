@@ -1,0 +1,87 @@
+{
+  "spec": "session rhythm detector; FRR-fixed operating points 5% and 1%",
+  "trained_on": "genuine vs naive_jitter (paced never in training)",
+  "counts": {
+    "genuine": {
+      "train": 1677,
+      "val": 239,
+      "test": 478
+    },
+    "naive": {
+      "train": 1677,
+      "val": 239,
+      "test": 478
+    },
+    "naive_jitter": {
+      "train": 1677,
+      "val": 239,
+      "test": 478
+    },
+    "paced": {
+      "train": 1677,
+      "val": 239,
+      "test": 478
+    },
+    "paced_emp": {
+      "train": 1677,
+      "val": 239,
+      "test": 478
+    }
+  },
+  "windows": {
+    "2s": {
+      "threshold_frr5": 0.0,
+      "threshold_frr1": 0.0,
+      "at_frr5": {
+        "genuine_false_alarm": 0.0021,
+        "naive_caught": 1.0,
+        "naive_jitter_caught": 1.0,
+        "paced_caught": 0.7218,
+        "paced_emp_caught": 0.0356
+      },
+      "at_frr1": {
+        "genuine_false_alarm": 0.0021,
+        "naive_caught": 1.0,
+        "naive_jitter_caught": 1.0,
+        "paced_caught": 0.7218,
+        "paced_emp_caught": 0.0356
+      }
+    },
+    "3s": {
+      "threshold_frr5": 0.0,
+      "threshold_frr1": 0.0,
+      "at_frr5": {
+        "genuine_false_alarm": 0.0042,
+        "naive_caught": 1.0,
+        "naive_jitter_caught": 1.0,
+        "paced_caught": 0.7218,
+        "paced_emp_caught": 0.0356
+      },
+      "at_frr1": {
+        "genuine_false_alarm": 0.0042,
+        "naive_caught": 1.0,
+        "naive_jitter_caught": 1.0,
+        "paced_caught": 0.7218,
+        "paced_emp_caught": 0.0356
+      }
+    },
+    "5s": {
+      "threshold_frr5": 0.0,
+      "threshold_frr1": 0.0,
+      "at_frr5": {
+        "genuine_false_alarm": 0.0042,
+        "naive_caught": 1.0,
+        "naive_jitter_caught": 1.0,
+        "paced_caught": 0.7259,
+        "paced_emp_caught": 0.0377
+      },
+      "at_frr1": {
+        "genuine_false_alarm": 0.0042,
+        "naive_caught": 1.0,
+        "naive_jitter_caught": 1.0,
+        "paced_caught": 0.7259,
+        "paced_emp_caught": 0.0377
+      }
+    }
+  }
+}

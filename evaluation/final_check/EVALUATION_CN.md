@@ -85,4 +85,4 @@ python code/session_detector.py --model logreg      # 训练+冻结+评测
 python code/session_detector.py --model rf
 ```
 
-产物：`results/sessions_*.jsonl`（四臂）、`results/session_detector_*.json`（逐窗逐操作点被抓率）。
+产物：`scores/sessions_*.jsonl`（四臂）、`scores/session_detector_*.json`（逐窗逐操作点被抓率）。

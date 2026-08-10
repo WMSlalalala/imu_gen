@@ -1,0 +1,18 @@
+{
+  "genuine_sessions": 2394,
+  "median_gap_s": {
+    "genuine": 1.099,
+    "naive": 4.0,
+    "naive_jitter": 4.001,
+    "paced": 0.998,
+    "paced_emp": 1.101
+  },
+  "naive_interval_s": 4.0,
+  "split_users": {
+    "actions": 5,
+    "train_users": 70,
+    "val_users": 10,
+    "test_users": 20,
+    "notes": 4
+  }
+}
